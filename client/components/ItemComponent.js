@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useRef, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, ImageBackground, Dimensions, TextInput } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, ImageBackground, Dimensions, TextInput, TouchableHighlight } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 
 export default function Item() {
@@ -66,14 +66,19 @@ export default function Item() {
           <Text style={{color: 'white', fontSize: 25}}>02:56</Text>
         </View>
         <View style={styles.bidView}>
-          <TextInput
-            style={styles.bidInput}
-            value={offerBid}
-            onChangeText={(text) => handleCurrency(text)}
-            keyboardType='numeric'
-            placeholder='0,00'
-          />
-          <Text style={styles.bidCurrency}>€</Text>
+          <View style={styles.bidBorder}>
+            <TextInput
+              style={styles.bidInput}
+              value={offerBid}
+              onChangeText={(text) => handleCurrency(text)}
+              keyboardType='numeric'
+              placeholder='0,00'
+            />
+            <Text style={styles.bidCurrency}>€</Text>
+          </View>
+          <TouchableHighlight style={styles.bidButton}>
+            <Text style={{ fontSize: 16, color: 'white' }}>MAKE OFFER</Text>
+          </TouchableHighlight>
         </View>
         
         <Text style={{fontWeight: '700', fontSize: 18}} >Item Description:</Text>
@@ -126,12 +131,16 @@ const styles = StyleSheet.create({
   },
   bidView: {
     flex: 1,
-    borderColor: 'gray',
-    borderWidth: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'stretch',
     marginBottom: 20,
+  },
+  bidBorder: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    flex: 1,
+    flexDirection: 'row',
   },
   bidInput: {
     flex: 1,
@@ -140,6 +149,11 @@ const styles = StyleSheet.create({
   },
   bidCurrency: {
     fontSize: 25,
+    padding: 10,
+  },
+  bidButton: {
+    justifyContent: "center",
+    backgroundColor: '#06D6A0',
     padding: 10,
   },
   userInfo: {
