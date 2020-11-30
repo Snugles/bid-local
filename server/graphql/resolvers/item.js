@@ -3,15 +3,15 @@ const { v4: uuidv4}  = require('uuid');
 module.exports =  {
   Query: {
     item: (parent, { id }, { models }) => {
-      return items[id]
+      return models.items[id]
     },
     items: (parent, agrs, { models }) => {
-      return Object.values(items);
+      return Object.values(models.items);
     }
   },
   Item: {
     user: (item, args, { models }) => {
-      return users[item.userID];
+      return models.users[item.userID];
     }
   },
   Mutation: {

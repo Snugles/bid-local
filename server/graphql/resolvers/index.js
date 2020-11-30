@@ -6,26 +6,26 @@ const resolvers = {
       return me;
     },
     user: (parent, { id }, { models }) => {
-      return users[id]
+      return models.users[id]
     },
     users: (parent, args, { models }) => {
-      return Object.values(users);
+      return Object.values(models.users);
     },
     item: (parent, { id }, { models }) => {
-      return items[id]
+      return models.items[id]
     },
     items: (parent, agrs, { models }) => {
-      return Object.values(items);
+      return Object.values(models.items);
     }
   },
   Item: {
     user: (item, args, { models }) => {
-      return users[item.userID];
+      return models.users[item.userID];
     }
   },
   User: {
-    item: user => {
-      return Object.values(items).filter(item => item.userID === user.id)
+    item: (user, args, { models }) => {
+      return Object.values(models.items).filter(item => item.userID === user.id)
     }
   },
   Mutation: {
@@ -38,7 +38,7 @@ const resolvers = {
         userID: me.id,
       }
       models.items[id] = item;
-      model.users[me.id].itemIds.push(id);
+      models.users[me.id].itemIds.push(id);
 
       return item;
     },

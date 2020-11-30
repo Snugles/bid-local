@@ -1,18 +1,18 @@
 module.exports =  { 
   Query: {
     me: () => {
-      return me;
+      return models.me;
     },
     user: (parent, { id }, { models }) => {
-      return users[id]
+      return models.users[id]
     },
     users: (parent, args, { models }) => {
-      return Object.values(users);
+      return Object.values(models.users);
     }
   },
   User: {
     item: (user, args, { models }) => {
-      return Object.values(items).filter(item => item.userID === user.id)
+      return Object.values(models.items).filter(item => item.userID === user.id)
     }
   }
 };
