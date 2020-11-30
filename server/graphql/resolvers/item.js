@@ -1,16 +1,7 @@
 const { v4: uuidv4}  = require('uuid');
 
-const resolvers = {
+module.exports =  {
   Query: {
-    me: () => {
-      return me;
-    },
-    user: (parent, { id }, { models }) => {
-      return users[id]
-    },
-    users: (parent, args, { models }) => {
-      return Object.values(users);
-    },
     item: (parent, { id }, { models }) => {
       return items[id]
     },
@@ -21,11 +12,6 @@ const resolvers = {
   Item: {
     user: (item, args, { models }) => {
       return users[item.userID];
-    }
-  },
-  User: {
-    item: user => {
-      return Object.values(items).filter(item => item.userID === user.id)
     }
   },
   Mutation: {
@@ -52,6 +38,4 @@ const resolvers = {
       
     }
   }
-};
-
-module.exports = resolvers;
+}

@@ -1,30 +1,11 @@
 const { gql } = require('apollo-server-express');
 
-const schemas = gql`
-  type Query {
-    me: User
-    user(id: ID!): User
-    users: [User!]
+const query = require('./query.schema');
+const mutations = require('./mutations.schema');
+const types = require('./types.schema');
 
-    item(id: ID!): Item
-    items: [Item!]
-  }
- 
-  type User {
-    id: ID!
-    username: String!
-    item: [Item!]
-  }
-
-  type Item {
-    id: ID!
-    name: String!
-    user: User!
-  }
-
-  type Mutation {
-    createItem(name: String!): Item!
-  }
+module.exports = gql`
+  ${query}
+  ${mutations}
+  ${types}
 `;
-
-module.exports = schemas;

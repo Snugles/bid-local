@@ -1,15 +1,16 @@
 'use strict';
-const { users, items } = require('../models/db');
 
 const { ApolloServer } = require('apollo-server-express');
-const typeDefs = require('./schemas');
+const schemas = require('./schemas');
 const resolvers = require('./resolvers');
+const models = require('../models');
 
 module.exports = new ApolloServer({
-  typeDefs,
+  typeDefs: schemas,
   resolvers,
   context: {
-    me: users[0]
+    models,
+    me: models.users[1]
   }
 });
 
