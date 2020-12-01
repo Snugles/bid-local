@@ -10,7 +10,7 @@ module.exports = new ApolloServer({
   resolvers,
   context: {
     models,
-    me: models.users[1]
+    //me: models.users[1]
   }
 });
 
