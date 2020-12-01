@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     firstName: { type: DataTypes.TEXT, validate: { isAlpha: true } },
     lastName: { type: DataTypes.TEXT, validate: { isAlpha: true } },
     phoneNumber: { type: DataTypes.INTEGER, validate: { isNumeric: true } },
-  })
+  });
 
   Users.associate = (models) => {
     Users.hasMany(models.items, { onDelete: 'CASCADE' });
@@ -19,4 +19,4 @@ module.exports = (sequelize, DataTypes) => {
   Users.beforeCreate(user => user.id = uuidv4());
 
   return Users;
-}
+};

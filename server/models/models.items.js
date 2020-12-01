@@ -19,12 +19,12 @@ module.exports = (sequelize, DataTypes) => {
     userId: {
       type: DataTypes.UUID,
     }
-  })
+  });
   Items.beforeCreate(item => item.id = uuidv4());
   Items.associate = (models) => {
     Items.belongsTo(models.users);
   };
-  console.log(uuidv4())
+  console.log(uuidv4());
   return Items;
 
-}
+};

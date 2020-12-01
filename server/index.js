@@ -18,7 +18,7 @@ server.applyMiddleware({ app, path: '/graphql' });
   try {
     await db.sequelize.sync();
     app.listen({ port: 8000 }, () => {
-      console.log(`Server is running at ${PORT}`)
+      console.log(`Server is running at ${PORT}`);
     });
   } catch (error) {
     console.log('Error connecting to db', error);
