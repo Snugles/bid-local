@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, ImageBackground, Dimensions, TextInput, TouchableHighlight } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
-import Navbar from '../components/Navbar';
 
-export default function Item({ navigation }) {
+export default function Item() {
 
   const [offerBid, setOfferBid] = useState('');
 
@@ -49,8 +49,6 @@ export default function Item({ navigation }) {
 
 
   return (
-    <>
-    <Navbar navigation={navigation} canGoBack={true}/>
     <ScrollView style={styles.container}>
       <Carousel
         containerCustomStyle={{backgroundColor: '#06D6A0', paddingVertical: 10}}
@@ -78,7 +76,7 @@ export default function Item({ navigation }) {
             />
             <Text style={styles.bidCurrency}>€</Text>
           </View>
-          <TouchableHighlight style={styles.bidButton} onPress={()=>{navigation.goBack()}}>
+          <TouchableHighlight style={styles.bidButton}>
             <Text style={{ fontSize: 16, color: 'white' }}>MAKE OFFER</Text>
           </TouchableHighlight>
         </View>
@@ -92,8 +90,9 @@ export default function Item({ navigation }) {
             <Text style={{fontSize: 16}} ><Text style={{fontWeight: '700'}}>Tel:</Text> {data.sellerInfo.telephone}</Text>
           </View>
       </View>
+
+      <StatusBar style="auto" />
     </ScrollView>
-    </>
   );
 }
 
@@ -102,6 +101,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: '#fff',
+    marginTop: 80
   },
   itemImage: {
     width: '100%',
