@@ -15,12 +15,11 @@ exports.get_users = async(item, _, { models }) => {
       return user;
     }
 
-exports.createItem = async (_, { name }, { models }) => {
-    //let id = uuidv4();
-    //console.log(id);
+exports.createItem = async (_, { name, minPrice, description }, { models }) => {
     const item = {
-      //id,
       name,
+      minPrice,
+      description,
       userId: 1,
     }
     const createdItem = await models.items.create(item);
