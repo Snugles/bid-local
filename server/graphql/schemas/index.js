@@ -5,7 +5,7 @@ const mutations = require('./mutations.schema');
 const types = require('./types.schema');
 
 module.exports = gql`
-  ${query}
-  ${mutations}
   ${types}
+  ${mutations}
+  ${query}
 `;
