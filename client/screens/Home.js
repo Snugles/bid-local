@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, ImageBackground, Dimensions } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, ImageBackground, Dimensions, SafeAreaView } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
+import Navbar from '../components/Navbar';
 
 const windowWidth = Dimensions.get('window').width;
 
-export default function Home() {
+export default function Home({ navigation }) {
+
   const categories = [
     'Houses',
     'Electronics',
@@ -32,7 +34,10 @@ export default function Home() {
   const [currentCategory, setCurrentCategory] = useState(categories[0]);
 
   const itemList = data.map( (item, index) => (
-    <View key={index} style={styles.itemView}>
+    <View key={index}
+      style={styles.itemView} 
+      onTouchStart={() =>navigation.navigate('Item', { name: item.title })}
+    >
       <ImageBackground style={styles.itemImage} resizeMode='cover' source={item.image}>
         <Text style={styles.itemTime}>04:45</Text>
       </ImageBackground>
@@ -49,6 +54,8 @@ export default function Home() {
   ));
 
   return (
+    <SafeAreaView style = {{flex: 1}}>
+    <Navbar navigation={navigation} canGoBack={false}/>
     <ScrollView style={styles.container}>
       <View style={styles.homeContent}>
         <Text style={styles.categoryTitle}>Category:</Text>
@@ -85,6 +92,7 @@ export default function Home() {
         </View>
       </View>
     </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -93,7 +101,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: '#fff',
-    marginTop: 80,
   },
   categoryTitle: {
     fontSize: 22,
@@ -133,4 +140,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666666',
   },
+  navbar: {
+    height: '5%'
+  }
 });
