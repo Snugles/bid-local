@@ -4,22 +4,24 @@ const { v4: uuidv4 } = require('uuid');
 
 const resolvers = {
   Query: {
-    me: () => {
-      return me;
-    },
-    user: (parent, { id }, { models }) => {
-      return models.users[id]
+    // me: () => {
+    //   return me;
+    // },
+    user: async (_, { id }, { models }) => {
+      const user = await models.users.findOne({id:id})
+      return user
     },
     users: async (_, __, { models }) => {
-      console.log(models)
-      const users = await models.users.find()
+      const users = await models.users.findAll()
       return users
     },
-    item: (parent, { id }, { models }) => {
-      return models.items[id]
+    item: async(_, { id }, { models }) => {
+      const item = await models.items.findOne({id:id})
+      return item
     },
-    items: (parent, agrs, { models }) => {
-      return Object.values(models.items);
+    items: async(parent, agrs, { models }) => {
+      const items = await models.items.findAll();
+      return items
     }
   },
   Item: {
@@ -34,13 +36,6 @@ const resolvers = {
   },
 
 
-  // async createCatcall(_, { catcall }) {
-  //   const { type, geometry, properties} = catcall;
-  //   const createdCatcall = await Catcall.create({ type, geometry, properties });
-  //   return createdCatcall;
-  // },
-
-
   Mutation: {
 
     createUser: async (_, { user }, { models }) => {
@@ -48,27 +43,28 @@ const resolvers = {
       return createdUser;
     },
 
-    createItem: (parent, { name }, { me, models }) => {
-      let id = uuidv4();
-      console.log(id);
+    createItem: async (_, { name }, { models }) => {
+      //let id = uuidv4();
+      //console.log(id);
       const item = {
-        id,
+        //id,
         name,
-        userID: me.id,
+        // userID: me.id,
       }
-      models.items[id] = item;
-      models.users[me.id].itemIds.push(id);
+      const createdItem = await models.items.create(item);
 
-      return item;
+      return createdItem;
     },
-    deleteItem: (parent, { id }) => {
-      let { [id]: item, ...otherItems } = items;
-      if (!item) {
+    deleteItem: async (_, { id }, { models }) => {
+      const destroyed = await models.items.destroy({
+        where: {
+          id:id
+        }
+      })
+      if (!destroyed) {
         return false;
       }
-      model.items = otherItems;
       return true;
-
     }
   }
 };

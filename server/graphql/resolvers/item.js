@@ -21,10 +21,10 @@ module.exports =  {
       const item = {
         id,
         name,
-        userID: me.id,
+        // userID: me.id,
       }
-      models.items[id] = item;
-      model.users[me.id].itemIds.push(id);
+      // models.items[id] = item;
+      // model.users[me.id].itemIds.push(id);
 
       return item;
     },
@@ -32,10 +32,10 @@ module.exports =  {
       let { [id]: item, ...otherItems } = items;
       if(!item) {
         return false;
-      } 
+      }
       model.items = otherItems;
       return true;
-      
+
     }
   }
 }

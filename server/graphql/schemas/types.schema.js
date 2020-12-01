@@ -6,7 +6,7 @@ type User {
   }
 
   type Item {
-    id: ID!
+    id: String!
     name: String!
-    user: User!
+    user: User
   }`;
