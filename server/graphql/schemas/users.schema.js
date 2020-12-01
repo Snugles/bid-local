@@ -4,12 +4,12 @@ type User {
     username: String!
     item: [Item!]
   }
-type Query {
+extend type Query {
     me: User
     user(id: ID!): User
     users: [User!]
 }
-type Mutation {
+extend type Mutation {
     createUser(user: String!): User!
   }
 `;

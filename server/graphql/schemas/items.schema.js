@@ -5,12 +5,12 @@ type Item {
   user: User
 }
 
-type Query {
+extend type Query {
   item(id: ID!): Item
   items: [Item!]
 }
 
-type Mutation {
+extend type Mutation {
     createItem(name: String!): Item!
     deleteItem(id: ID!): Boolean!
   } `;
