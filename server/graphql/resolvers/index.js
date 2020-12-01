@@ -6,15 +6,22 @@ const resolvers = {
   Query: {
     user: user.user,
     users: user.users,
-
+    item: item.item,
+    items: item.items,
   },
 
   User: {
     item: user.get_items
   },
 
+  Item: {
+    user: item.get_users
+  },
+
   Mutation: {
-    createUser: user.createUser
+    createUser: user.createUser,
+    createItem: item.createItem,
+    deleteItem: item.deleteItem
   }
 };
 
