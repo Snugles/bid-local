@@ -8,5 +8,7 @@ type User {
   type Item {
     id: String!
     name: String!
-    user: User
+    minPrice: Int
+    description: String!
+    user: User!
   }`;
