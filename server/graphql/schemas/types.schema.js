@@ -9,6 +9,6 @@ type User {
     id: String!
     name: String!
     minPrice: Int
-    description: String!
+    description: String
     user: User!
   }`;
