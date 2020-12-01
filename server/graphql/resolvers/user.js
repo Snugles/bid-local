@@ -1,6 +1,6 @@
 
-exports.user = async (_, { id }, { models }) => {
-  const user = await models.users.findOne({id:id})
+exports.user = async (_, { email }, { models }) => {
+  const user = await models.users.findOne({email:email})
   return user
 }
 
@@ -10,7 +10,6 @@ exports.users = async (_, __, { models }) => {
 }
 
 exports.get_items = async (user, _, { models }) => {
-  console.log('USERID PASSED',user.id);
   const items = await models.items.findAll({
     where: {
       userId:user.id
@@ -18,7 +17,7 @@ exports.get_items = async (user, _, { models }) => {
   return items
 }
 
-exports.createUser = async (_, { user }, { models }) => {
-  const createdUser = await models.users.create({ username: user });
+exports.createUser = async (_, { email,password,firstName,lastName,phoneNumber }, { models }) => {
+  const createdUser = await models.users.create({ email: email, password: password,firstName: firstName, lastName:lastName, phoneNumber: phoneNumber });
   return createdUser;
 }

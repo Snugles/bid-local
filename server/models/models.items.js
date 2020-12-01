@@ -17,7 +17,7 @@ const Items = sequelize.define('items', {
     type: DataTypes.TEXT
   },
   userId: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
   }
 })
 Items.beforeCreate(item => item.id = uuidv4());

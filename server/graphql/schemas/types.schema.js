@@ -1,7 +1,11 @@
 module.exports = `
 type User {
-    id: ID!
-    username: String!
+    id: String!
+    firstName: String
+    lastName: String
+    password: String!
+    email: String!
+    phoneNumber: Int
     item: [Item!]
   }
 
