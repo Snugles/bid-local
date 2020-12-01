@@ -19,7 +19,7 @@ exports.get_items = async (user, _, { models }) => {
 }
 
 exports.createUser = async (_, { user }, { models }) => {
-  const createdUser = await models.users.create({ id: 2, username: user });
+  const createdUser = await models.users.create({ username: user });
   return createdUser;
 }
 

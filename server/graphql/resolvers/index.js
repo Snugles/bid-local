@@ -6,7 +6,6 @@ const resolvers = {
   Query: {
     user: user.user,
     users: user.users,
-
   },
 
   User: {
