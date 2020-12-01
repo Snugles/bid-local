@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   LayoutAnimation,
@@ -12,25 +12,50 @@ import {
   TextInput,
 } from 'react-native';
 
-const ExpandableComponent = ({item, onClickFunction, title, description}) => {
-  const [layoutHeight, setLayoutHeight] = useState(0);
-
-  useEffect(() => {
-    if (item.isExpanded) {
-      setLayoutHeight(null);
-    } else {
-      setLayoutHeight(0);
+export default function UsersItems() {
+  const data = [
+    {
+      title:'title 1',
+      description:'description description description description',
+      deadline:new Date('December 25, 2020 12:00:00'),
+      price:'20€',
+    },
+    {
+      title:'title 2',
+      description:'description description description description',
+      deadline:new Date('December 31, 2020 24:00:00'),
+      price:'20€',
     }
-  }, [item.isExpanded]);
+  ]
 
+  return (
+    <View style={styles.container}>
+      <View style={styles.box}>
+        <Text style={styles.text}>
+          Add additional item
+        </Text>
+      </View>
+      {data.map((item)=>(
+        <Panel 
+          key={item.title}
+          title={item.title} 
+          description={item.description} 
+          deadline={item.deadline}
+          price='20€'/>
+        ))}
+    </View>
+  );
+}
+
+const ExpandableComponent = ({onClickFunction, title, description, layoutHeight, setDescription, setTitle}) => {
   return (
     <View>
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={onClickFunction}
-        style={styles.header}>
-        <Text style={styles.headerText}>
-          Edit
+        style={styles2.header}>
+        <Text style={styles2.header}>
+          TOUCH HERE TO EDIT
         </Text>
       </TouchableOpacity>
       <View
@@ -40,22 +65,32 @@ const ExpandableComponent = ({item, onClickFunction, title, description}) => {
         }}>
           <View>
             <Text>Title</Text>
-            <TextInput style={styles.textBoxes} value={title}></TextInput>
+            <TextInput style={styles2.textBoxes} value={title} onChangeText={text => setTitle(text)}></TextInput>
             <Text>Description</Text>
-            <TextInput style={styles.textBoxes} value={description}></TextInput>
+            <TextInput style={styles2.textBoxes} value={description} onChangeText={text => setDescription(text)}></TextInput>
           </View>
       </View>
     </View>
   );
 };
-
-export default function Panel (props) {
+function Panel (props) {
   const [listDataSource, setListDataSource] = useState([{
     isExpanded: false,
   }]);
   const [multiSelect, setMultiSelect] = useState(false);
   const [timeDiff, setTimeDiff] = useState(props.deadline-new Date(Date.now()));
   const [time, setTime] = useState('99:99:99:99')
+  const [layoutHeight, setLayoutHeight] = useState(0);
+  const [title, setTitle] = useState(props.title);
+  const [description, setDescription] = useState(props.description);
+
+  useEffect(() => {
+    if (listDataSource[0].isExpanded) {
+      setLayoutHeight(null);
+    } else {
+      setLayoutHeight(0);
+    }
+  }, [listDataSource[0].isExpanded]);
 
   useEffect(()=>{
     setTimeout(()=>setTime(updateTime(timeDiff)), 1000);
@@ -90,7 +125,6 @@ export default function Panel (props) {
     if (multiSelect) {
       array[index]['isExpanded'] = !array[index]['isExpanded'];
     } else {
-      console.log(props.title)
       array.map((value, placeindex) =>
         placeindex === index
           ? (array[placeindex]['isExpanded'] =
@@ -107,22 +141,25 @@ export default function Panel (props) {
       borderColor: '#00C793',
       width: '95%',
       margin:10}}>
-      <View style={styles.container}>
+      <View style={styles2.container}>
         <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
           <View style={{flexShrink: 0}}>
-            <Text style={styles.titleText}>{props.title}</Text>
+            <Text style={styles2.titleText}>{props.title}</Text>
             <Text>{props.price}</Text>
           </View>
           <Text>{time}</Text>
         </View>
         <ScrollView>
             <ExpandableComponent
-              description={props.description}
-              title={props.title}
+              description={description}
+              title={title}
+              setTitle={setTitle}
+              setDescription={setDescription}
               onClickFunction={() => {
                 updateLayout(0);
               }}
-              item={listDataSource[0]}
+              listDataSource={listDataSource}
+              layoutHeight={layoutHeight}
             />
         </ScrollView>
       </View>
@@ -130,10 +167,11 @@ export default function Panel (props) {
   );
 };
 
-const styles = StyleSheet.create({
+const styles2 = StyleSheet.create({
   container: {
     width: '95%',
     flexShrink: 0,
+    padding:10,
   },
   titleText: {
     flexShrink: 0,
@@ -143,25 +181,57 @@ const styles = StyleSheet.create({
     width:'100%'
   },
   header: {
-    width: '95%'
-  },
-  headerText: {
     width: '95%',
     fontSize: 16,
     fontWeight: '500',
   },
   textBoxes: {
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#EF476F',
-    width: '95%',
+    borderWidth:1,
+    borderStyle:'solid',
+    borderColor:'#EF476F',
+    width:'95%',
+    padding:10
   },
   text: {
-    width: '95%',
-    fontSize: 16,
+    width:'95%',
+    fontSize:16,
   },
   content: {
+    width:'95%',
+    backgroundColor:'#fff',
+  },
+});
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection:'column',
+    marginTop:80,
+    backgroundColor:'#fff',
+    alignItems:'center',
+    justifyContent:'flex-start',
+    width:'100%',
+    height:'100%',
+    flexShrink:0,
+  },
+  box: {
+    margin:10,
+    height:100,
     width: '95%',
-    backgroundColor: '#fff',
+    flexShrink: 0,
+    backgroundColor: '#0C637F',
+    flexDirection:'row',
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  text: {
+    color:'#fff',
+    fontSize: 22,
+    textAlign:'center',
+  },
+  itemImage: {
+    width: 50,
+    height: 50,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
   },
 });
