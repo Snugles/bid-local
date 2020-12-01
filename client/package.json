@@ -13,6 +13,9 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.4.tar.gz",
+    "react-native-dropdown-picker": "^3.7.1",
+    "react-native-material-dropdown": "^0.11.1",
+    "react-native-snap-carousel": "^3.9.1",
     "react-native-web": "~0.13.12"
   },
   "devDependencies": {

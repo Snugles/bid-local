@@ -7,9 +7,10 @@
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "cover",
+      "backgroundColor": "#FFD166"
     },
+
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -23,7 +24,14 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+          "splash": {
+            "mdpi": "assets/splash.png",
+            "hdpi": "assets/splash/hdpi.png",
+            "xhdpi": "assets/splash/xhdpi.png",
+            "xxhdpi": "assets/splash/xxhdpi.png",
+            "xxxhdpi": "assets/splash/xxxhdpi.png"
+          }
     },
     "web": {
       "favicon": "./assets/favicon.png"
