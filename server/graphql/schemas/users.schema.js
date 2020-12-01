@@ -1,15 +1,19 @@
 module.exports = `
 type User {
-    id: ID!
-    username: String!
-    item: [Item!]
+  id: String!
+  firstName: String
+  lastName: String
+  password: String!
+  email: String!
+  phoneNumber: Int
+  item: [Item!]
   }
 extend type Query {
     me: User
-    user(id: ID!): User
+    user(email: String!): User
     users: [User!]
 }
 extend type Mutation {
-    createUser(user: String!): User!
+  createUser(email: String!,password: String!,firstName: String, lastName: String, phoneNumber:Int): User!
   }
 `;

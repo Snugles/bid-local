@@ -10,7 +10,7 @@ exports.items = async(_, agrs, { models }) => {
   return items
 }
 
-exports.get_users = async(item, _, { models }) => {
+exports.get_user = async(item, _, { models }) => {
       const user = await models.users.findOne({id:item.userId})
       return user;
     }
@@ -20,7 +20,7 @@ exports.createItem = async (_, { name, minPrice, description }, { models }) => {
       name,
       minPrice,
       description,
-      userId: 1,
+      userId: "f4d75b33-a491-47f7-afff-b62db5b18c5c", //make dynamic
     }
     const createdItem = await models.items.create(item);
 

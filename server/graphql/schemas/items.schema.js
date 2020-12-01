@@ -2,7 +2,9 @@ module.exports = `
 type Item {
   id: String!
   name: String!
-  user: User
+  minPrice: Int
+  description: String
+  user: User!
 }
 
 extend type Query {
@@ -11,6 +13,6 @@ extend type Query {
 }
 
 extend type Mutation {
-    createItem(name: String!): Item!
-    deleteItem(id: ID!): Boolean!
+  createItem(name: String!, minPrice: Int!, description: String): Item!
+  deleteItem(id: ID!): Boolean!
   } `;
