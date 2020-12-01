@@ -13,12 +13,12 @@ exports.get_user = async (item, _, { models }) => {
   return user;
 }
 
-exports.createItem = async (_, { name, minPrice, description }, { models }) => {
+exports.createItem = async (_, { name, minPrice, description,userId }, { models }) => {
   const item = {
     name,
     minPrice,
     description,
-    userId: "f4d75b33-a491-47f7-afff-b62db5b18c5c", //make dynamic
+    userId: userId, //make dynamic
   }
   const createdItem = await models.items.create(item);
 

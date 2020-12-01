@@ -13,6 +13,6 @@ extend type Query {
 }
 
 extend type Mutation {
-  createItem(name: String!, minPrice: Int!, description: String): Item!
+  createItem(name: String!, minPrice: Int!, description: String, userId: String!): Item!
   deleteItem(id: ID!): Boolean!
   } `;
