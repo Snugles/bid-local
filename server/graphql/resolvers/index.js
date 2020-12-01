@@ -25,13 +25,19 @@ const resolvers = {
     }
   },
   Item: {
-    user: (item, args, { models }) => {
-      return models.users[item.userID];
+    user: async(item, _, { models }) => {
+      const user = await models.users.findOne({id:item.userId})
+      return user;
     }
   },
   User: {
-    item: (user, args, { models }) => {
-      return Object.values(models.items).filter(item => item.userID === user.id)
+    item: async (user, _, { models }) => {
+      console.log('USERID PASSED',user.id);
+      const items = await models.items.findAll({
+        where: {
+          userId:user.id
+        }})
+      return items
     }
   },
 
@@ -49,7 +55,7 @@ const resolvers = {
       const item = {
         //id,
         name,
-        // userID: me.id,
+        userId: 1,
       }
       const createdItem = await models.items.create(item);
 
