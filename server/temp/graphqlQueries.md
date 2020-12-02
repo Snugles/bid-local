@@ -1,3 +1,6 @@
+// For queries that require Ids please insert ones given by database.
+// Here is some sample queries
+
 
 //Create User
 mutation {
@@ -35,6 +38,28 @@ mutation {
       email
       id
     }
+  }
+}
+
+// List all items
+query {
+  items{
+    id
+    name
+    minPrice
+    description
+    user {
+      email
+    }
+  }
+}
+
+// Get item by Id (Insert the correct id given from database)
+query{
+  item(id:"1cb38768-682d-484e-af4d-dd2f9d0e482e"){
+    name
+    minPrice
+    description
   }
 }
 
