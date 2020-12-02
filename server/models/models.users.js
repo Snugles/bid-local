@@ -7,8 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     id: { primaryKey: true, type: DataTypes.UUID },
     email: { type: DataTypes.STRING, allowNull: false, unique: true, validate: { isEmail: true, notEmpty: true } },
     password: { type: DataTypes.TEXT, allowNull: false, validate: { notEmpty: true } },
-    firstName: { type: DataTypes.TEXT, validate: { isAlpha: true } },
-    lastName: { type: DataTypes.TEXT, validate: { isAlpha: true } },
+    firstName: { type: DataTypes.TEXT },
+    lastName: { type: DataTypes.TEXT },
     phoneNumber: { type: DataTypes.INTEGER, validate: { isNumeric: true } },
   });
 

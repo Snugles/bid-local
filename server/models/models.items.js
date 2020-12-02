@@ -13,12 +13,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: true,
-        isAlpha: true
       }
     },
     minPrice: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      default: 0,
       validate: {
         notEmpty: true,
         isDecimal: true
@@ -26,7 +25,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.TEXT,
-      allowNull: true,
     },
     userId: {
       type: DataTypes.UUID,
