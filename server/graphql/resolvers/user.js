@@ -19,7 +19,7 @@ exports.get_items = async (user, _, { models }) => {
 };
 
 exports.get_address = async (user, _, { models }) => {
-  const address = await models.addresses.findAll({
+  const address = await models.addresses.findOne({
     where: {
       userId: user.id
     }

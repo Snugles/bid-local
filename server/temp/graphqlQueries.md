@@ -88,3 +88,19 @@ query {
   }
 }
 
+//Create Address
+mutation {
+  createAddress(
+    firstLineAddress:"Bickleigh house", 
+    secondLineAddress:"Tiverton road", 
+    city: "London", 
+    postcode:"N15 6ED", 
+    country:"UK", 
+    userId:"4cd83f3f-7fde-4c9d-a5ef-b323b1ced666")
+    {
+      city
+      postcode
+      country
+    }
+}
+
