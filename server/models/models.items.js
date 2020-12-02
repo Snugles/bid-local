@@ -37,7 +37,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     categoryId: {
       type: DataTypes.UUID,
-      allowNull: false,
       validate: {
         isUUID: 4,
       }

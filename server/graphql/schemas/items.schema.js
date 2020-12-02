@@ -5,7 +5,7 @@ type Item {
   minPrice: Int
   description: String
   user: User!
-  category: Category!
+  category: Category
 }
 
 extend type Query {
@@ -14,6 +14,6 @@ extend type Query {
 }
 
 extend type Mutation {
-  createItem(name: String!, minPrice: Int!, description: String, userId: String!, categoryId: String!): Item!
+  createItem(name: String!, minPrice: Int!, description: String, userId: String!, categoryId: String): Item!
   deleteItem(id: ID!): Boolean!
   } `;
