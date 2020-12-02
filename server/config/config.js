@@ -1,6 +1,6 @@
 module.exports =  {
   database: 'db_bid_local',
-  username: 'postgres',
-  password: 'Alex',
-  dialect: 'postgres',
-}
+  username: 'db_user',
+  password: 'BID_local@2020',
+  dialect: 'mysql',
+};
