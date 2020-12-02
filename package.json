@@ -1,0 +1,23 @@
+{
+  "name": "bid-local",
+  "version": "1.0.0",
+  "description": "## database table for each region table for users table for items linked to region",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "husky": "^4.3.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SnuglyWugly/bid-local.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SnuglyWugly/bid-local/issues"
+  },
+  "homepage": "https://github.com/SnuglyWugly/bid-local#readme"
+}
