@@ -31,7 +31,12 @@ mutation {
 
 //Create an item
 mutation {
-  createItem(name: "wardrobe",minPrice:30,userId:"00041ef6-51d2-4db3-b939-bcda0b108b27"){
+  createItem(
+    name: "wardrobe",
+    minPrice:30,
+    userId:"00041ef6-51d2-4db3-b939-bcda0b108b27",
+    categoryId:"3e84bcf9-385e-46ad-a20b-70960813a3a5",
+  ){
     name
     minPrice
     user{
@@ -66,5 +71,20 @@ query{
 //Delete an item
 mutation {
   deleteItem(id:"13e6a396-7b98-4fb5-bcde-1a0d7d916781")
+}
+
+//Create Category
+mutation{
+  createCategory(name: "clothes"){
+    name
+  }
+}
+
+//List all categories
+query {
+  categories{
+    id
+    name
+  }
 }
 

@@ -18,6 +18,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     userId: {
       type: DataTypes.UUID,
+    },
+    categoryId: {
+      type: DataTypes.UUID,
     }
   });
   Items.beforeCreate(item => item.id = uuidv4());

@@ -9,7 +9,7 @@ exports.categories = async (_, __, { models }) => {
 };
 
 exports.get_items = async (category, _, { models }) => {
-  const item = await models.items.findOne({ id: category.categoryId });
+  const item = await models.items.findOne({ id: item.categoryId });
   return item;
 };
 
