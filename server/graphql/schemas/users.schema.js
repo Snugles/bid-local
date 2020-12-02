@@ -7,6 +7,7 @@ type User {
   email: String!
   phoneNumber: Int
   item: [Item!]
+  address: Address!
   }
 extend type Query {
     me: User

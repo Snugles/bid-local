@@ -18,6 +18,15 @@ exports.get_items = async (user, _, { models }) => {
   return items;
 };
 
+exports.get_address = async (user, _, { models }) => {
+  const address = await models.addresses.findAll({
+    where: {
+      userId: user.id
+    }
+  });
+  return address;
+};
+
 exports.createUser = async (_, { email, password, firstName, lastName, phoneNumber }, { models }) => {
   const createdUser = await models.users.create({ email: email, password: password, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber });
   return createdUser;
