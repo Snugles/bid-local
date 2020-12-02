@@ -2,12 +2,12 @@ module.exports = `
 type Category {
   id: String!
   name: String!
-  item: Item!
+  item: [Item]
 }
 
 extend type Query {
-  category(id: ID!): Category
-  categories: [Category!]
+  get_category(id: ID!): Category
+  get_categories: [Category]
 }
 
 extend type Mutation {

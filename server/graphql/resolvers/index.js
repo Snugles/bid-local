@@ -10,8 +10,8 @@ const resolvers = {
     users: user.users,
     item: item.item,
     items: item.items,
-    category: category.category,
-    categories: category.categories,
+    get_category: category.get_category,
+    get_categories: category.get_categories,
     address: address.address,
   },
 
