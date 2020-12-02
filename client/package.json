@@ -5,7 +5,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "lint": "eslint"
   },
   "dependencies": {
     "@react-native-community/masked-view": "0.1.10",
@@ -14,6 +15,7 @@
     "expo": "~39.0.2",
     "expo-font": "^8.3.0",
     "expo-status-bar": "~1.0.2",
+    "prettier": "^2.2.1",
     "native-base": "^2.13.14",
     "react": "16.13.1",
     "react-dom": "16.13.1",

@@ -1,35 +1,34 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, Image, TextInput, Dimensions, TouchableOpacity } from 'react-native'
+import Navbar from '../components/Navbar';
 
 const windowWidth = Dimensions.get('window').width;
 
 
-export default function AddItem() {
+export default function AddItem({ navigation }) {
   const [title, setTitle] = React.useState('');
   const [price, setPrice] = React.useState('');
   const [description, setDescription] = React.useState('');
 
   const images=[
     {
-      key:0,
       image:require('../assets/item-test-1.jpg'),
     },
     {
-      key:1,
       image:require('../assets/item-test-2.jpg'),
     },
     {
-      key:2,
       image:require('../assets/item-test-3.jpg'),
     },
     {
-      key:4,
       image:require('../assets/plus.png'),
     }
   ];
 
   return (
-    <ScrollView style={styles.container}>
+    <>
+    <Navbar navigation={navigation} canGoBack={true}/>
+    <ScrollView style={styles.container} contentContainerStyle={{alignItems: 'center',}}>
       <Text>
         Title:
       </Text>
@@ -49,28 +48,30 @@ export default function AddItem() {
       style={styles.textBoxes}
       onChangeText={text => setDescription(text)}/>
       <View style={styles.itemView}>
-        {images.map(image=>(
-        <TouchableOpacity>
+        {images.map((image, index)=>(
+        <TouchableOpacity key={index}>
         <Image 
-          key={image.key}
           style={styles.itemImage}
           source={image.image}/>
         </TouchableOpacity>))}
       </View>
     </ScrollView>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    width:'95%'
+    flex: 1,
+    padding: 15,
   },
   textBoxes: {
     borderWidth: 1,
     borderStyle: 'solid',
     borderColor: '#EF476F',
-    width: '95%',
-    padding:10
+    width: '90%',
+    padding:10,
+    marginBottom: 15,
   },
   itemView: {
     width: '100%',
