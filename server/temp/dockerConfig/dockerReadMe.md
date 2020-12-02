@@ -1,12 +1,20 @@
+0. Make sure mysql service is NOT running
+1. Replace your config file with one in the docker folder
+2. run docker compose up to start the database service
+3. run npm start in seperate terminal
+
+Instructions from the web
+
+/*****************************************************/
 Shutting Down & Cleaning Up
 
 We don’t want our image to be running 24/7, but shutting it down can be a little tricky.
 
-In your terminal, press
+In your terminal, press (to persist data)
 
 **ctrl + c**
 
-this may or may not kill the container gracefully 🤷‍. Either way, run
+this may or may not kill the container gracefully 🤷‍. Either way, run (this will drop tables and start afresh)
 
 **docker-compose down**
 
