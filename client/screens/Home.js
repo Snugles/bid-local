@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, ImageBackground, Dimensions } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Navbar from '../components/Navbar';
 
 const windowWidth = Dimensions.get('window').width;
@@ -33,13 +34,15 @@ export default function Home({ navigation }) {
   const [currentCategory, setCurrentCategory] = useState(categories[0]);
 
   const itemList = data.map( (item, index) => (
-    <View key={index} style={styles.itemView} onTouchStart={()=>{navigation.navigate('Item')}}>
-      <ImageBackground style={styles.itemImage} resizeMode='cover' source={item.image}>
-        <Text style={styles.itemTime}>04:45</Text>
-      </ImageBackground>
-      <Text style={styles.itemTitle}>{item.title}</Text>
-      <Text style={styles.itemPrice}>{item.startingPrice}</Text>
-    </View>
+    <TouchableWithoutFeedback key={index} onPress={()=>{navigation.navigate('Item')}}>
+      <View style={styles.itemView}>
+        <ImageBackground style={styles.itemImage} resizeMode='cover' source={item.image}>
+          <Text style={styles.itemTime}>04:45</Text>
+        </ImageBackground>
+        <Text style={styles.itemTitle}>{item.title}</Text>
+        <Text style={styles.itemPrice}>{item.startingPrice}</Text>
+      </View>
+    </TouchableWithoutFeedback>
   ));
 
   const categoryList = categories.map(cat => (

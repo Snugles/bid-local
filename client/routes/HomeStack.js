@@ -3,23 +3,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import React from 'react'
 import Home from '../screens/Home';
 import Item from '../screens/Item';
+import AddItem from '../screens/AddItem'
+import UsersItems from '../screens/UsersListedItems'
 
 const Stack = createStackNavigator();
-
-const screens = {
-  Home: {
-    screen: Home,
-    navigationOptions: { headerShown: false },
-  },
-  Item: {
-    screen: Item,
-    navigationOptions: { headerShown: false },
-  },
-  // MapScreen: {
-  //   screen: MapScreen,
-  //   navigationOptions: { headerShown: false },
-  // },
-};
 
 const HomeStack = () => {
 
@@ -32,12 +19,18 @@ const HomeStack = () => {
         <Stack.Screen
           name="Home"
           component={Home}
-          
         />
         <Stack.Screen
           name="Item"
           component={Item}
-          
+        />
+        <Stack.Screen
+          name="AddItem"
+          component={AddItem}
+        />
+        <Stack.Screen
+          name="UsersItems"
+          component={UsersItems}
         />
       </Stack.Navigator>
     </NavigationContainer>

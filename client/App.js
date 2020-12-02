@@ -1,16 +1,9 @@
-import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View, ImageBackground, TouchableWithoutFeedback } from 'react-native';
-// import { NavigationContainer } from '@react-navigation/native';
-// import { createStackNavigator } from '@react-navigation/stack';
 import Navigator from './routes/HomeStack';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
-// import Item from './components/ItemComponent';
-// import Home from './components/HomeComponent';
-
-// const Stack = createStackNavigator();
 
 const getFonts = () => {
   return Font.loadAsync({
@@ -21,14 +14,6 @@ const getFonts = () => {
 export default function App() {
 
   const [fontsLoaded, setFontsLoaded] = useState(false);
-
-  // const navRef = useRef(null);
-  // const backRef = useRef(true);
-
-  // function handleNavChange (navigation) {
-  //   console.log(navigation.canGoBack());
-  //   navRef.current = navigation;
-  // }
 
   return (
     <>
