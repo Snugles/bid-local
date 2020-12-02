@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, Animated, Image } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { StyleSheet, Animated } from 'react-native';
 import { Container, Content, Text, List, ListItem, Icon } from "native-base";
 
 export default function SideBar({ navigation, hideSide, setHideSide }) {
 
-  const routes = ["Home", "AddItem", "UsersItems"];
   const fadeAnim = useRef(new Animated.Value(300)).current
 
   useEffect(() => {
@@ -34,6 +33,14 @@ export default function SideBar({ navigation, hideSide, setHideSide }) {
     <Animated.View style={[styles.container, {transform: [{ translateX: fadeAnim }]} ]}>
         <Content>
           <List>
+            <ListItem onPress={()=>{navigation.navigate('Login'); setHideSide(true)}}>
+              <Icon type="MaterialCommunityIcons" name="login" style={styles.sidebarIcon}/>
+              <Text style={styles.sidebarText}>Login</Text>
+            </ListItem>
+            <ListItem onPress={()=>{navigation.navigate('UserInfo'); setHideSide(true)}}>
+              <Icon type="MaterialCommunityIcons" name="account" style={styles.sidebarIcon}/>
+              <Text style={styles.sidebarText}>User Info</Text>
+            </ListItem>
             <ListItem style={styles.sidebarItem} onPress={()=>{navigation.navigate('Home'); setHideSide(true)}}>
               <Icon type="MaterialCommunityIcons" name="home" style={styles.sidebarIcon}/>
               <Text style={styles.sidebarText}>Home</Text>

@@ -3,8 +3,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import React from 'react'
 import Home from '../screens/Home';
 import Item from '../screens/Item';
-import AddItem from '../screens/AddItem'
-import UsersItems from '../screens/UsersListedItems'
+import AddItem from '../screens/AddItem';
+import UsersItems from '../screens/UsersListedItems';
+import Login from '../screens/Login';
+import UserInfo from '../screens/UserInfo';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +33,14 @@ const HomeStack = () => {
         <Stack.Screen
           name="UsersItems"
           component={UsersItems}
+        />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+        />
+        <Stack.Screen
+          name="UserInfo"
+          component={UserInfo}
         />
       </Stack.Navigator>
     </NavigationContainer>
