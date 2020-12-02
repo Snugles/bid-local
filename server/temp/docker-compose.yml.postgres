@@ -1,0 +1,13 @@
+version: '0.5'
+
+services:
+  db:
+    image: postgres:13
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=db_bid_local
+
