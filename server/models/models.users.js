@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
 
   const Users = sequelize.define('users', {
     id: { primaryKey: true, type: DataTypes.UUID },
-    email: { type: DataTypes.TEXT, allowNull: false, unique: true, validate: { isEmail: true, notEmpty: true } },
+    email: { type: DataTypes.STRING, allowNull: false, unique: true, validate: { isEmail: true, notEmpty: true } },
     password: { type: DataTypes.TEXT, allowNull: false, validate: { notEmpty: true } },
     firstName: { type: DataTypes.TEXT, validate: { isAlpha: true } },
     lastName: { type: DataTypes.TEXT, validate: { isAlpha: true } },
