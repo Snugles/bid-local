@@ -3,6 +3,6 @@ module.exports =  {
   username: '', //'postgres'
   password: '', //'pass'
   dialect: '' //'postgres' OR 'mysql'
-}
+};
 
 //put in config folder
