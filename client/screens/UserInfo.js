@@ -7,8 +7,9 @@ import {
   Button,
   TextInput,
 } from 'react-native';
+import Navbar from '../components/Navbar';
 
-export default function UserInfo() {
+export default function UserInfo({ navigation }) {
   const [username, setUsername] = useState('snuglywugly');
   const [email, SetEmail] = useState('email@gmail.com');
   const [phoneNumber, setPhoneNumber] = useState('07425 058395');
@@ -19,6 +20,8 @@ export default function UserInfo() {
   }
   
   return (
+    <>
+    <Navbar navigation={navigation} canGoBack={true}/>
     <ScrollView style={styles.container}>
       <Text style={styles.headers}>
         Username:
@@ -57,19 +60,21 @@ export default function UserInfo() {
         onPress={toggle}
         color= '#0C637F'/>}
     </ScrollView>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    width:'95%'
+    flex: 1,
+    padding: 15,
   },
   headers : {
     fontWeight: 'bold',
-    fontSize:'16px'
+    fontSize: 16
   },
   displayText : {
-    width: '95%',
+    width: '100%',
     padding:11,
     marginBottom:10
   },
@@ -77,7 +82,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: 'solid',
     borderColor: '#EF476F',
-    width: '95%',
+    width: '100%',
     padding:10,
     marginBottom:10
   },
