@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
   Items.beforeCreate(item => item.id = uuidv4());
   Items.associate = (models) => {
     Items.belongsTo(models.users);
-    // Items.belongsToMany(models.categories);
+    Items.belongsTo(models.categories);
   };
 
   console.log(uuidv4());

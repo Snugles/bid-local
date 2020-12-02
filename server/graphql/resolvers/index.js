@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const user = require('./user');
 const item = require('./item');
+const category = require('./category');
 
 const resolvers = {
   Query: {
@@ -8,6 +9,8 @@ const resolvers = {
     users: user.users,
     item: item.item,
     items: item.items,
+    category: category.category,
+    categories: category.categories
   },
 
   User: {
@@ -18,10 +21,16 @@ const resolvers = {
     user: item.get_user
   },
 
+  Category: {
+    item: category.get_items
+  },
+
   Mutation: {
     createUser: user.createUser,
     createItem: item.createItem,
-    deleteItem: item.deleteItem
+    deleteItem: item.deleteItem,
+    createCategory: category.createCategory,
+    deleteCategory: category.deleteCategory
   }
 };
 

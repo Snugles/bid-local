@@ -2,6 +2,8 @@ const { gql } = require('apollo-server-express');
 
 const usersSchema = require('./users.schema');
 const itemsSchema = require('./items.schema');
+const categoriesSchema = require('./categories.schema');
+
 
 module.exports = gql`
    type Query {
@@ -13,4 +15,5 @@ module.exports = gql`
    }
    ${usersSchema}
    ${itemsSchema}
+   ${categoriesSchema}
  `;
