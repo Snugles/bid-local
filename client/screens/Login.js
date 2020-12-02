@@ -6,8 +6,9 @@ import {
   Button,
   TextInput,
 } from 'react-native';
+import Navbar from '../components/Navbar';
 
-export default function UserInfo() {
+export default function Login({ navigation }) {
   const [username, setUsername] = useState('');
   
   function login () {
@@ -15,6 +16,8 @@ export default function UserInfo() {
   }
 
   return (
+    <>
+    <Navbar navigation={navigation} canGoBack={true}/>
     <View style={styles.container}>
       <Text style={styles.headers}>
         Username:
@@ -28,17 +31,19 @@ export default function UserInfo() {
         onPress={login()}
         color= '#0C637F'/>
     </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    width:'95%',
-    alignSelf:'center'
+    padding: 15,
+    flex: 1,
+    justifyContent: 'center',
   },
   headers : {
     fontWeight: 'bold',
-    fontSize:'16px',
+    fontSize: 16,
     justifyContent:'center'
   },
   textBoxes: {
