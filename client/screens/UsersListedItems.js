@@ -11,8 +11,10 @@ import {
   Platform,
   TextInput,
 } from 'react-native';
+import { Icon } from "native-base";
+import Navbar from '../components/Navbar';
 
-export default function UsersItems() {
+export default function UsersItems({navigation}) {
   const data = [
     {
       title:'title 1',
@@ -29,12 +31,15 @@ export default function UsersItems() {
   ]
 
   return (
+    <>
+    <Navbar navigation={navigation} canGoBack={true}/>
     <View style={styles.container}>
-      <View style={styles.box}>
+      <TouchableOpacity onPress={()=>{navigation.navigate('AddItem')}} style={styles.box}>
         <Text style={styles.text}>
           Add additional item
         </Text>
-      </View>
+        <Icon type="MaterialCommunityIcons" name="plus" style={{color: 'white', fontSize: 70}}/>
+      </TouchableOpacity>
       {data.map((item)=>(
         <Panel 
           key={item.title}
@@ -44,6 +49,7 @@ export default function UsersItems() {
           price='20€'/>
         ))}
     </View>
+    </>
   );
 }
 
@@ -93,7 +99,11 @@ function Panel (props) {
   }, [listDataSource[0].isExpanded]);
 
   useEffect(()=>{
-    setTimeout(()=>setTime(updateTime(timeDiff)), 1000);
+    let timer = setTimeout(()=>setTime(updateTime(timeDiff)), 1000);
+
+    return ()=>{
+      clearTimeout(timer);
+    }
   },[timeDiff]);
 
   function updateTime (diff) { 
@@ -205,7 +215,6 @@ const styles2 = StyleSheet.create({
 const styles = StyleSheet.create({
   container: {
     flexDirection:'column',
-    marginTop:80,
     backgroundColor:'#fff',
     alignItems:'center',
     justifyContent:'flex-start',
@@ -214,13 +223,14 @@ const styles = StyleSheet.create({
     flexShrink:0,
   },
   box: {
+    paddingLeft: 15,
     margin:10,
     height:100,
     width: '95%',
     flexShrink: 0,
     backgroundColor: '#0C637F',
     flexDirection:'row',
-    justifyContent:'center',
+    justifyContent:'space-between',
     alignItems:'center'
   },
   text: {

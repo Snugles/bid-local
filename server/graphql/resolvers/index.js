@@ -15,7 +15,7 @@ const resolvers = {
   },
 
   Item: {
-    user: item.get_users
+    user: item.get_user
   },
 
   Mutation: {
