@@ -1,6 +1,6 @@
-module.exports =  {
+module.exports = {
   database: 'db_bid_local',
-  username: 'postgres',
-  password: 'Alex',
+  username: 'matthaddon',
+  password: 'postgres123',
   dialect: 'postgres',
-}
+};
