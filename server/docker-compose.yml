@@ -1,0 +1,13 @@
+version: "3"
+services:
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: db_bid_local
+      MYSQL_USER: user
+      MYSQL_PASSWORD: mysqlpass
+    ports:
+      - '3306:3306'
+
