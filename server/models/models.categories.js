@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 module.exports = (sequlize, DataTypes) => {
   const Categories = sequlize.define('categories', {
     id: { primaryKey: true, type: DataTypes.UUID},
-    name: { type: DataTypes.STRING, validate: { isAlpha: true } }
+    name: { type: DataTypes.STRING, validate: { allowNull: false, isAlpha: true } }
   });
 
   Categories.associate = (models) => {
