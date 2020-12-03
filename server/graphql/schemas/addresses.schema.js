@@ -1,8 +1,8 @@
 module.exports = `
 type Address {
   id: String!
-  firstLineAddress: String
-  secndLineAddress: String
+  firstLineAddress: String!
+  secondLineAddress: String
   city: String!
   postcode: String!
   country: String!
