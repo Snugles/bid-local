@@ -59,11 +59,13 @@ export default function AddItem({ navigation }) {
 
   function handleSubmit () {
     const queryVariables = {
-      name: title,
-      minPrice: parseInt(price),
-      description: description,
       userId: "3a739a58-6189-45d7-bb1d-376569355ca8",
-      categoryId: "2f4b1fff-6643-46fc-abee-40ddbd8896ae"
+      item: {
+        name: title,
+        minPrice: parseInt(price),
+        description: description,
+      }
+      // categoryId: "2f4b1fff-6643-46fc-abee-40ddbd8896ae"
     };
 
     console.log(queryVariables);

@@ -3,24 +3,31 @@ import { StyleSheet, Text, View, ScrollView, ImageBackground, Dimensions } from 
 import DropDownPicker from 'react-native-dropdown-picker';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Navbar from '../components/Navbar';
-import { GET_USERS } from '../queries/test'
-import { useQuery } from '@apollo/client';
+import { GET_CATEGORIES, GET_ITEMS } from '../queries/home'
+import { useQuery, useLazyQuery } from '@apollo/client';
 
 const windowWidth = Dimensions.get('window').width;
 
 export default function Home({ navigation }) {
-  const { loading, error, data } = useQuery(GET_USERS);
+  const [currentCategory, setCurrentCategory] = useState('ALL');
+  const categories = useQuery(GET_CATEGORIES);
+  const [getItems, items] = useLazyQuery(GET_ITEMS);
 
   useEffect(()=>{
-    console.log('loading: ',loading);
-    console.log('error: ',error);
-    console.log('data: ',data);
-  }, [loading, data, error]);
+    if (categories.data) {
+      getItems();
+    }
+  }, [categories]);
 
-  const categories = [
-    'Houses',
-    'Electronics',
-    'Motorcycles'
+  useEffect(()=>{
+    console.log(currentCategory);
+  }, [currentCategory]);
+
+  const categ = [
+    'ALL',
+    'ELECTRONICS',
+    'HOUSES',
+    'VEHICLES',
   ];
 
   const mockdata = [
@@ -44,26 +51,8 @@ export default function Home({ navigation }) {
     },
   ];
 
-  const [currentCategory, setCurrentCategory] = useState(categories[0]);
-
-  const itemList = mockdata.map( (item, index) => (
-    <TouchableWithoutFeedback key={index} onPress={()=>{navigation.navigate('Item', {id: item.itemId})}}>
-      <View style={styles.itemView}>
-        <ImageBackground style={styles.itemImage} resizeMode='cover' source={item.image}>
-          <Text style={styles.itemTime}>04:45</Text>
-        </ImageBackground>
-        <Text style={styles.itemTitle}>{item.title}</Text>
-        <Text style={styles.itemPrice}>{item.startingPrice}</Text>
-      </View>
-    </TouchableWithoutFeedback>
-  ));
-
-  const categoryList = categories.map(cat => (
-    {
-      label: cat.charAt(0).toUpperCase() + cat.slice(1),
-      value: cat
-    }
-  ));
+  if (categories.loading) return (<Text>Loading...</Text>);
+  if (categories.error) return (<Text>Error: {items.error}</Text>);
 
   return (
     <>
@@ -72,8 +61,15 @@ export default function Home({ navigation }) {
       <View style={styles.homeContent}>
         <Text style={styles.categoryTitle}>Category:</Text>
         <DropDownPicker
-          items={categoryList}
-          defaultValue={categories[0]}
+          items={
+            [{name: 'ALL'}, ...categories.data.get_categories].map(cat => (
+              {
+                label: cat.name.charAt(0) + cat.name.slice(1).toLowerCase(),
+                value: cat.name
+              }
+            ))
+          }
+          defaultValue={'ALL'}
           containerStyle={{
             height: 40,
             marginBottom: 20,
@@ -100,13 +96,30 @@ export default function Home({ navigation }) {
           onChangeItem={cat => setCurrentCategory(cat.value)}
         />
         <View style={styles.homeItems}>
-          {itemList}
+          {items.data
+            ?
+            items.data.get_items.map( (item, index) => (
+              <TouchableWithoutFeedback key={index} onPress={()=>{navigation.navigate('Item', {id: item.id})}}>
+                <View style={styles.itemView}>
+                  <ImageBackground style={styles.itemImage} resizeMode='cover' source={require('../assets/item-test-1.jpg')}>
+                    <Text style={styles.itemTime}>xx:xx</Text>
+                  </ImageBackground>
+                  <Text style={styles.itemTitle}>{item.name}</Text>
+                  <Text style={styles.itemPrice}>{item.minPrice}</Text>
+                </View>
+              </TouchableWithoutFeedback>
+            ))
+            :
+            null
+          }
         </View>
       </View>
     </ScrollView>
     </>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
