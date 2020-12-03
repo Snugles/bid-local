@@ -13,22 +13,38 @@ import {
 } from 'react-native';
 import { Icon } from "native-base";
 import Navbar from '../components/Navbar';
+import { GET_USER_ITEMS } from '../queries/usersListedItems'
+import { useQuery } from '@apollo/client';
 
 export default function UsersItems({navigation}) {
-  const data = [
-    {
-      title:'title 1',
-      description:'description description description description',
-      deadline:new Date('December 25, 2020 12:00:00'),
-      price:'20€',
-    },
-    {
-      title:'title 2',
-      description:'description description description description',
-      deadline:new Date('December 31, 2020 24:00:00'),
-      price:'20€',
-    }
-  ]
+  const mockemail = 'test@email2.com';
+  const {loading, error, data} = useQuery(GET_USER_ITEMS, {
+    variables: { email: mockemail }
+  });
+
+  useEffect(()=>{
+    console.log('loading: ', loading);
+    console.log('error: ', error);
+    console.log('data: ', data);
+  }, [loading, error, data]);
+
+  // const data = [
+  //   {
+  //     title:'title 1',
+  //     description:'description description description description',
+  //     deadline:new Date('December 25, 2020 12:00:00'),
+  //     price:'20€',
+  //   },
+  //   {
+  //     title:'title 2',
+  //     description:'description description description description',
+  //     deadline:new Date('December 31, 2020 24:00:00'),
+  //     price:'20€',
+  //   }
+  // ]
+
+  if (loading) return (<Text>Loading...</Text>);
+  if (error) return (<Text>Error: {error}</Text>);
 
   return (
     <>
@@ -40,13 +56,13 @@ export default function UsersItems({navigation}) {
         </Text>
         <Icon type="MaterialCommunityIcons" name="plus" style={{color: 'white', fontSize: 70}}/>
       </TouchableOpacity>
-      {data.map((item)=>(
+      {data.get_user_by_email.item.map((item)=>(
         <Panel 
-          key={item.title}
-          title={item.title} 
+          key={item.id}
+          title={item.name} 
           description={item.description} 
-          deadline={item.deadline}
-          price='20€'/>
+          deadline={new Date('December 25, 2020 12:00:00')}
+          price={item.minPrice}/>
         ))}
     </View>
     </>
