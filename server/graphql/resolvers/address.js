@@ -4,7 +4,7 @@ exports.get_address_by_userId = async (_, { userId }, { models }) => {
 };
 
 exports.get_user_by_address = async (address, _, { models }) => {
-  const user = await models.addresses.findOne({ id: address.userId });
+  const user = await models.addresses.findOne({ where: { id: address.userId }});
   return user;
 };
 

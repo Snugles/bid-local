@@ -15,11 +15,8 @@ exports.get_items = async (category, _, { models }) => {
 };
 
 exports.create_category = async (_, { name }, { models }) => {
-  console.log('Received CATEGORY:',name);
   const upperName = name.toUpperCase();
-  console.log('changed CATEGORY:',upperName);
   const createdCategory = await models.categories.create({name: upperName});
-  console.log('CREATED CATEGORY:',createdCategory);
   return createdCategory;
 };
 exports.delete_category = async (_, { id }, { models }) => {
