@@ -4,11 +4,12 @@
 
 //Create User
 mutation {
-  create_user (email:"tok@gmail.com",password:"pass"){
+  create_user(user: {email: "mm@gmail.com", password: "pass"}){
     id
     email
   }
 }
+
 //get all users
 {
   get_users {
@@ -31,18 +32,14 @@ mutation {
 
 //Create an item
 mutation {
-  create_item(
-    name: "wardrobe",
+  create_item(item: {
+    name: "chair",
     minPrice:30,
-    userId:"14a73d3b-9cd4-4401-a54c-4db0a98e29c7",
-  ){
+  }, userId:"2643aca0-9371-4a37-a455-d1ab9b2b0a10"){
     name
     minPrice
-    user{
-      email
-      id
-    }
   }
+}
 
 // List all items
 query {
@@ -90,16 +87,17 @@ query {
 //Create Address
 mutation {
   create_address(
-    firstLineAddress:"Bickleigh house",
-    secondLineAddress:"Tiverton road",
-    city: "London",
-    postcode:"N15 6ED",
-    country:"UK",
-    userId:"41954578-486e-438e-9285-ea456eb819a4")
-    {
-      city
-      postcode
-      country
-    }
+  userId:"2643aca0-9371-4a37-a455-d1ab9b2b0a10",
+  address: {
+  	firstLineAddress:"Bickleigh house", 
+    secondLineAddress:"Tiverton road", 
+    city: "London", 
+    postcode:"N15 6ED", 
+    country:"UK"}
+){
+  city
+  country
+  postcode
+}
 }
 
