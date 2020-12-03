@@ -11,6 +11,7 @@ extend type Query {
 }
 
 extend type Mutation {
-  create_category(name: String!): Category!
+  create_category(name: String!): Category
   delete_category(id: ID!): Boolean!
+  update_category(id: ID!,name: String!): Category!
   } `;

@@ -18,11 +18,14 @@ input UserUpdate {
   phoneNumber: String
 }
 extend type Query {
-    me: User
-    get_user_by_email(email: String!): User
-    get_users: [User]
+  me: User
+  get_user_by_email(email: String!): User
+  get_users: [User]
 }
 extend type Mutation {
   create_user(user: UserUpdate!): User
-  }
+  update_user(userId:String!,user:UserUpdate!): User!
+  delete_user(userId:String!): Boolean!
+}
+
 `;
