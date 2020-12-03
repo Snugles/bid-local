@@ -30,7 +30,6 @@ exports.create_address = async (_, { userId, address }, { models }) => {
 };
 
 exports.update_address = async (_, { addressId, address }, { models }) => {
-  console.log(_, addressId, address,);
   let addressDB = await models.addresses.findOne({ where: { id: addressId } });
   addressDB = Object.assign(addressDB, address);
   await addressDB.save();

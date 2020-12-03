@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     password: { type: DataTypes.TEXT, allowNull: false, validate: { notEmpty: true } },
     firstName: { type: DataTypes.TEXT },
     lastName: { type: DataTypes.TEXT },
-    phoneNumber: { type: DataTypes.INTEGER, validate: { isNumeric: true } },
+    phoneNumber: { type: DataTypes.STRING(25), validate: { isNumeric: true } },
   });
 
   Users.associate = (models) => {
