@@ -33,11 +33,8 @@ mutation {
 //Create an item
 mutation {
   create_item(
-    item: {
-      name: "monkey"
-      minPrice: 30
-      userId: "41954578-486e-438e-9285-ea456eb819a4"
-    }
+    userId: "41954578-486e-438e-9285-ea456eb819a4"
+    item: { name: "monkey", minPrice: 30 }
   ) {
     name
     minPrice
