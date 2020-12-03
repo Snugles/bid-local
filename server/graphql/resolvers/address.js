@@ -21,3 +21,25 @@ exports.create_address = async (_, { firstLineAddress, secondLineAddress, city, 
 
   return createdAddress;
 };
+
+exports.update_address = async (_,{addressId,modAddress},{models}) => {
+
+}
+
+async updateCatcall(_, { id, catcall }, context) {
+  if (context.mod._id) {
+
+    if (await Moderator.findOne({ _id: context.mod._id })) {
+
+      let entry = await Catcall.findOne({ _id: id });
+      const {properties} = catcall;
+      let newEntry = Object.assign(entry.properties,properties);
+      entry.properties = newEntry;
+      await entry.save();
+      return entry
+    }
+  }
+  let err = new Error;
+  err.message = 'You must be logged in as a moderator to see this content';
+  return err;
+}
