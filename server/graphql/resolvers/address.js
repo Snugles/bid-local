@@ -23,23 +23,9 @@ exports.create_address = async (_, { firstLineAddress, secondLineAddress, city, 
 };
 
 exports.update_address = async (_,{addressId,modAddress},{models}) => {
-
-}
-
-async updateCatcall(_, { id, catcall }, context) {
-  if (context.mod._id) {
-
-    if (await Moderator.findOne({ _id: context.mod._id })) {
-
-      let entry = await Catcall.findOne({ _id: id });
-      const {properties} = catcall;
-      let newEntry = Object.assign(entry.properties,properties);
-      entry.properties = newEntry;
-      await entry.save();
-      return entry
-    }
-  }
-  let err = new Error;
-  err.message = 'You must be logged in as a moderator to see this content';
-  return err;
-}
+  console.log(_,addressId,modAddress,);
+  let address = await models.addresses.findOne({id:addressId});
+  address = Object.assign(address,modAddress);
+  await address.save();
+  return address;
+};
