@@ -21,3 +21,11 @@ exports.create_address = async (_, { firstLineAddress, secondLineAddress, city, 
 
   return createdAddress;
 };
+
+exports.update_address = async (_,{addressId,modAddress},{models}) => {
+  console.log(_,addressId,modAddress,);
+  let address = await models.addresses.findOne({id:addressId});
+  address = Object.assign(address,modAddress);
+  await address.save();
+  return address;
+};
