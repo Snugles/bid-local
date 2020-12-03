@@ -10,20 +10,22 @@ module.exports = (sequelize, DataTypes) => {
     },
     firstLineAddress: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      notEmpty: true,
     },
     secondLineAddress: {
-      type: DataTypes.TEXT,
-      allowNull: true
+      type: DataTypes.TEXT
     },
     city: {
       type: DataTypes.STRING,
+      notEmpty: true
     },
     postcode: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      notEmpty: true
     },
     country: {
       type: DataTypes.STRING,
+      notEmpty: true
     },
     userId: {
       type: DataTypes.UUID,

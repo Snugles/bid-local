@@ -1,5 +1,5 @@
 exports.get_category = async (_, { id }, { models }) => {
-  const category = await models.categories.findOne({ id: id });
+  const category = await models.categories.findOne({ where: { id: id }});
   return category;
 };
 
@@ -10,16 +10,13 @@ exports.get_categories = async (_, __, { models }) => {
 };
 
 exports.get_items = async (category, _, { models }) => {
-  const item = await models.items.findOne({ id: item.categoryId });
-  return item;
+  const items = await models.items.findAll( { where: { id: item.categoryId }});
+  return items;
 };
 
 exports.create_category = async (_, { name }, { models }) => {
-  console.log('Received CATEGORY:',name);
   const upperName = name.toUpperCase();
-  console.log('changed CATEGORY:',upperName);
   const createdCategory = await models.categories.create({name: upperName});
-  console.log('CREATED CATEGORY:',createdCategory);
   return createdCategory;
 };
 exports.delete_category = async (_, { id }, { models }) => {

@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     categoryId: {
       type: DataTypes.UUID,
       validate: {
-        isUUID: 4,
+        isUUID: 4, // Need to put defalut value as Other or ...
       }
     }
   });

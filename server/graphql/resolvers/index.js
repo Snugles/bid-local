@@ -13,6 +13,7 @@ const resolvers = {
     get_category: category.get_category,
     get_categories: category.get_categories,
     get_address_by_userId: address.get_address_by_userId,
+    get_addresses: address.get_addresses,
   },
 
   User: {
@@ -38,7 +39,8 @@ const resolvers = {
     delete_item_by_id: item.delete_item_by_id,
     create_category: category.create_category,
     delete_category: category.delete_category,
-    create_address: address.create_address
+    create_address: address.create_address,
+    update_address: address.update_address,
   }
 };
 
