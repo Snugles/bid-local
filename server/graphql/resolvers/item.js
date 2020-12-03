@@ -1,30 +1,31 @@
-exports.item = async (_, { id }, { models }) => {
+exports.get_item_by_Id = async (_, { id }, { models }) => {
   const item = await models.items.findOne({ id: id });
   return item;
 };
 
-exports.items = async (_, __, { models }) => {
+exports.get_items = async (_, __, { models }) => {
   const items = await models.items.findAll();
   return items;
 };
 
-exports.get_user = async (item, _, { models }) => {
+exports.get_user_by_item = async (item, _, { models }) => {
   const user = await models.users.findOne({ id: item.userId });
   return user;
 };
 
-exports.createItem = async (_, { name, minPrice, description,userId }, { models }) => {
+exports.create_item = async (_, { name, minPrice, description,userId, categoryId }, { models }) => {
   const item = {
     name,
     minPrice,
     description,
-    userId: userId, //make dynamic
+    userId, //make dynamic
+    categoryId, //make dynamic
   };
   const createdItem = await models.items.create(item);
 
   return createdItem;
 };
-exports.deleteItem = async (_, { id }, { models }) => {
+exports.delete_item_by_id = async (_, { id }, { models }) => {
   const destroyed = await models.items.destroy({
     where: {
       id: id

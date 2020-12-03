@@ -4,14 +4,14 @@
 
 //Create User
 mutation {
-  createUser (email:"tomum@gmail.com",password:"pass"){
+  create_user (email:"tok@gmail.com",password:"pass"){
     id
     email
   }
 }
 //get all users
 {
-  users {
+  get_users {
     id
     email
   }
@@ -19,7 +19,7 @@ mutation {
 
 //get a user by email and list items
 {
-  user(email:"toms@gmail.com") {
+  get_user_by_email(email:"tok@gmail.com") {
     id
     email
     item {
@@ -31,7 +31,11 @@ mutation {
 
 //Create an item
 mutation {
-  createItem(name: "wardrobe",minPrice:30,userId:"00041ef6-51d2-4db3-b939-bcda0b108b27"){
+  create_item(
+    name: "wardrobe",
+    minPrice:30,
+    userId:"14a73d3b-9cd4-4401-a54c-4db0a98e29c7",
+  ){
     name
     minPrice
     user{
@@ -39,11 +43,10 @@ mutation {
       id
     }
   }
-}
 
 // List all items
 query {
-  items{
+  get_items{
     id
     name
     minPrice
@@ -56,7 +59,8 @@ query {
 
 // Get item by Id (Insert the correct id given from database)
 query{
-  item(id:"1cb38768-682d-484e-af4d-dd2f9d0e482e"){
+  get_item_by_Id(id:"bb222ce4-57ab-4bea-bbca-27326fc077fe"){
+    id
     name
     minPrice
     description
@@ -65,6 +69,37 @@ query{
 
 //Delete an item
 mutation {
-  deleteItem(id:"13e6a396-7b98-4fb5-bcde-1a0d7d916781")
+  delete_item_by_id(id:"13e6a396-7b98-4fb5-bcde-1a0d7d916781")
+}
+
+//Create Category
+mutation{
+  create_category(name: "clothes"){
+    name
+  }
+}
+
+//List all categories
+query {
+  categories{
+    id
+    name
+  }
+}
+
+//Create Address
+mutation {
+  create_address(
+    firstLineAddress:"Bickleigh house",
+    secondLineAddress:"Tiverton road",
+    city: "London",
+    postcode:"N15 6ED",
+    country:"UK",
+    userId:"41954578-486e-438e-9285-ea456eb819a4")
+    {
+      city
+      postcode
+      country
+    }
 }
 
