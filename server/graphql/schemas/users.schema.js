@@ -23,10 +23,6 @@ extend type Query {
     get_users: [User]
 }
 extend type Mutation {
-<<<<<<< HEAD
-  create_user(email: String!,password: String!,firstName: String, lastName: String, phoneNumber:String): User!
-=======
   create_user(user: UserUpdate!): User
->>>>>>> refactorMutation
   }
 `;

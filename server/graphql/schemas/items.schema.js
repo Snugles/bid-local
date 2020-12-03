@@ -12,11 +12,8 @@ input ItemUpdate {
   name: String!
   minPrice: Int!
   description: String
-<<<<<<< HEAD
   userId: String!
   categoryId: String!
-=======
->>>>>>> refactorMutation
 }
 
 extend type Query {
