@@ -28,7 +28,7 @@ exports.create_item = async (_, { name, minPrice, description,userId, categoryId
   } catch (error) {
     console.error('Error', error);
   }
-  
+
 };
 exports.delete_item_by_id = async (_, { id }, { models }) => {
   try {

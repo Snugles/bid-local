@@ -16,6 +16,5 @@ extend type Query {
 }
 extend type Mutation {
   create_user(email: String!,password: String!,firstName: String, lastName: String, phoneNumber:String): User!
-
   }
 `;

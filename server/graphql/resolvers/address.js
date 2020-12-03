@@ -1,6 +1,6 @@
 exports.get_address_by_userId = async (_, { userId }, { models }) => {
-  const item = await models.addresses.findOne({ where: { userId: userId } });
-  return item;
+  const address = await models.addresses.findOne({ where: { userId: userId } });
+  return address;
 };
 
 exports.get_user_by_address = async (address, _, { models }) => {
@@ -14,19 +14,29 @@ exports.get_addresses = async (_, __, { models }) => {
 };
 
 exports.create_address = async (_, { userId, address }, { models }) => {
-  console.log(address);
-  const { firstLineAddress, secondLineAddress, city, postcode, country } = address;
-  const newAddress = {
-    firstLineAddress,
-    secondLineAddress,
-    city,
-    postcode,
-    country,
-    userId, //make dynamic
-  };
-  const createdAddress = await models.addresses.create(newAddress);
+  try {
+    console.log('Checking if user has an address:', address);
+    const DBaddress = await this.get_address_by_userId(_, { userId }, { models });
 
-  return createdAddress;
+    if (!DBaddress) {
+      const { firstLineAddress, secondLineAddress, city, postcode, country } = address;
+      const newAddress = {
+        firstLineAddress,
+        secondLineAddress,
+        city,
+        postcode,
+        country,
+        userId, //make dynamic
+      };
+      const createdAddress = await models.addresses.create(newAddress);
+
+      return createdAddress;
+    }
+    error = new Error('Cannot create more than 1 address, use edit/update instead');
+    return error;
+  } catch (e) {
+    return e;
+  }
 };
 
 exports.update_address = async (_, { addressId, address }, { models }) => {

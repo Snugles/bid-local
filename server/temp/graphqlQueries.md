@@ -103,3 +103,24 @@ mutation {
     }
 }
 
+// edit-update address
+mutation {
+  update_address(
+    addressId:"5684e2a0-c447-4f91-9359-fefe694c832a",
+    address:{
+      firstLineAddress:"Manor house",
+    	secondLineAddress:"Riverun road",
+    	city: "Paris",
+    	postcode:"N15 6ED",
+    	country:"France",
+    }
+    ){
+    id
+    firstLineAddress
+    secondLineAddress
+    city
+    postcode
+    country
+  }
+}
+
