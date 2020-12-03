@@ -8,11 +8,18 @@ type Item {
   category: Category
 }
 
-input ItemUpdate {
+input ItemCreate {
   name: String!
   minPrice: Int!
   description: String
   userId: String!
+  categoryId: String
+}
+
+input ItemUpdate {
+  name: String!
+  minPrice: Int!
+  description: String
   categoryId: String!
 }
 
@@ -22,8 +29,9 @@ extend type Query {
 }
 
 extend type Mutation {
-  create_item(item: ItemUpdate!, userId: String!, categoryId: String): Item!
+  create_item(userId: String!, item: ItemCreate!): Item!
   delete_item_by_id(id: ID!): Boolean!
+  update_item(itemId:String!,item:ItemUpdate!): Item!
 }
 
   `;
