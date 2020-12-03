@@ -1,5 +1,5 @@
 exports.get_item_by_Id = async (_, { id }, { models }) => {
-  const item = await models.items.findOne({ id: id });
+  const item = await models.items.findOne({ wherer: { id: id }});
   return item;
 };
 
@@ -9,7 +9,7 @@ exports.get_items = async (_, __, { models }) => {
 };
 
 exports.get_user_by_item = async (item, _, { models }) => {
-  const user = await models.users.findOne({ id: item.userId });
+  const user = await models.users.findOne({ where: { id: item.userId }});
   return user;
 };
 

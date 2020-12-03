@@ -11,7 +11,7 @@ type User {
   }
 extend type Query {
     me: User
-    get_user_by_email(email: String!): User
+    get_user_by_email(email: String!): User!
     get_users: [User]
 }
 extend type Mutation {

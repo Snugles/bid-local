@@ -1,5 +1,5 @@
 exports.get_category = async (_, { id }, { models }) => {
-  const category = await models.categories.findOne({ id: id });
+  const category = await models.categories.findOne({ where: { id: id }});
   return category;
 };
 
