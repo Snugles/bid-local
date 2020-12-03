@@ -26,7 +26,7 @@ extend type Mutation {
   create_address(
     userId:String!
     address:AddressUpdate!
-    ): Address!
+    ): Address
 
   update_address(
     addressId:String!
