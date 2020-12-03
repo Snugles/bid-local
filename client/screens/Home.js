@@ -1,19 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, ImageBackground, Dimensions } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Navbar from '../components/Navbar';
+import { GET_USERS } from '../queries/test'
+import { useQuery } from '@apollo/client';
 
 const windowWidth = Dimensions.get('window').width;
 
 export default function Home({ navigation }) {
+  const { loading, error, data } = useQuery(GET_USERS);
+
+  useEffect(()=>{
+    console.log('loading: ',loading);
+    console.log('error: ',error);
+    console.log('data: ',data);
+  }, [loading, data, error]);
+
   const categories = [
     'Houses',
     'Electronics',
     'Motorcycles'
   ];
 
-  const data = [
+  const mockdata = [
     {
       title: 'Item Title 1',
       startingPrice: '20€',
@@ -33,7 +43,7 @@ export default function Home({ navigation }) {
 
   const [currentCategory, setCurrentCategory] = useState(categories[0]);
 
-  const itemList = data.map( (item, index) => (
+  const itemList = mockdata.map( (item, index) => (
     <TouchableWithoutFeedback key={index} onPress={()=>{navigation.navigate('Item')}}>
       <View style={styles.itemView}>
         <ImageBackground style={styles.itemImage} resizeMode='cover' source={item.image}>
