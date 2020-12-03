@@ -9,9 +9,9 @@ type Address {
   user: User!
   }
 extend type Query {
-    address(email: String!): Address
+  get_address_by_userId(userId: String!): Address
 }
 extend type Mutation {
-  createAddress(firstLineAddress: String!,secondLineAddress: String!,city: String, postcode: String, country: String, userId: String): Address!
+  create_address(firstLineAddress: String!,secondLineAddress: String!,city: String, postcode: String, country: String, userId: String): Address!
   }
 `;

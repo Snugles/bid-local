@@ -14,7 +14,7 @@ exports.get_items = async (category, _, { models }) => {
   return item;
 };
 
-exports.createCategory = async (_, { name }, { models }) => {
+exports.create_category = async (_, { name }, { models }) => {
   console.log('Received CATEGORY:',name);
   const upperName = name.toUpperCase();
   console.log('changed CATEGORY:',upperName);
@@ -22,7 +22,7 @@ exports.createCategory = async (_, { name }, { models }) => {
   console.log('CREATED CATEGORY:',createdCategory);
   return createdCategory;
 };
-exports.deleteCategory = async (_, { id }, { models }) => {
+exports.delete_category = async (_, { id }, { models }) => {
   const destroyed = await models.categories.destroy({
     where: {
       id: id

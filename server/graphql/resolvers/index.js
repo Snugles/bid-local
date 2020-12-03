@@ -6,13 +6,13 @@ const address = require('./address');
 
 const resolvers = {
   Query: {
-    user: user.user,
-    users: user.users,
-    item: item.item,
-    items: item.items,
+    get_user_by_email: user.get_user_by_email,
+    get_users: user.get_users,
+    get_item_by_Id: item.get_item_by_Id,
+    get_items: item.get_items,
     get_category: category.get_category,
     get_categories: category.get_categories,
-    address: address.address,
+    get_address_by_userId: address.get_address_by_userId,
   },
 
   User: {
@@ -21,7 +21,7 @@ const resolvers = {
   },
 
   Item: {
-    user: item.get_user
+    user: item.get_user_by_item
   },
 
   Category: {
@@ -29,16 +29,16 @@ const resolvers = {
   },
 
   Address: {
-    user: address.get_user
+    user: address.get_user_by_address
   },
 
   Mutation: {
-    createUser: user.createUser,
-    createItem: item.createItem,
-    deleteItem: item.deleteItem,
-    createCategory: category.createCategory,
-    deleteCategory: category.deleteCategory,
-    createAddress: address.createAddress
+    create_user: user.create_user,
+    create_item: item.create_item,
+    delete_item_by_id: item.delete_item_by_id,
+    create_category: category.create_category,
+    delete_category: category.delete_category,
+    create_address: address.create_address
   }
 };
 

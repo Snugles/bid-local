@@ -7,14 +7,14 @@ type User {
   email: String!
   phoneNumber: Int
   item: [Item!]
-  address: Address!
+  address: Address
   }
 extend type Query {
     me: User
-    user(email: String!): User
-    users: [User!]
+    get_user_by_email(email: String!): User
+    get_users: [User]
 }
 extend type Mutation {
-  createUser(email: String!,password: String!,firstName: String, lastName: String, phoneNumber:Int): User!
+  create_user(email: String!,password: String!,firstName: String, lastName: String, phoneNumber:Int): User!
   }
 `;

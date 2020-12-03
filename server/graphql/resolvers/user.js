@@ -1,10 +1,10 @@
 
-exports.user = async (_, { email }, { models }) => {
+exports.get_user_by_email = async (_, { email }, { models }) => {
   const user = await models.users.findOne({ email: email });
   return user;
 };
 
-exports.users = async (_, __, { models }) => {
+exports.get_users = async (_, __, { models }) => {
   const users = await models.users.findAll();
   return users;
 };
@@ -27,7 +27,7 @@ exports.get_address = async (user, _, { models }) => {
   return address;
 };
 
-exports.createUser = async (_, { email, password, firstName, lastName, phoneNumber }, { models }) => {
+exports.create_user = async (_, { email, password, firstName, lastName, phoneNumber }, { models }) => {
   const createdUser = await models.users.create({ email: email, password: password, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber });
   return createdUser;
 };
