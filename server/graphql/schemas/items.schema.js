@@ -2,7 +2,7 @@ module.exports = `
 type Item {
   id: String!
   name: String!
-  minPrice: Int
+  minPrice: Int!
   description: String
   user: User!
   category: Category
