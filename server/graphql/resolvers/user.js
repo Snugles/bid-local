@@ -1,5 +1,6 @@
 
 exports.get_user_by_email = async (_, { email }, { models }) => {
+  console.log('email is', email);
   try {
     const user = await models.users.findOne({where: { email: email }});
     return user;
