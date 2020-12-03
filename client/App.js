@@ -1,9 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, View, ImageBackground, TouchableWithoutFeedback } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
 import Navigator from './routes/HomeStack';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
+import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
+import {APOLLO_SERVER_URI} from '@env';
 
 const getFonts = () => {
   return Font.loadAsync({
@@ -12,18 +13,24 @@ const getFonts = () => {
 }
 
 export default function App() {
-
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
+  console.log(APOLLO_SERVER_URI);
+
+  const client = new ApolloClient({
+    uri: APOLLO_SERVER_URI,
+    cache: new InMemoryCache()
+  });
+
   return (
-    <>
+    <ApolloProvider client={client}>
     {fontsLoaded
       ?
       <Navigator/>
       :
       <AppLoading startAsync={getFonts} onFinish={()=>{setFontsLoaded(true)}}/>
     }
-    </>
+    </ApolloProvider>
   );
 }
 
