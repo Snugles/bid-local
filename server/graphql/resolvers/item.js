@@ -13,7 +13,8 @@ exports.get_user_by_item = async (item, _, { models }) => {
   return user;
 };
 
-exports.create_item = async (_, { name, minPrice, description,userId, categoryId }, { models }) => {
+exports.create_item = async (_, { item ,userId, categoryId }, { models }) => {
+  const { name, minPrice, description } = item;
   try {
     const item = {
       name,
