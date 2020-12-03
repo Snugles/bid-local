@@ -16,7 +16,12 @@ export default function AddItem({ navigation }) {
     console.log('loading: ',loading);
     console.log('error: ',error);
     console.log('data: ',data);
-  }, [loading, data, error]);
+
+    if (data) {
+      navigation.navigate('Item', {id: data.create_item.id});
+    }
+
+  }, [data]);
 
   const images=[
     {

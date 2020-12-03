@@ -2,14 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, ImageBackground, Dimensions, TextInput, TouchableHighlight } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import Navbar from '../components/Navbar';
+import { GET_ITEM_BY_ID } from '../queries/item';
+import { useQuery } from '@apollo/client';
 
-export default function Item({ navigation }) {
-
-  const [offerBid, setOfferBid] = useState('');
-
+export default function Item({ navigation, route }) {
   const windowWidth = Dimensions.get('window').width;
+  const [offerBid, setOfferBid] = useState('');
+  const { loading, error, data } = useQuery(GET_ITEM_BY_ID, {
+    variables: {
+      id: route.params.id
+    }
+  });
 
-  const data = {
+  console.log('itemid:', route.params);
+
+  useEffect(()=>{
+    console.log('loading: ',loading);
+    console.log('error: ',error);
+    console.log('data: ',data);
+  }, [loading, data, error]);
+
+  const mockdata = {
     title: 'Item Title',
     startingPrice: '20€',
     images: [require('../assets/item-test-1.jpg'),require('../assets/item-test-2.jpg'),require('../assets/item-test-3.jpg')],
@@ -47,6 +60,8 @@ export default function Item({ navigation }) {
     }
   }
 
+  if (loading) return (<Text>Loading...</Text>);
+  if (error) return (<Text>Error: {error}</Text>);
 
   return (
     <>
@@ -55,14 +70,14 @@ export default function Item({ navigation }) {
       <Carousel
         containerCustomStyle={{backgroundColor: '#06D6A0', paddingVertical: 10}}
         layout={"default"}
-        data={data.images}
+        data={mockdata.images}
         sliderWidth={windowWidth}
         itemWidth={windowWidth-windowWidth/6}
         renderItem={imageList}
       />
       <View style={styles.itemInfo} >
-        <Text style={styles.itemTitle} >{data.title}</Text>
-        <Text style={styles.itemPrice} >{data.startingPrice}</Text>
+        <Text style={styles.itemTitle} >{data.get_item_by_Id.name}</Text>
+        <Text style={styles.itemPrice} >{data.get_item_by_Id.minPrice}€</Text>
         <View style={styles.time}>
           <Text style={{color: 'white', fontSize: 16}} >Time Left:</Text>
           <Text style={{color: 'white', fontSize: 25}}>02:56</Text>
@@ -84,12 +99,12 @@ export default function Item({ navigation }) {
         </View>
         
         <Text style={{fontWeight: '700', fontSize: 18}} >Item Description:</Text>
-        <Text style={{fontSize: 16}} >{data.description}</Text>
+        <Text style={{fontSize: 16}} >{data.get_item_by_Id.description}</Text>
         <View style={styles.userInfo} >
             <Text style={{fontWeight: '700', fontSize: 18}} >Seller Info</Text>
-            <Text style={{fontSize: 16}} ><Text style={{fontWeight: '700'}}>Username:</Text> {data.sellerInfo.username}</Text>
-            <Text style={{fontSize: 16}} ><Text style={{fontWeight: '700'}}>Email:</Text> {data.sellerInfo.email}</Text>
-            <Text style={{fontSize: 16}} ><Text style={{fontWeight: '700'}}>Tel:</Text> {data.sellerInfo.telephone}</Text>
+            <Text style={{fontSize: 16}} ><Text style={{fontWeight: '700'}}>Name: </Text>{data.get_item_by_Id.user.firstName} {data.get_item_by_Id.user.lastName}</Text>
+            <Text style={{fontSize: 16}} ><Text style={{fontWeight: '700'}}>Email: </Text>{data.get_item_by_Id.user.email}</Text>
+            <Text style={{fontSize: 16}} ><Text style={{fontWeight: '700'}}>Tel: </Text>{data.get_item_by_Id.user.phoneNumber}</Text>
           </View>
       </View>
     </ScrollView>
