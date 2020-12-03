@@ -1,5 +1,5 @@
 exports.get_item_by_Id = async (_, { id }, { models }) => {
-  const item = await models.items.findOne({ where: { id: id }});
+  const item = await models.items.findOne({ where: { id: id } });
   return item;
 };
 
@@ -9,12 +9,12 @@ exports.get_items = async (_, __, { models }) => {
 };
 
 exports.get_user_by_item = async (item, _, { models }) => {
-  const user = await models.users.findOne({ where: { id: item.userId }});
+  const user = await models.users.findOne({ where: { id: item.userId } });
   return user;
 };
 
-exports.create_item = async (_, { userId, item }, { models }) => {
-  const { name, minPrice, description, categoryId } = item;
+exports.create_item = async (_, { item }, { models }) => {
+  const { name, minPrice, description, categoryId, userId } = item;
   try {
     const item = {
       name,
@@ -45,4 +45,11 @@ exports.delete_item_by_id = async (_, { id }, { models }) => {
   } catch (error) {
     console.error('Error', error);
   }
+};
+
+exports.update_item = async (_, { itemId, item }, { models }) => {
+  let itemDB = await models.items.findOne({ where: { id: itemId } });
+  itemDB = Object.assign(itemDB, item);
+  await itemDB.save();
+  return itemDB;
 };

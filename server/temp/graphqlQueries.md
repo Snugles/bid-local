@@ -32,12 +32,35 @@ mutation {
 
 //Create an item
 mutation {
-  create_item(item: {
-    name: "chair",
-    minPrice:30,
-  }, userId:"2643aca0-9371-4a37-a455-d1ab9b2b0a10"){
+  create_item(
+    item: {
+      name: "monkey"
+      minPrice: 30
+      userId: "41954578-486e-438e-9285-ea456eb819a4"
+    }
+  ) {
     name
     minPrice
+    user {
+      email
+      id
+    }
+  }
+}
+
+mutation {
+  update_item (itemId:"bb222ce4-57ab-4bea-bbca-27326fc077fe",item: {
+      name: "car"
+      minPrice: 30
+  }) {
+    id
+    name
+    minPrice
+    user{
+      id
+      email
+      password
+    }
   }
 }
 
@@ -89,10 +112,10 @@ mutation {
   create_address(
   userId:"2643aca0-9371-4a37-a455-d1ab9b2b0a10",
   address: {
-  	firstLineAddress:"Bickleigh house", 
-    secondLineAddress:"Tiverton road", 
-    city: "London", 
-    postcode:"N15 6ED", 
+  	firstLineAddress:"Bickleigh house",
+    secondLineAddress:"Tiverton road",
+    city: "London",
+    postcode:"N15 6ED",
     country:"UK"}
 ){
   city

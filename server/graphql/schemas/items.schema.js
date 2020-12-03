@@ -20,7 +20,7 @@ input ItemUpdate {
   name: String!
   minPrice: Int!
   description: String
-  categoryId: String!
+  categoryId: String
 }
 
 extend type Query {
@@ -29,9 +29,9 @@ extend type Query {
 }
 
 extend type Mutation {
-  create_item(userId: String!, item: ItemCreate!): Item!
+  create_item(item: ItemCreate!): Item!
   delete_item_by_id(id: ID!): Boolean!
   update_item(itemId:String!,item:ItemUpdate!): Item!
 }
 
-  `;
+`;
