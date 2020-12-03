@@ -28,23 +28,26 @@ export default function Home({ navigation }) {
       title: 'Item Title 1',
       startingPrice: '20€',
       image: require('../assets/item-test-1.jpg'),
+      itemId: 'd15da980-9d9e-4b5a-8b1c-f4c3223ea2a6',
     },
     {
       title: 'Item Title 2',
       startingPrice: '25€',
       image: require('../assets/item-test-2.jpg'),
+      itemId: 'd4f446d7-9805-4214-995c-65e1a4744799',
     },
     {
       title: 'Item Title 3',
       startingPrice: '13€',
       image: require('../assets/item-test-3.jpg'),
+      itemId: 'd15da980-9d9e-4b5a-8b1c-f4c3223ea2a6',
     },
   ];
 
   const [currentCategory, setCurrentCategory] = useState(categories[0]);
 
   const itemList = mockdata.map( (item, index) => (
-    <TouchableWithoutFeedback key={index} onPress={()=>{navigation.navigate('Item')}}>
+    <TouchableWithoutFeedback key={index} onPress={()=>{navigation.navigate('Item', {id: item.itemId})}}>
       <View style={styles.itemView}>
         <ImageBackground style={styles.itemImage} resizeMode='cover' source={item.image}>
           <Text style={styles.itemTime}>04:45</Text>

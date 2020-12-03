@@ -15,10 +15,10 @@ const getFonts = () => {
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
-  console.log(APOLLO_SERVER_URI);
+  const uri = APOLLO_SERVER_URI;
 
   const client = new ApolloClient({
-    uri: APOLLO_SERVER_URI,
+    uri: uri,
     cache: new InMemoryCache()
   });
 
