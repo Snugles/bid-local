@@ -105,7 +105,7 @@ export default function Home({ navigation }) {
                     <Text style={styles.itemTime}>xx:xx</Text>
                   </ImageBackground>
                   <Text style={styles.itemTitle}>{item.name}</Text>
-                  <Text style={styles.itemPrice}>{item.minPrice}</Text>
+                  <Text style={styles.itemPrice}>{item.minPrice}€</Text>
                 </View>
               </TouchableWithoutFeedback>
             ))
