@@ -49,10 +49,17 @@ exports.get_address = async (user, _, { models }) => {
   }
 };
 
-exports.create_user = async (_, { email, password, firstName, lastName, phoneNumber }, { models }) => {
+exports.create_user = async (_, { user }, { models }) => {
   try {
-    const createdUser = await models.users.create({ email: email, password: password, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber });
-    return createdUser;
+    const { email, password, firstName, lastName, phoneNumber } = user;
+    const userFound = await models.users.findOne({ where: { email: email}});
+    if (!userFound) {
+      const createdUser = await models.users.create({ email: email, password: password, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber });
+      return createdUser;
+    }
+    else {
+      return new Error('There is alreary a user with this email');
+    }
   } catch (error) {
     console.error('Error', error);
   }
