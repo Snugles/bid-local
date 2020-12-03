@@ -14,25 +14,34 @@ exports.get_user_by_item = async (item, _, { models }) => {
 };
 
 exports.create_item = async (_, { name, minPrice, description,userId, categoryId }, { models }) => {
-  const item = {
-    name,
-    minPrice,
-    description,
-    userId, //make dynamic
-    categoryId, //make dynamic
-  };
-  const createdItem = await models.items.create(item);
+  try {
+    const item = {
+      name,
+      minPrice,
+      description,
+      userId, //make dynamic
+      categoryId, //make dynamic
+    };
+    const createdItem = await models.items.create(item);
 
-  return createdItem;
+    return createdItem;
+  } catch (error) {
+    console.error('Error', error);
+  }
+  
 };
 exports.delete_item_by_id = async (_, { id }, { models }) => {
-  const destroyed = await models.items.destroy({
-    where: {
-      id: id
+  try {
+    const destroyed = await models.items.destroy({
+      where: {
+        id: id
+      }
+    });
+    if (!destroyed) {
+      return false;
     }
-  });
-  if (!destroyed) {
-    return false;
+    return true;
+  } catch (error) {
+    console.error('Error', error);
   }
-  return true;
 };
