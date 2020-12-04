@@ -5,7 +5,7 @@ import { useLazyQuery } from '@apollo/client';
 import Navbar from '../components/Navbar';
 
 export default function Login({ navigation, route }) {
-  const [intialEmail, setInitialEmail] = useState('');
+  const [initialEmail, setInitialEmail] = useState('');
   const { setEmail } = route.params;
   const [getID, { data, error, loading }] = useLazyQuery(GET_USER_BY_EMAIL);
 
@@ -31,7 +31,7 @@ export default function Login({ navigation, route }) {
         <TextInput
           style={styles.textBoxes}
           onChangeText={(text) => setInitialEmail(text)}
-          value={intialEmail}
+          value={initialEmail}
         />
         <Button title="Login" onPress={login} color="#0C637F" />
       </View>
