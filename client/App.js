@@ -4,37 +4,45 @@ import Navigator from './routes/HomeStack';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
-import { APOLLO_SERVER_URI } from '@env';
+import {APOLLO_SERVER_URI} from '@env';
+import { ApolloLink } from 'apollo-boost'
+import { onError } from 'apollo-link-error'
+import { HttpLink } from 'apollo-link-http';
 
 const getFonts = () => {
   return Font.loadAsync({
     Roboto_medium: require('./assets/fonts/Roboto-Medium.ttf'),
   });
-};
+}
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const [email, setEmail] = useState('hello@gmail.com');
+  const [email, setEmail] = useState('donald@email.com');
 
-  const uri = APOLLO_SERVER_URI;
+  console.log(APOLLO_SERVER_URI);
+
+  const errorLink = onError(({ graphQLErrors }) => {
+    if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message))
+  })
+
+  const httpLink = new HttpLink({
+    uri: APOLLO_SERVER_URI
+  })
 
   const client = new ApolloClient({
-    uri: uri,
+    uri: APOLLO_SERVER_URI,
     cache: new InMemoryCache(),
+    link: ApolloLink.from([errorLink, httpLink]),
   });
 
   return (
     <ApolloProvider client={client}>
-      {fontsLoaded ? (
-        <Navigator setEmail={setEmail} email={email} />
-      ) : (
-        <AppLoading
-          startAsync={getFonts}
-          onFinish={() => {
-            setFontsLoaded(true);
-          }}
-        />
-      )}
+    {fontsLoaded
+      ?
+      <Navigator email={email} setEmail={setEmail}/>
+      :
+      <AppLoading startAsync={getFonts} onFinish={()=>{setFontsLoaded(true)}}/>
+    }
     </ApolloProvider>
   );
 }
@@ -61,16 +69,16 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     width: '70%',
-    height: 50,
+    height:50,
     flexDirection: 'row',
     justifyContent: 'center',
   },
   navbarLogo: {
-    height: 50,
+    height:50,
     width: 200,
   },
   burgerContainer: {
     width: '15%',
-    height: 50,
+    height: 50
   },
 });
