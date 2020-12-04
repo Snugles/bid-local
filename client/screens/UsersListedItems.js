@@ -69,7 +69,7 @@ function Panel (props) {
   }]);
   const [multiSelect, setMultiSelect] = useState(false);
   const [timeDiff, setTimeDiff] = useState(props.deadline-new Date(Date.now()));
-  const [time, setTime] = useState('')
+  const [time, setTime] = useState('');
   const [layoutHeight, setLayoutHeight] = useState(0);
   const [title, setTitle] = useState(props.name);
   const [description, setDescription] = useState(props.description);
