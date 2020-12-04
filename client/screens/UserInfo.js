@@ -11,11 +11,11 @@ import Navbar from '../components/Navbar';
 import { GET_EMAIL } from '../queries/userInfo.query';
 import { useQuery } from '@apollo/client';
 
-export default function UserInfo({ navigation }) {
-  const email2 = 'tok@gmail.com';
+export default function UserInfo({ navigation, route }) {
+  const { email } = route.params;
 
   // const [username, setUsername] = useState('snuglywugly');
-  const [email, SetEmail] = useState('');
+
   const [phoneNumber, setPhoneNumber] = useState('07425 058395');
   const [editMode, setEditMode] = useState(false);
   const { data, error, loading } = useQuery(GET_EMAIL, {

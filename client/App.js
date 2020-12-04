@@ -4,32 +4,37 @@ import Navigator from './routes/HomeStack';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
-import {APOLLO_SERVER_URI} from '@env';
+import { APOLLO_SERVER_URI } from '@env';
 
 const getFonts = () => {
   return Font.loadAsync({
     Roboto_medium: require('./assets/fonts/Roboto-Medium.ttf'),
   });
-}
+};
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [email, setEmail] = useState('hello@gmail.com');
 
   const uri = APOLLO_SERVER_URI;
 
   const client = new ApolloClient({
     uri: uri,
-    cache: new InMemoryCache()
+    cache: new InMemoryCache(),
   });
 
   return (
     <ApolloProvider client={client}>
-    {fontsLoaded
-      ?
-      <Navigator/>
-      :
-      <AppLoading startAsync={getFonts} onFinish={()=>{setFontsLoaded(true)}}/>
-    }
+      {fontsLoaded ? (
+        <Navigator setEmail={setEmail} email={email} />
+      ) : (
+        <AppLoading
+          startAsync={getFonts}
+          onFinish={() => {
+            setFontsLoaded(true);
+          }}
+        />
+      )}
     </ApolloProvider>
   );
 }
@@ -56,16 +61,16 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     width: '70%',
-    height:50,
+    height: 50,
     flexDirection: 'row',
     justifyContent: 'center',
   },
   navbarLogo: {
-    height:50,
+    height: 50,
     width: 200,
   },
   burgerContainer: {
     width: '15%',
-    height: 50
+    height: 50,
   },
 });
