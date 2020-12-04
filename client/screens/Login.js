@@ -1,50 +1,40 @@
-import React, {useState, useEffect} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  TextInput,
-} from 'react-native';
-import { GET_USER_BY_EMAIL } from '../queries/login'
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import { GET_USER_BY_EMAIL } from '../queries/login';
 import { useLazyQuery } from '@apollo/client';
 import Navbar from '../components/Navbar';
 
-export default function Login({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [getID,{data,error,loading}] = useLazyQuery(GET_USER_BY_EMAIL);
-  const [id, SetID] =useState('');
-  
-  useEffect(()=>{
-    console.log('loading: ',loading);
-    console.log('error: ',error);
-    console.log('data: ',data);
+export default function Login({ navigation, route }) {
+  const [initialEmail, setInitialEmail] = useState('');
+  const { setEmail } = route.params;
+  const [getID, { data, error, loading }] = useLazyQuery(GET_USER_BY_EMAIL);
+
+  useEffect(() => {
+    console.log('loading: ', loading);
+    console.log('error: ', error);
+    console.log('data: ', data);
     if (data) {
-      SetID(data);
+      setEmail(data.get_user_by_email.email);
     }
   }, [loading, data, error]);
 
-  function login () {
-    console.log('called')
-    getID( {variables:{ email:email }} );
+  function login() {
+    console.log('called');
+    getID({ variables: { email: initialEmail } });
   }
 
   return (
     <>
-    <Navbar navigation={navigation} canGoBack={true}/>
-    <View style={styles.container}>
-      <Text style={styles.headers}>
-        Email:
-      </Text>
-      <TextInput 
-        style={styles.textBoxes}
-        onChangeText={text => setEmail(text)}
-        value={email}/>
-      <Button
-        title='Login'
-        onPress={login}
-        color= '#0C637F'/>
-    </View>
+      <Navbar navigation={navigation} canGoBack={true} />
+      <View style={styles.container}>
+        <Text style={styles.headers}>Email:</Text>
+        <TextInput
+          style={styles.textBoxes}
+          onChangeText={(text) => setInitialEmail(text)}
+          value={initialEmail}
+        />
+        <Button title="Login" onPress={login} color="#0C637F" />
+      </View>
     </>
   );
 }
@@ -55,21 +45,21 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  headers : {
+  headers: {
     fontWeight: 'bold',
     fontSize: 16,
-    justifyContent:'center'
+    justifyContent: 'center',
   },
   textBoxes: {
     borderWidth: 1,
     borderStyle: 'solid',
     borderColor: '#EF476F',
-    padding:10,
-    marginBottom:10
+    padding: 10,
+    marginBottom: 10,
   },
-  Button:{
+  Button: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
     padding: 16,
-  }
+  },
 });

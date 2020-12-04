@@ -10,16 +10,17 @@ import {
   TouchableOpacity,
   Platform,
   TextInput,
+  Button
 } from 'react-native';
 import { Icon } from "native-base";
 import Navbar from '../components/Navbar';
-import { GET_USER_ITEMS } from '../queries/usersListedItems'
-import { useQuery } from '@apollo/client';
+import { GET_USER_ITEMS, UPDATE_ITEM } from '../queries/usersListedItems'
+import { useQuery, useMutation } from '@apollo/client';
 
-export default function UsersItems({navigation}) {
-  const mockemail = 'test@email2.com';
+export default function UsersItems({navigation,route}) {
+  const { email } = route.params;
   const {loading, error, data} = useQuery(GET_USER_ITEMS, {
-    variables: { email: mockemail }
+    variables: { email: email }
   });
 
   useEffect(()=>{
@@ -27,84 +28,58 @@ export default function UsersItems({navigation}) {
     console.log('error: ', error);
     console.log('data: ', data);
   }, [loading, error, data]);
-
-  // const data = [
-  //   {
-  //     title:'title 1',
-  //     description:'description description description description',
-  //     deadline:new Date('December 25, 2020 12:00:00'),
-  //     price:'20€',
-  //   },
-  //   {
-  //     title:'title 2',
-  //     description:'description description description description',
-  //     deadline:new Date('December 31, 2020 24:00:00'),
-  //     price:'20€',
-  //   }
-  // ]
-
+  
   if (loading) return (<Text>Loading...</Text>);
   if (error) return (<Text>Error: {error}</Text>);
-
+  
   return (
-    <>
+    <SafeAreaView>
     <Navbar navigation={navigation} canGoBack={true}/>
-    <View style={styles.container}>
-      <TouchableOpacity onPress={()=>{navigation.navigate('AddItem')}} style={styles.box}>
-        <Text style={styles.text}>
-          Add additional item
-        </Text>
-        <Icon type="MaterialCommunityIcons" name="plus" style={{color: 'white', fontSize: 70}}/>
+    <ScrollView style={styles.container}>
+    <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('AddItem');
+          }}
+          style={styles.box}
+        >
+          <Text style={styles.text}>Add additional item</Text>
+          <Icon
+            type="MaterialCommunityIcons"
+            name="plus"
+            style={{ color: 'white', fontSize: 70 }}
+          />
       </TouchableOpacity>
       {data.get_user_by_email.item.map((item)=>(
-        <Panel 
+        <Panel
           key={item.id}
-          title={item.name} 
+          id={item.id}
+          name={item.name} 
           description={item.description} 
           deadline={new Date('December 25, 2020 12:00:00')}
           price={item.minPrice}/>
-        ))}
-    </View>
-    </>
+          ))}
+    </ScrollView>
+    </SafeAreaView>
   );
 }
 
-const ExpandableComponent = ({onClickFunction, title, description, layoutHeight, setDescription, setTitle}) => {
-  return (
-    <View>
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={onClickFunction}
-        style={styles2.header}>
-        <Text style={styles2.header}>
-          TOUCH HERE TO EDIT
-        </Text>
-      </TouchableOpacity>
-      <View
-        style={{
-          height: layoutHeight,
-          overflow: 'hidden',
-        }}>
-          <View>
-            <Text>Title</Text>
-            <TextInput style={styles2.textBoxes} value={title} onChangeText={text => setTitle(text)}></TextInput>
-            <Text>Description</Text>
-            <TextInput style={styles2.textBoxes} value={description} onChangeText={text => setDescription(text)}></TextInput>
-          </View>
-      </View>
-    </View>
-  );
-};
 function Panel (props) {
   const [listDataSource, setListDataSource] = useState([{
     isExpanded: false,
   }]);
   const [multiSelect, setMultiSelect] = useState(false);
   const [timeDiff, setTimeDiff] = useState(props.deadline-new Date(Date.now()));
-  const [time, setTime] = useState('99:99:99:99')
+  const [time, setTime] = useState('')
   const [layoutHeight, setLayoutHeight] = useState(0);
-  const [title, setTitle] = useState(props.title);
+  const [title, setTitle] = useState(props.name);
   const [description, setDescription] = useState(props.description);
+  const [changeItem, {data, error, loading}] = useMutation(UPDATE_ITEM);
+  
+  useEffect(()=>{
+    console.log('loading: ', loading);
+    console.log('error: ', error);
+    console.log('data: ', data);
+  }, [loading, error, data]);
 
   useEffect(() => {
     if (listDataSource[0].isExpanded) {
@@ -113,6 +88,21 @@ function Panel (props) {
       setLayoutHeight(0);
     }
   }, [listDataSource[0].isExpanded]);
+
+  function saveChanges() {
+    const queryVariables = {
+      itemId: props.id,
+      item: {
+        name: title,
+        minPrice:props.price,
+        description: description,
+      }
+    };
+
+    console.log(queryVariables)
+
+    changeItem({variables:queryVariables});
+  }
 
   useEffect(()=>{
     let timer = setTimeout(()=>setTime(updateTime(timeDiff)), 1000);
@@ -170,13 +160,14 @@ function Panel (props) {
       <View style={styles2.container}>
         <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
           <View style={{flexShrink: 0}}>
-            <Text style={styles2.titleText}>{props.title}</Text>
+            <Text style={styles2.titleText}>{title}</Text>
             <Text>{props.price}</Text>
           </View>
           <Text>{time}</Text>
         </View>
         <ScrollView>
             <ExpandableComponent
+              saveChanges={saveChanges}
               description={description}
               title={title}
               setTitle={setTitle}
@@ -190,6 +181,38 @@ function Panel (props) {
         </ScrollView>
       </View>
     </SafeAreaView>
+  );
+};
+const ExpandableComponent = ({saveChanges,onClickFunction, title, description, layoutHeight, setDescription, setTitle}) => {
+  return (
+    <View>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={onClickFunction}
+        style={styles2.header}>
+        <Text style={styles2.header}>
+          TOUCH HERE TO EDIT
+        </Text>
+      </TouchableOpacity>
+      <View
+        style={{
+          height: layoutHeight,
+          overflow: 'hidden',
+        }}>
+      <View>
+        <Text>Title</Text>
+        <TextInput style={styles2.textBoxes} value={title} onChangeText={text => {
+          console.log(text)
+          setTitle(text)}}></TextInput>
+        <Text>Description</Text>
+        <TextInput style={styles2.textBoxes} value={description} onChangeText={text => setDescription(text)}></TextInput>
+      </View>
+      <Button
+        title='Save Changes'
+        onPress={saveChanges}
+        color= '#0C637F'/>
+      </View>
+    </View>
   );
 };
 
@@ -232,8 +255,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection:'column',
     backgroundColor:'#fff',
-    alignItems:'center',
-    justifyContent:'flex-start',
     width:'100%',
     height:'100%',
     flexShrink:0,
