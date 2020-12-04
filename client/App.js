@@ -17,13 +17,11 @@ const getFonts = () => {
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const [email, setEmail] = useState('donald@email.com');
+  const [email, setEmail] = useState('test@email2.com');
 
-  console.log(APOLLO_SERVER_URI);
-
-  const errorLink = onError(({ graphQLErrors }) => {
-    if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message))
-  })
+  useEffect(()=>{
+    console.log(email);
+  }, [email]);
 
   const httpLink = new HttpLink({
     uri: APOLLO_SERVER_URI

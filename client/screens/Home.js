@@ -56,7 +56,10 @@ export default function Home({ navigation, route }) {
   ];
 
   if (categories.loading) return <Text>Loading...</Text>;
-  if (categories.error) return <Text>Error: {items.error}</Text>;
+  if (categories.error) {
+    console.log('error', categories.error);
+    return <Text>Error: </Text>;
+  }
 
   return (
     <>
