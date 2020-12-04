@@ -19,7 +19,6 @@ import { useQuery, useMutation } from '@apollo/client';
 
 export default function UsersItems({navigation,route}) {
   const { email } = route.params;
-  console.log(route)
   const {loading, error, data} = useQuery(GET_USER_ITEMS, {
     variables: { email: email }
   });
@@ -29,30 +28,14 @@ export default function UsersItems({navigation,route}) {
     console.log('error: ', error);
     console.log('data: ', data);
   }, [loading, error, data]);
-
-
-  // const data = [
-  //   {
-  //     title:'title 1',
-  //     description:'description description description description',
-  //     deadline:new Date('December 25, 2020 12:00:00'),
-  //     price:'20€',
-  //   },
-  //   {
-  //     title:'title 2',
-  //     description:'description description description description',
-  //     deadline:new Date('December 31, 2020 24:00:00'),
-  //     price:'20€',
-  //   }
-  // ]
   
   if (loading) return (<Text>Loading...</Text>);
   if (error) return (<Text>Error: {error}</Text>);
   
   return (
-    <>
+    <SafeAreaView>
     <Navbar navigation={navigation} canGoBack={true}/>
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
     <TouchableOpacity
           onPress={() => {
             navigation.navigate('AddItem');
@@ -75,8 +58,8 @@ export default function UsersItems({navigation,route}) {
           deadline={new Date('December 25, 2020 12:00:00')}
           price={item.minPrice}/>
           ))}
-    </View>
-    </>
+    </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -272,8 +255,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection:'column',
     backgroundColor:'#fff',
-    alignItems:'center',
-    justifyContent:'flex-start',
     width:'100%',
     height:'100%',
     flexShrink:0,
