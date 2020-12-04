@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   LayoutAnimation,
@@ -10,25 +10,26 @@ import {
   TouchableOpacity,
   Platform,
   TextInput,
+  Button
 } from 'react-native';
-import { Icon } from 'native-base';
+import { Icon } from "native-base";
 import Navbar from '../components/Navbar';
-import { GET_USER_ITEMS } from '../queries/usersListedItems';
-import { useQuery } from '@apollo/client';
+import { GET_USER_ITEMS, UPDATE_ITEM } from '../queries/usersListedItems'
+import { useQuery, useMutation } from '@apollo/client';
 
-export default function UsersItems({ navigation, route }) {
-  const mockemail = 'test@email2.com';
-  const { loading, error, data } = useQuery(GET_USER_ITEMS, {
-    variables: { email: mockemail },
+export default function UsersItems({navigation,route}) {
+  const { email } = route.params;
+  console.log(route)
+  const {loading, error, data} = useQuery(GET_USER_ITEMS, {
+    variables: { email: email }
   });
 
-  useEffect(() => {
+  useEffect(()=>{
     console.log('loading: ', loading);
     console.log('error: ', error);
     console.log('data: ', data);
   }, [loading, error, data]);
 
-  const { email } = route.params;
 
   // const data = [
   //   {
@@ -44,15 +45,15 @@ export default function UsersItems({ navigation, route }) {
   //     price:'20€',
   //   }
   // ]
-
-  if (loading) return <Text>Loading...</Text>;
-  if (error) return <Text>Error: {error}</Text>;
-
+  
+  if (loading) return (<Text>Loading...</Text>);
+  if (error) return (<Text>Error: {error}</Text>);
+  
   return (
     <>
-      <Navbar navigation={navigation} canGoBack={true} />
-      <View style={styles.container}>
-        <TouchableOpacity
+    <Navbar navigation={navigation} canGoBack={true}/>
+    <View style={styles.container}>
+    <TouchableOpacity
           onPress={() => {
             navigation.navigate('AddItem');
           }}
@@ -64,76 +65,38 @@ export default function UsersItems({ navigation, route }) {
             name="plus"
             style={{ color: 'white', fontSize: 70 }}
           />
-        </TouchableOpacity>
-        {data.get_user_by_email.item.map((item) => (
-          <Panel
-            key={item.id}
-            title={item.name}
-            description={item.description}
-            deadline={new Date('December 25, 2020 12:00:00')}
-            price={item.minPrice}
-          />
-        ))}
-      </View>
+      </TouchableOpacity>
+      {data.get_user_by_email.item.map((item)=>(
+        <Panel
+          key={item.id}
+          id={item.id}
+          name={item.name} 
+          description={item.description} 
+          deadline={new Date('December 25, 2020 12:00:00')}
+          price={item.minPrice}/>
+          ))}
+    </View>
     </>
   );
 }
 
-const ExpandableComponent = ({
-  onClickFunction,
-  title,
-  description,
-  layoutHeight,
-  setDescription,
-  setTitle,
-}) => {
-  return (
-    <View>
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={onClickFunction}
-        style={styles2.header}
-      >
-        <Text style={styles2.header}>TOUCH HERE TO EDIT</Text>
-      </TouchableOpacity>
-      <View
-        style={{
-          height: layoutHeight,
-          overflow: 'hidden',
-        }}
-      >
-        <View>
-          <Text>Title</Text>
-          <TextInput
-            style={styles2.textBoxes}
-            value={title}
-            onChangeText={(text) => setTitle(text)}
-          ></TextInput>
-          <Text>Description</Text>
-          <TextInput
-            style={styles2.textBoxes}
-            value={description}
-            onChangeText={(text) => setDescription(text)}
-          ></TextInput>
-        </View>
-      </View>
-    </View>
-  );
-};
-function Panel(props) {
-  const [listDataSource, setListDataSource] = useState([
-    {
-      isExpanded: false,
-    },
-  ]);
+function Panel (props) {
+  const [listDataSource, setListDataSource] = useState([{
+    isExpanded: false,
+  }]);
   const [multiSelect, setMultiSelect] = useState(false);
-  const [timeDiff, setTimeDiff] = useState(
-    props.deadline - new Date(Date.now()),
-  );
-  const [time, setTime] = useState('99:99:99:99');
+  const [timeDiff, setTimeDiff] = useState(props.deadline-new Date(Date.now()));
+  const [time, setTime] = useState('')
   const [layoutHeight, setLayoutHeight] = useState(0);
-  const [title, setTitle] = useState(props.title);
+  const [title, setTitle] = useState(props.name);
   const [description, setDescription] = useState(props.description);
+  const [changeItem, {data, error, loading}] = useMutation(UPDATE_ITEM);
+  
+  useEffect(()=>{
+    console.log('loading: ', loading);
+    console.log('error: ', error);
+    console.log('data: ', data);
+  }, [loading, error, data]);
 
   useEffect(() => {
     if (listDataSource[0].isExpanded) {
@@ -143,28 +106,43 @@ function Panel(props) {
     }
   }, [listDataSource[0].isExpanded]);
 
-  useEffect(() => {
-    let timer = setTimeout(() => setTime(updateTime(timeDiff)), 1000);
-
-    return () => {
-      clearTimeout(timer);
+  function saveChanges() {
+    const queryVariables = {
+      itemId: props.id,
+      item: {
+        name: title,
+        minPrice:props.price,
+        description: description,
+      }
     };
-  }, [timeDiff]);
 
-  function updateTime(diff) {
+    console.log(queryVariables)
+
+    changeItem({variables:queryVariables});
+  }
+
+  useEffect(()=>{
+    let timer = setTimeout(()=>setTime(updateTime(timeDiff)), 1000);
+
+    return ()=>{
+      clearTimeout(timer);
+    }
+  },[timeDiff]);
+
+  function updateTime (diff) { 
     if (diff > 0) {
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      let minutes = Math.floor((diff / 1000 / 60) % 60);
-      let seconds = Math.floor((diff / 1000) % 60);
-      if (minutes < 10) {
-        minutes = '0' + minutes;
+      const days=Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours=Math.floor((diff / (1000 * 60 * 60)) % 24);
+      let minutes=Math.floor((diff / 1000 / 60) % 60);
+      let seconds=Math.floor((diff / 1000) % 60);
+      if (minutes<10) {
+        minutes='0'+minutes;
       }
-      if (seconds < 10) {
-        seconds = '0' + seconds;
+      if (seconds<10) {
+        seconds='0'+seconds;
       }
-      setTimeDiff(timeDiff - 1000);
-      return `${days}:${hours}:${minutes}:${seconds}`;
+      setTimeDiff(timeDiff-1000);
+      return `${days}:${hours}:${minutes}:${seconds}`
     } else {
       return 'finished';
     }
@@ -182,7 +160,8 @@ function Panel(props) {
     } else {
       array.map((value, placeindex) =>
         placeindex === index
-          ? (array[placeindex]['isExpanded'] = !array[placeindex]['isExpanded'])
+          ? (array[placeindex]['isExpanded'] =
+            !array[placeindex]['isExpanded'])
           : (array[placeindex]['isExpanded'] = false),
       );
     }
@@ -190,54 +169,82 @@ function Panel(props) {
   };
 
   return (
-    <SafeAreaView
-      style={{
-        flexShrink: 0,
-        borderWidth: 5,
-        borderStyle: 'solid',
-        borderColor: '#00C793',
-        width: '95%',
-        margin: 10,
-      }}
-    >
+    <SafeAreaView style={{flexShrink: 0,borderWidth: 5,
+      borderStyle: 'solid',
+      borderColor: '#00C793',
+      width: '95%',
+      margin:10}}>
       <View style={styles2.container}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View style={{ flexShrink: 0 }}>
-            <Text style={styles2.titleText}>{props.title}</Text>
+        <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
+          <View style={{flexShrink: 0}}>
+            <Text style={styles2.titleText}>{title}</Text>
             <Text>{props.price}</Text>
           </View>
           <Text>{time}</Text>
         </View>
         <ScrollView>
-          <ExpandableComponent
-            description={description}
-            title={title}
-            setTitle={setTitle}
-            setDescription={setDescription}
-            onClickFunction={() => {
-              updateLayout(0);
-            }}
-            listDataSource={listDataSource}
-            layoutHeight={layoutHeight}
-          />
+            <ExpandableComponent
+              saveChanges={saveChanges}
+              description={description}
+              title={title}
+              setTitle={setTitle}
+              setDescription={setDescription}
+              onClickFunction={() => {
+                updateLayout(0);
+              }}
+              listDataSource={listDataSource}
+              layoutHeight={layoutHeight}
+            />
         </ScrollView>
       </View>
     </SafeAreaView>
   );
-}
+};
+const ExpandableComponent = ({saveChanges,onClickFunction, title, description, layoutHeight, setDescription, setTitle}) => {
+  return (
+    <View>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={onClickFunction}
+        style={styles2.header}>
+        <Text style={styles2.header}>
+          TOUCH HERE TO EDIT
+        </Text>
+      </TouchableOpacity>
+      <View
+        style={{
+          height: layoutHeight,
+          overflow: 'hidden',
+        }}>
+      <View>
+        <Text>Title</Text>
+        <TextInput style={styles2.textBoxes} value={title} onChangeText={text => {
+          console.log(text)
+          setTitle(text)}}></TextInput>
+        <Text>Description</Text>
+        <TextInput style={styles2.textBoxes} value={description} onChangeText={text => setDescription(text)}></TextInput>
+      </View>
+      <Button
+        title='Save Changes'
+        onPress={saveChanges}
+        color= '#0C637F'/>
+      </View>
+    </View>
+  );
+};
 
 const styles2 = StyleSheet.create({
   container: {
     width: '95%',
     flexShrink: 0,
-    padding: 10,
+    padding:10,
   },
   titleText: {
     flexShrink: 0,
     width: '95%',
     fontSize: 22,
     fontWeight: 'bold',
-    width: '100%',
+    width:'100%'
   },
   header: {
     width: '95%',
@@ -245,47 +252,47 @@ const styles2 = StyleSheet.create({
     fontWeight: '500',
   },
   textBoxes: {
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#EF476F',
-    width: '95%',
-    padding: 10,
+    borderWidth:1,
+    borderStyle:'solid',
+    borderColor:'#EF476F',
+    width:'95%',
+    padding:10
   },
   text: {
-    width: '95%',
-    fontSize: 16,
+    width:'95%',
+    fontSize:16,
   },
   content: {
-    width: '95%',
-    backgroundColor: '#fff',
+    width:'95%',
+    backgroundColor:'#fff',
   },
 });
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column',
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    width: '100%',
-    height: '100%',
-    flexShrink: 0,
+    flexDirection:'column',
+    backgroundColor:'#fff',
+    alignItems:'center',
+    justifyContent:'flex-start',
+    width:'100%',
+    height:'100%',
+    flexShrink:0,
   },
   box: {
     paddingLeft: 15,
-    margin: 10,
-    height: 100,
+    margin:10,
+    height:100,
     width: '95%',
     flexShrink: 0,
     backgroundColor: '#0C637F',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection:'row',
+    justifyContent:'space-between',
+    alignItems:'center'
   },
   text: {
-    color: '#fff',
+    color:'#fff',
     fontSize: 22,
-    textAlign: 'center',
+    textAlign:'center',
   },
   itemImage: {
     width: 50,
