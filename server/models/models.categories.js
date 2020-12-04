@@ -7,7 +7,9 @@ module.exports = (sequlize, DataTypes) => {
   });
 
   Categories.associate = (models) => {
-    Categories.hasMany(models.items);
+    Categories.hasMany(models.items, {
+      foreignKey: 'categoryId'
+    });
   };
 
   Categories.beforeCreate(category => category.id = uuidv4());

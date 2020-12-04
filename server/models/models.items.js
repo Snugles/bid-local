@@ -26,6 +26,9 @@ module.exports = (sequelize, DataTypes) => {
     description: {
       type: DataTypes.TEXT,
     },
+    picUrl: {
+      type: DataTypes.TEXT,
+    },
     userId: {
       type: DataTypes.UUID,
       allowNull: false,
@@ -42,7 +45,10 @@ module.exports = (sequelize, DataTypes) => {
   });
   Items.beforeCreate(item => item.id = uuidv4());
   Items.associate = (models) => {
-    Items.belongsTo(models.users);
+    Items.belongsTo(models.users, {
+      foreignKey: 'userId',
+      onDelete: 'CASCADE'
+    });
     Items.belongsTo(models.categories);
   };
 

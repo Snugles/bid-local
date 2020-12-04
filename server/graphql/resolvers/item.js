@@ -14,12 +14,13 @@ exports.get_user_by_item = async (item, _, { models }) => {
 };
 
 exports.create_item = async (_, { userId, item }, { models }) => {
-  const { name, minPrice, description, categoryId } = item;
+  const { name, minPrice, description, picUrl, categoryId } = item;
   try {
     const item = {
       name,
       minPrice,
       description,
+      picUrl,
       userId, //make dynamic
       categoryId, //make dynamic
     };

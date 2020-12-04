@@ -4,14 +4,16 @@ type Item {
   name: String!
   minPrice: Int!
   description: String
+  picUrl: String
   user: User!
-  category: Category
+  categoryId: String
 }
 
 input ItemUpdate {
   name: String!
   minPrice: Int!
   description: String
+  picUrl: String
   categoryId: String
 }
 

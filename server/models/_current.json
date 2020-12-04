@@ -104,6 +104,10 @@
                     "field": "description",
                     "seqType": "Sequelize.TEXT"
                 },
+                "picUrl": {
+                    "field": "picUrl",
+                    "seqType": "Sequelize.TEXT"
+                },
                 "userId": {
                     "allowNull": false,
                     "field": "userId",
@@ -111,7 +115,7 @@
                         "model": "users",
                         "key": "id"
                     },
-                    "onDelete": "NO ACTION",
+                    "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
                     "seqType": "Sequelize.UUID"
                 },
