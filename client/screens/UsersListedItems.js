@@ -55,7 +55,7 @@ export default function UsersItems({navigation,route}) {
           id={item.id}
           name={item.name} 
           description={item.description} 
-          deadline={new Date('December 25, 2020 12:00:00')}
+          deadline={new Date('December 5, 2020 12:00:00')}
           price={item.minPrice}/>
           ))}
     </ScrollView>
@@ -115,17 +115,31 @@ function Panel (props) {
   function updateTime (diff) { 
     if (diff > 0) {
       const days=Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours=Math.floor((diff / (1000 * 60 * 60)) % 24);
-      let minutes=Math.floor((diff / 1000 / 60) % 60);
-      let seconds=Math.floor((diff / 1000) % 60);
-      if (minutes<10) {
-        minutes='0'+minutes;
+      if (days>0) {
+        return `${days} days`;
       }
-      if (seconds<10) {
-        seconds='0'+seconds;
+      const hours=Math.floor((diff / (1000 * 60 * 60)) % 24);
+      if (hours>0) {
+        return `${hours} hours`;
+      }
+      let minutes=Math.floor((diff / 1000 / 60) % 60);
+      if (minutes>0) {
+        if (minutes<10) {
+          minutes='0'+minutes;
+        }
+        return `${minutes} minutes`;
+      }
+      let seconds=Math.floor((diff / 1000) % 60);
+      if (seconds>0) {
+        if (seconds<10) {
+          seconds='0'+seconds;
+        }
+        return `${seconds} seconds`;
       }
       setTimeDiff(timeDiff-1000);
-      return `${days}:${hours}:${minutes}:${seconds}`
+      // if (hours>0) {
+      //   return `${days} days  ${hours} hours\n${minutes} mintues  ${seconds} seconds`
+      // }
     } else {
       return 'finished';
     }
@@ -161,7 +175,7 @@ function Panel (props) {
         <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
           <View style={{flexShrink: 0}}>
             <Text style={styles2.titleText}>{title}</Text>
-            <Text>{props.price}</Text>
+            <Text>{props.price+'€'}</Text>
           </View>
           <Text>{time}</Text>
         </View>
