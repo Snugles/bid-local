@@ -14,12 +14,12 @@ import {
 } from 'react-native';
 import { Icon } from "native-base";
 import Navbar from '../components/Navbar';
+import Timer from '../components/Timer';
 import { GET_USER_ITEMS, UPDATE_ITEM } from '../queries/usersListedItems'
 import { useQuery, useMutation } from '@apollo/client';
 
 export default function UsersItems({navigation,route}) {
   const { email } = route.params;
-  console.log(route)
   const {loading, error, data} = useQuery(GET_USER_ITEMS, {
     variables: { email: email }
   });
@@ -29,30 +29,14 @@ export default function UsersItems({navigation,route}) {
     console.log('error: ', error);
     console.log('data: ', data);
   }, [loading, error, data]);
-
-
-  // const data = [
-  //   {
-  //     title:'title 1',
-  //     description:'description description description description',
-  //     deadline:new Date('December 25, 2020 12:00:00'),
-  //     price:'20€',
-  //   },
-  //   {
-  //     title:'title 2',
-  //     description:'description description description description',
-  //     deadline:new Date('December 31, 2020 24:00:00'),
-  //     price:'20€',
-  //   }
-  // ]
   
   if (loading) return (<Text>Loading...</Text>);
   if (error) return (<Text>Error: {error}</Text>);
   
   return (
-    <>
+    <SafeAreaView>
     <Navbar navigation={navigation} canGoBack={true}/>
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
     <TouchableOpacity
           onPress={() => {
             navigation.navigate('AddItem');
@@ -72,11 +56,11 @@ export default function UsersItems({navigation,route}) {
           id={item.id}
           name={item.name} 
           description={item.description} 
-          deadline={new Date('December 25, 2020 12:00:00')}
+          deadline={new Date('December 5, 2020 12:00:00')}
           price={item.minPrice}/>
           ))}
-    </View>
-    </>
+    </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -85,8 +69,6 @@ function Panel (props) {
     isExpanded: false,
   }]);
   const [multiSelect, setMultiSelect] = useState(false);
-  const [timeDiff, setTimeDiff] = useState(props.deadline-new Date(Date.now()));
-  const [time, setTime] = useState('')
   const [layoutHeight, setLayoutHeight] = useState(0);
   const [title, setTitle] = useState(props.name);
   const [description, setDescription] = useState(props.description);
@@ -116,36 +98,7 @@ function Panel (props) {
       }
     };
 
-    console.log(queryVariables)
-
     changeItem({variables:queryVariables});
-  }
-
-  useEffect(()=>{
-    let timer = setTimeout(()=>setTime(updateTime(timeDiff)), 1000);
-
-    return ()=>{
-      clearTimeout(timer);
-    }
-  },[timeDiff]);
-
-  function updateTime (diff) { 
-    if (diff > 0) {
-      const days=Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours=Math.floor((diff / (1000 * 60 * 60)) % 24);
-      let minutes=Math.floor((diff / 1000 / 60) % 60);
-      let seconds=Math.floor((diff / 1000) % 60);
-      if (minutes<10) {
-        minutes='0'+minutes;
-      }
-      if (seconds<10) {
-        seconds='0'+seconds;
-      }
-      setTimeDiff(timeDiff-1000);
-      return `${days}:${hours}:${minutes}:${seconds}`
-    } else {
-      return 'finished';
-    }
   }
 
   if (Platform.OS === 'android') {
@@ -178,9 +131,10 @@ function Panel (props) {
         <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
           <View style={{flexShrink: 0}}>
             <Text style={styles2.titleText}>{title}</Text>
-            <Text>{props.price}</Text>
+            <Text>{props.price+'€'}</Text>
           </View>
-          <Text>{time}</Text>
+          <Text>Time:</Text>
+          <Timer deadline={props.deadline}/>
         </View>
         <ScrollView>
             <ExpandableComponent
@@ -219,7 +173,6 @@ const ExpandableComponent = ({saveChanges,onClickFunction, title, description, l
       <View>
         <Text>Title</Text>
         <TextInput style={styles2.textBoxes} value={title} onChangeText={text => {
-          console.log(text)
           setTitle(text)}}></TextInput>
         <Text>Description</Text>
         <TextInput style={styles2.textBoxes} value={description} onChangeText={text => setDescription(text)}></TextInput>
@@ -272,8 +225,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection:'column',
     backgroundColor:'#fff',
-    alignItems:'center',
-    justifyContent:'flex-start',
     width:'100%',
     height:'100%',
     flexShrink:0,

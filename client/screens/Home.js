@@ -10,8 +10,10 @@ import {
 import DropDownPicker from 'react-native-dropdown-picker';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Navbar from '../components/Navbar';
+import Timer from '../components/Timer';
 import { GET_CATEGORIES, GET_ITEMS } from '../queries/home';
 import { useQuery, useLazyQuery } from '@apollo/client';
+
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -112,7 +114,7 @@ export default function Home({ navigation, route }) {
                         resizeMode="cover"
                         source={require('../assets/item-test-1.jpg')}
                       >
-                        <Text style={styles.itemTime}>xx:xx</Text>
+                        <Timer style={styles.itemTime} deadline={new Date('December 5, 2020 12:00:00')}/>
                       </ImageBackground>
                       <Text style={styles.itemTitle}>{item.name}</Text>
                       <Text style={styles.itemPrice}>{item.minPrice}€</Text>
