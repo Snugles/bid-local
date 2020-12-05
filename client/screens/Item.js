@@ -11,12 +11,14 @@ import {
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import Navbar from '../components/Navbar';
+import Timer from '../components/Timer';
 import { GET_ITEM_BY_ID } from '../queries/item';
 import { useQuery } from '@apollo/client';
 
 export default function Item({ navigation, route }) {
   const windowWidth = Dimensions.get('window').width;
   const [offerBid, setOfferBid] = useState('');
+
   const { loading, error, data } = useQuery(GET_ITEM_BY_ID, {
     variables: {
       id: route.params.id,
@@ -24,8 +26,6 @@ export default function Item({ navigation, route }) {
   });
 
   const { email } = route.params;
-
-  console.log('itemid:', route.params);
 
   useEffect(() => {
     console.log('loading: ', loading);
@@ -61,7 +61,6 @@ export default function Item({ navigation, route }) {
   };
 
   function handleCurrency(input) {
-    console.log(input);
     if (input) {
       if (input.search(/[^0-9,]/g) === -1) {
         // if string only contains (0123456789,)
@@ -105,7 +104,7 @@ export default function Item({ navigation, route }) {
           <Text style={styles.itemPrice}>{data.get_item_by_Id.minPrice}€</Text>
           <View style={styles.time}>
             <Text style={{ color: 'white', fontSize: 16 }}>Time Left:</Text>
-            <Text style={{ color: 'white', fontSize: 25 }}>02:56</Text>
+            <Timer style={{ color: 'white', fontSize: 25 }} deadline={new Date('December 5, 2020 12:00:00')}/>
           </View>
           <View style={styles.bidView}>
             <View style={styles.bidBorder}>
