@@ -26,9 +26,10 @@ export default function App() {
   }, [email]);
 
   const uri = APOLLO_SERVER_URI;
+  const link = new HttpLink({ uri: uri });
 
   const client = new ApolloClient({
-    uri: uri,
+    link: link,
     cache: new InMemoryCache(),
   });
 
