@@ -165,11 +165,14 @@ mutation{
   }
 }
 
-//List all categories
+//List all categories (and items within them)
 query {
   get_categories{
     id
     name
+    item {
+      name
+    }
   }
 }
 

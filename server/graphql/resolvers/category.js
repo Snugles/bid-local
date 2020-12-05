@@ -10,7 +10,7 @@ exports.get_categories = async (_, __, { models }) => {
 };
 
 exports.get_items = async (category, _, { models }) => {
-  const items = await models.items.findAll({ where: { id: item.categoryId } });
+  const items = await models.items.findAll({ where: { categoryId: category.id } });
   return items;
 };
 
