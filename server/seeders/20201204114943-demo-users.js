@@ -21,11 +21,11 @@ const users = [...Array(numItems)].map((user) => (
   }
 ));
 
-const admin =
+const adminUser =
   {
     id: faker.random.uuid(),
-    email: 'admin@admin.com',
-    password: 'admin',
+    email: 'user@user.com',
+    password: 'user',
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     phoneNumber: `${faker.phone.phoneNumber()}`,
@@ -33,8 +33,7 @@ const admin =
     updatedAt: new Date()
   };
 
-users.push(admin);
-
+users.push(adminUser);
 
 const categories = [
   { id: faker.random.uuid(), name: 'FURNITURE', createdAt: new Date(), updatedAt: new Date() },
@@ -50,7 +49,7 @@ const categories = [
   { id: faker.random.uuid(), name: 'SPORTS', createdAt: new Date(), updatedAt: new Date() },
 ];
 
-const items = [...Array(numItems)].map((item, index) => (
+const items = [...Array(numItems+1)].map((item, index) => (
   {
     id: faker.random.uuid(),
     name: faker.commerce.productName(),
@@ -59,14 +58,14 @@ const items = [...Array(numItems)].map((item, index) => (
     picUrl1: faker.image.image(),
     picUrl2: faker.image.image(),
     picUrl3: faker.image.image(),
-    userId: users[randNumb(numItems)].id,
+    userId: users[randNumb(numItems+1)].id,
     categoryId: categories[randNumb(10)].id,
     createdAt: new Date(),
     updatedAt: new Date()
   }
 ));
 
-const addresses = [...Array(numItems)].map((address, index) => (
+const addresses = [...Array(numItems+1)].map((address, index) => (
   {
     id: faker.random.uuid(),
     firstLineAddress: faker.address.streetAddress(),
