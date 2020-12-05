@@ -21,6 +21,21 @@ const users = [...Array(numItems)].map((user) => (
   }
 ));
 
+const admin =
+  {
+    id: faker.random.uuid(),
+    email: 'admin@admin.com',
+    password: 'admin',
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    phoneNumber: `${faker.phone.phoneNumber()}`,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  };
+
+users.push(admin);
+
+
 const categories = [
   { id: faker.random.uuid(), name: 'FURNITURE', createdAt: new Date(), updatedAt: new Date() },
   { id: faker.random.uuid(), name: 'ANIMALS', createdAt: new Date(), updatedAt: new Date() },
