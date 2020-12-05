@@ -4,6 +4,7 @@ type Item {
   name: String!
   minPrice: Int!
   description: String
+  file: Upload
   user: User!
   category: Category
 }
@@ -13,6 +14,7 @@ input ItemUpdate {
   minPrice: Int!
   description: String
   categoryId: String
+  file: Upload
 }
 
 extend type Query {
