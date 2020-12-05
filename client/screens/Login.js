@@ -8,14 +8,15 @@ export default function Login({ navigation, route }) {
 
   const [email, setEmail] = useState('');
   const [getID, { data, error, loading }] = useLazyQuery(GET_USER_BY_EMAIL);
-  const [id, SetID] = useState('');
+  const [id, SetID] = useState({});
 
   useEffect(() => {
     console.log('loading: ', loading);
     console.log('error: ', error);
     console.log('data: ', data);
-    if (data) {
-      SetID(data);
+    if (data && data.get_user_by_email) {
+      SetID(data.get_user_by_email.id);
+      navigation.navigate('Home')
     }
   }, [loading, data, error]);
 
@@ -25,7 +26,6 @@ export default function Login({ navigation, route }) {
 
   return (
     <>
-      <Navbar navigation={navigation} canGoBack={true} />
       <View style={styles.container}>
         <Text style={styles.headers}>Email:</Text>
         <TextInput
