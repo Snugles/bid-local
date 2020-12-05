@@ -16,3 +16,12 @@ mutation create_item(
   }
 }
 `;
+
+export const GET_CATEGORIES = gql`
+query get_categories {
+  get_categories {
+    id
+    name
+  }
+}
+`;
