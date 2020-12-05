@@ -21,6 +21,7 @@ extend type Query {
   me: User
   get_user_by_email(email: String!): User
   get_users: [User]
+  get_user_by_Id(id: String!): User
 }
 extend type Mutation {
   create_user(user: UserUpdate!): User

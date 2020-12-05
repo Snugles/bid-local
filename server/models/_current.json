@@ -104,8 +104,16 @@
                     "field": "description",
                     "seqType": "Sequelize.TEXT"
                 },
-                "picUrl": {
-                    "field": "picUrl",
+                "picUrl1": {
+                    "field": "picUrl1",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "picUrl2": {
+                    "field": "picUrl2",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "picUrl3": {
+                    "field": "picUrl3",
                     "seqType": "Sequelize.TEXT"
                 },
                 "userId": {

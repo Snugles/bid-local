@@ -8,8 +8,7 @@
     "start": "nodemon index.js",
     "lint:js": "eslint . --ext .js,.jsx",
     "fixAll": "npm run lint:js -- --fix",
-    "cleanStart": "npx sequelize db:drop && npx sequelize db:create && sequelize-mig migration:undo && sequelize-mig migration:make && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
-    "repopulate":"npx sequelize db:drop && npx sequelize db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
+    "cleanStart": "npx sequelize db:drop && npx sequelize db:create && sequelize-mig migration:undo && sequelize-mig migration:make && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
   },
   "lint-staged": {
     "./**/*.{js}": [

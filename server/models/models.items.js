@@ -26,7 +26,13 @@ module.exports = (sequelize, DataTypes) => {
     description: {
       type: DataTypes.TEXT,
     },
-    picUrl: {
+    picUrl1: {
+      type: DataTypes.TEXT,
+    },
+    picUrl2: {
+      type: DataTypes.TEXT,
+    },
+    picUrl3: {
       type: DataTypes.TEXT,
     },
     userId: {

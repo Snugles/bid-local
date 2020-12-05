@@ -13,7 +13,7 @@ const Sequelize = require("sequelize");
 const info = {
   revision: 1,
   name: "noname",
-  created: "2020-12-04T21:58:38.891Z",
+  created: "2020-12-05T11:19:12.146Z",
   comment: "",
 };
 
@@ -127,7 +127,9 @@ const migrationCommands = (transaction) => {
           name: { type: Sequelize.STRING, field: "name", allowNull: false },
           minPrice: { type: Sequelize.INTEGER, field: "minPrice", default: 0 },
           description: { type: Sequelize.TEXT, field: "description" },
-          picUrl: { type: Sequelize.TEXT, field: "picUrl" },
+          picUrl1: { type: Sequelize.TEXT, field: "picUrl1" },
+          picUrl2: { type: Sequelize.TEXT, field: "picUrl2" },
+          picUrl3: { type: Sequelize.TEXT, field: "picUrl3" },
           userId: {
             type: Sequelize.UUID,
             onUpdate: "CASCADE",

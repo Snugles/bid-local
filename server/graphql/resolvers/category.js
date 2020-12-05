@@ -1,4 +1,4 @@
-exports.get_category = async (_, { id }, { models }) => {
+exports.get_category_by_Id = async (_, { id }, { models }) => {
   const category = await models.categories.findOne({ where: { id: id } });
   return category;
 };
