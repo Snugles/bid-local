@@ -7,7 +7,7 @@ type Address {
   postcode: String!
   country: String!
   user: User!
-  }
+}
 
 input AddressUpdate {
   firstLineAddress: String!
