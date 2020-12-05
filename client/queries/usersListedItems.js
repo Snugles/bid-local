@@ -16,3 +16,20 @@ query get_user_by_email (
   }
 }
 `;
+
+export const UPDATE_ITEM = gql`
+mutation update_item (
+  $itemId: String!
+  $item: ItemUpdate!
+) {
+  update_item (
+    itemId: $itemId
+    item: $item
+  ) {
+    id
+    name
+    minPrice
+    description
+  }
+}
+`;

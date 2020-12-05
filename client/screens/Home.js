@@ -1,34 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, ImageBackground, Dimensions } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  ImageBackground,
+  Dimensions,
+} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Navbar from '../components/Navbar';
-import { GET_CATEGORIES, GET_ITEMS } from '../queries/home'
+import Timer from '../components/Timer';
+import { GET_CATEGORIES, GET_ITEMS } from '../queries/home';
 import { useQuery, useLazyQuery } from '@apollo/client';
+
 
 const windowWidth = Dimensions.get('window').width;
 
-export default function Home({ navigation }) {
+export default function Home({ navigation, route }) {
   const [currentCategory, setCurrentCategory] = useState('ALL');
   const categories = useQuery(GET_CATEGORIES);
   const [getItems, items] = useLazyQuery(GET_ITEMS);
 
-  useEffect(()=>{
+  const { email } = route.params;
+
+  useEffect(() => {
     if (categories.data) {
       getItems();
     }
   }, [categories]);
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(currentCategory);
   }, [currentCategory]);
 
-  const categ = [
-    'ALL',
-    'ELECTRONICS',
-    'HOUSES',
-    'VEHICLES',
-  ];
+  const categ = ['ALL', 'ELECTRONICS', 'HOUSES', 'VEHICLES'];
 
   const mockdata = [
     {
@@ -51,75 +57,80 @@ export default function Home({ navigation }) {
     },
   ];
 
-  if (categories.loading) return (<Text>Loading...</Text>);
-  if (categories.error) return (<Text>Error: {items.error}</Text>);
+  if (categories.loading) return <Text>Loading...</Text>;
+  if (categories.error) {
+    console.log('error', categories.error);
+    return <Text>Error: </Text>;
+  }
 
   return (
     <>
-    <Navbar navigation={navigation} canGoBack={false}/>
-    <ScrollView style={styles.container}>
-      <View style={styles.homeContent}>
-        <Text style={styles.categoryTitle}>Category:</Text>
-        <DropDownPicker
-          items={
-            [{name: 'ALL'}, ...categories.data.get_categories].map(cat => (
-              {
+      <Navbar navigation={navigation} canGoBack={false} />
+      <ScrollView style={styles.container}>
+        <View style={styles.homeContent}>
+          <Text style={styles.categoryTitle}>Category:</Text>
+          <DropDownPicker
+            items={[{ name: 'ALL' }, ...categories.data.get_categories].map(
+              (cat) => ({
                 label: cat.name.charAt(0) + cat.name.slice(1).toLowerCase(),
-                value: cat.name
-              }
-            ))
-          }
-          defaultValue={'ALL'}
-          containerStyle={{
-            height: 40,
-            marginBottom: 20,
-          }}
-          style={{
-            backgroundColor: '#06D6A0',
-            borderWidth: 0,
-          }}
-          itemStyle={{
-            justifyContent: 'flex-start',
-          }}
-          arrowColor='white'
-          arrowSize={20}
-          labelStyle={{
-            fontSize: 22,
-            color: 'white',
-          }}
-          dropDownStyle={{
-            backgroundColor: '#06D6A0',
-            borderWidth: 0,
-            borderTopWidth: 1,
-            borderColor: 'white'
-          }}
-          onChangeItem={cat => setCurrentCategory(cat.value)}
-        />
-        <View style={styles.homeItems}>
-          {items.data
-            ?
-            items.data.get_items.map( (item, index) => (
-              <TouchableWithoutFeedback key={index} onPress={()=>{navigation.navigate('Item', {id: item.id})}}>
-                <View style={styles.itemView}>
-                  <ImageBackground style={styles.itemImage} resizeMode='cover' source={require('../assets/item-test-1.jpg')}>
-                    <Text style={styles.itemTime}>xx:xx</Text>
-                  </ImageBackground>
-                  <Text style={styles.itemTitle}>{item.name}</Text>
-                  <Text style={styles.itemPrice}>{item.minPrice}€</Text>
-                </View>
-              </TouchableWithoutFeedback>
-            ))
-            :
-            null
-          }
+                value: cat.name,
+              }),
+            )}
+            defaultValue={'ALL'}
+            containerStyle={{
+              height: 40,
+              marginBottom: 20,
+            }}
+            style={{
+              backgroundColor: '#06D6A0',
+              borderWidth: 0,
+            }}
+            itemStyle={{
+              justifyContent: 'flex-start',
+            }}
+            arrowColor="white"
+            arrowSize={20}
+            labelStyle={{
+              fontSize: 22,
+              color: 'white',
+            }}
+            dropDownStyle={{
+              backgroundColor: '#06D6A0',
+              borderWidth: 0,
+              borderTopWidth: 1,
+              borderColor: 'white',
+            }}
+            onChangeItem={(cat) => setCurrentCategory(cat.value)}
+          />
+          <View style={styles.homeItems}>
+            {items.data
+              ? items.data.get_items.map((item, index) => (
+                  <TouchableWithoutFeedback
+                    key={index}
+                    onPress={() => {
+                      navigation.navigate('Item', { id: item.id });
+                    }}
+                  >
+                    <View style={styles.itemView}>
+                      <ImageBackground
+                        style={styles.itemImage}
+                        resizeMode="cover"
+                        source={require('../assets/item-test-1.jpg')}
+                      >
+                        <Timer style={styles.itemTime} deadline={new Date('December 5, 2020 12:00:00')}/>
+                      </ImageBackground>
+                      <Text style={styles.itemTitle}>{item.name}</Text>
+                      <Text style={styles.itemPrice}>{item.minPrice}€</Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+                ))
+              : null}
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
     </>
   );
 }
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -143,12 +154,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   itemView: {
-    width: (windowWidth-45)/2,
+    width: (windowWidth - 45) / 2,
     marginBottom: 15,
   },
   itemImage: {
     width: '100%',
-    height: (windowWidth-45)/2,
+    height: (windowWidth - 45) / 2,
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
   },
