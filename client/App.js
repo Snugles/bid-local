@@ -14,7 +14,11 @@ const getFonts = () => {
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const [email, setEmail] = useState('hello@gmail.com');
+  const [email, setEmail] = useState('test@email2.com');
+
+  useEffect(()=>{
+    console.log(email);
+  }, [email]);
 
   const uri = APOLLO_SERVER_URI;
 
