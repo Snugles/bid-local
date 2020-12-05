@@ -3,7 +3,12 @@ import { StyleSheet } from 'react-native';
 import Navigator from './routes/HomeStack';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
-import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
+import {
+  ApolloProvider,
+  ApolloClient,
+  InMemoryCache,
+  HttpLink,
+} from '@apollo/client';
 import { APOLLO_SERVER_URI } from '@env';
 
 const getFonts = () => {
@@ -16,14 +21,15 @@ export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [email, setEmail] = useState('test@email2.com');
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(email);
   }, [email]);
 
   const uri = APOLLO_SERVER_URI;
+  const link = new HttpLink({ uri: uri });
 
   const client = new ApolloClient({
-    uri: uri,
+    link: link,
     cache: new InMemoryCache(),
   });
 
