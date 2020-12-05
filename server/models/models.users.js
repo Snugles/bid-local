@@ -7,13 +7,14 @@ module.exports = (sequelize, DataTypes) => {
     id: { primaryKey: true, type: DataTypes.UUID },
     email: { type: DataTypes.STRING, allowNull: false, unique: true, validate: { isEmail: true, notEmpty: true } },
     password: { type: DataTypes.TEXT, allowNull: false, validate: { notEmpty: true } },
-    firstName: { type: DataTypes.TEXT, validate: { isAlpha: true } },
-    lastName: { type: DataTypes.TEXT, validate: { isAlpha: true } },
-    phoneNumber: { type: DataTypes.INTEGER, validate: { isNumeric: true } },
+    firstName: { type: DataTypes.TEXT },
+    lastName: { type: DataTypes.TEXT },
+    phoneNumber: { type: DataTypes.STRING(25), validate: { isNumeric: true } },
   });
 
   Users.associate = (models) => {
     Users.hasMany(models.items, { onDelete: 'CASCADE' });
+    Users.hasOne(models.addresses, { onDelete: 'CASCADE' });
   };
 
   Users.beforeCreate(user => user.id = uuidv4());

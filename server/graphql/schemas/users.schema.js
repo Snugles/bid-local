@@ -5,15 +5,27 @@ type User {
   lastName: String
   password: String!
   email: String!
-  phoneNumber: Int
+  phoneNumber: String
   item: [Item!]
+  address: Address
   }
+
+input UserUpdate {
+  firstName: String
+  lastName: String
+  password: String!
+  email: String!
+  phoneNumber: String
+}
 extend type Query {
-    me: User
-    user(email: String!): User
-    users: [User!]
+  me: User
+  get_user_by_email(email: String!): User
+  get_users: [User]
 }
 extend type Mutation {
-  createUser(email: String!,password: String!,firstName: String, lastName: String, phoneNumber:Int): User!
-  }
+  create_user(user: UserUpdate!): User
+  update_user(userId:String!,user:UserUpdate!): User!
+  delete_user(userId:String!): Boolean!
+}
+
 `;

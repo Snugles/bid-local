@@ -2,17 +2,28 @@ module.exports = `
 type Item {
   id: String!
   name: String!
-  minPrice: Int
+  minPrice: Int!
   description: String
   user: User!
+  category: Category
+}
+
+input ItemUpdate {
+  name: String!
+  minPrice: Int!
+  description: String
+  categoryId: String
 }
 
 extend type Query {
-  item(id: ID!): Item
-  items: [Item!]
+  get_item_by_Id(id: ID!): Item
+  get_items: [Item]
 }
 
 extend type Mutation {
-  createItem(name: String!, minPrice: Int!, description: String, userId: String!): Item!
-  deleteItem(id: ID!): Boolean!
-  } `;
+  create_item(userId: String!,item: ItemUpdate!): Item!
+  delete_item_by_id(id: ID!): Boolean!
+  update_item(itemId:String!,item:ItemUpdate!): Item!
+}
+
+`;
