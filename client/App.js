@@ -16,7 +16,7 @@ export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [email, setEmail] = useState('test@email2.com');
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(email);
   }, [email]);
 
