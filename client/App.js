@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { APOLLO_SERVER_URI } from '@env';
+import { createHttpLink } from "apollo-link-http";
+import { AppLoading } from 'expo';
+import * as Font from 'expo-font';
+import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Navigator from './routes/HomeStack';
-import * as Font from 'expo-font';
-import { AppLoading } from 'expo';
-import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
-import {APOLLO_SERVER_URI} from '@env';
+
+
+const link = createHttpLink({ uri: "/graphql" });
 
 const getFonts = () => {
   return Font.loadAsync({
@@ -18,7 +22,7 @@ export default function App() {
   const uri = APOLLO_SERVER_URI;
 
   const client = new ApolloClient({
-    uri: uri,
+   link: createHttpLink({ uri: uri }),
     cache: new InMemoryCache()
   });
 

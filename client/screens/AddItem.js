@@ -1,8 +1,44 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, TextInput, Dimensions, TouchableOpacity, TouchableHighlight } from 'react-native'
+import { useMutation } from '@apollo/client';
+import { ImagePicker } from 'expo';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import Navbar from '../components/Navbar';
 import { CREATE_ITEM } from '../queries/addItem';
-import { useMutation } from '@apollo/client';
+
+let pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      base64: true
+    });
+
+    if (!result.cancelled) {
+      setImage({ image: result.uri })
+      
+      let base64Img = `data:image/jpg;base64,${result.base64}`
+      
+      //Add your cloud name
+      let apiUrl = 'https://api.cloudinary.com/v1_1/madhushree25/image/upload';
+  
+      let data = {
+        "file": base64Img,
+        "upload_preset": "ofoblmjj",
+      }
+
+      fetch(apiUrl, {
+        body: JSON.stringify(data),
+        headers: {
+          'content-type': 'application/json'
+        },
+        method: 'POST',
+      }).then(async r => {
+          let data = await r.json()
+          console.log(data.secure_url)
+          return data.secure_url
+    }).catch(err=>console.log(err))
+  }
+  
+}
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -11,6 +47,7 @@ export default function AddItem({ navigation }) {
   const [price, setPrice] = React.useState('');
   const [description, setDescription] = React.useState('');
   const [createItem, {data, error, loading}] = useMutation(CREATE_ITEM);
+  const [image, setImage] = useState('');
 
   useEffect(()=>{
     console.log('loading: ',loading);
@@ -109,6 +146,20 @@ export default function AddItem({ navigation }) {
       <TouchableHighlight style={styles.addItemButton} onPress={handleSubmit}>
         <Text style={{ fontSize: 18, color: 'white' }}>ADD ITEM</Text>
       </TouchableHighlight>
+
+      {/* Adding upload image functionality */}
+      <View style={styles.container}>
+        <TouchableOpacity onPress={()=>this.pickImage()} style={{width: 200, alignSelf: 'center'}}>
+          <View style={{backgroundColor:'transparent'}}>
+            {this.state.image?
+              <Image source={{uri: this.state.image}} style={{width: 200, height: 200, borderRadius: 100, alignSelf:'center'}}/>
+              :
+              <View style={{ backgroundColor: 'grey',width: 200, height: 200, borderRadius: 100}}/>
+            }
+      </View>
+      </TouchableOpacity>
+      </View>
+
     </ScrollView>
     </>
   );

@@ -14,12 +14,13 @@ exports.get_user_by_item = async (item, _, { models }) => {
 };
 
 exports.create_item = async (_, { userId, item }, { models }) => {
-  const { name, minPrice, description, categoryId } = item;
+  const { name, minPrice, description, categoryId, imageToUpload } = item;
   try {
     const item = {
       name,
       minPrice,
       description,
+      imageToUpload,
       userId, //make dynamic
       categoryId, //make dynamic
     };
@@ -53,3 +54,4 @@ exports.update_item = async (_, { itemId, item }, { models }) => {
   await itemDB.save();
   return itemDB;
 };
+
