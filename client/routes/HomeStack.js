@@ -13,7 +13,7 @@ const Stack = createStackNavigator();
 const HomeStack = ({ setEmail, email }) => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home" headerMode={null}>
+      <Stack.Navigator initialRouteName="Login" headerMode={null}>
         <Stack.Screen
           name="Home"
           component={Home}
