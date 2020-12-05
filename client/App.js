@@ -1,10 +1,10 @@
+import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/client';
+import { APOLLO_SERVER_URI } from '@env';
+import { AppLoading } from 'expo';
+import * as Font from 'expo-font';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Navigator from './routes/HomeStack';
-import * as Font from 'expo-font';
-import { AppLoading } from 'expo';
-import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
-import { APOLLO_SERVER_URI } from '@env';
 
 const getFonts = () => {
   return Font.loadAsync({
@@ -21,9 +21,9 @@ export default function App() {
   }, [email]);
 
   const uri = APOLLO_SERVER_URI;
-
+  const link = new HttpLink({ uri: uri });
   const client = new ApolloClient({
-    uri: uri,
+    link: link,
     cache: new InMemoryCache(),
   });
 
