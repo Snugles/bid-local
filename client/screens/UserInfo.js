@@ -19,14 +19,13 @@ export default function UserInfo({ navigation, route }) {
   const [phoneNumber, setPhoneNumber] = useState('07425 058395');
   const [editMode, setEditMode] = useState(false);
   const { data, error, loading } = useQuery(GET_EMAIL, {
-    variables: { email: email2 },
+    variables: { email: email },
   });
 
   useEffect(() => {
     console.log(loading);
     console.log(error);
     if (data) {
-      SetEmail(data.get_user_by_email.email);
       setPhoneNumber(data.get_user_by_email.phoneNumber);
 
       console.log(data);
@@ -55,7 +54,7 @@ export default function UserInfo({ navigation, route }) {
         {editMode ? (
           <TextInput
             style={styles.textBoxes}
-            onChangeText={(text) => SetEmail(text)}
+            onChangeText={(text) => {}}
             value={email}
           />
         ) : (
