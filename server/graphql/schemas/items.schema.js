@@ -6,7 +6,7 @@ type Item {
   description: String
   picUrl: String
   user: User!
-  categoryId: String
+  category: Category
 }
 
 input ItemUpdate {
