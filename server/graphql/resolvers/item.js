@@ -15,14 +15,21 @@ exports.get_user_by_item = async (item, _, { models }) => {
   return user;
 };
 
+exports.get_category_by_Item = async (item, _, { models }) => {
+  const user = await models.categories.findOne({ where: { id: item.categoryId } });
+  return user;
+};
+
 exports.create_item = async (_, { userId, item }, { models }) => {
-  const { name, minPrice, description, categoryId, file } = item;
+  const { name, minPrice, description, picUrl1,picUrl2,picUrl3, categoryId } = item;
   try {
     const item = {
       name,
       minPrice,
       description,
-      file,
+      picUrl1,
+      picUrl2,
+      picUrl3,
       userId, //make dynamic
       categoryId, //make dynamic
     };

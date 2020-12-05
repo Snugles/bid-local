@@ -16,7 +16,14 @@ export default function UserInfo({ navigation, route }) {
 
   // const [username, setUsername] = useState('snuglywugly');
 
-  const [phoneNumber, setPhoneNumber] = useState('07425 058395');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [address, setAddress] = useState({
+    firstLineAddress: '',
+    secondLineAddress: '',
+    city: '',
+    postcode: '',
+    country: '',
+  });
   const [editMode, setEditMode] = useState(false);
   const { data, error, loading } = useQuery(GET_EMAIL, {
     variables: { email: email },
@@ -27,6 +34,13 @@ export default function UserInfo({ navigation, route }) {
     console.log(error);
     if (data) {
       setPhoneNumber(data.get_user_by_email.phoneNumber);
+      setAddress({
+        firstLineAddress: data.get_user_by_email.firstLineAddress,
+        secondLineAddress: data.get_user_by_email.secondLineAddress,
+        city: data.get_user_by_email.city,
+        postcode: data.get_user_by_email.postcode,
+        country: data.get_user_by_email.country,
+      });
 
       console.log(data);
     }
@@ -40,16 +54,6 @@ export default function UserInfo({ navigation, route }) {
     <>
       <Navbar navigation={navigation} canGoBack={true} />
       <ScrollView style={styles.container}>
-        {/* <Text style={styles.headers}>Username:</Text>
-        {editMode ? (
-          <TextInput
-            style={styles.textBoxes}
-            onChangeText={(text) => setUsername(text)}
-            value={username}
-          />
-        ) : (
-          <Text style={styles.displayText}>{username}</Text>
-        )} */}
         <Text style={styles.headers}>Email:</Text>
         {editMode ? (
           <TextInput
@@ -69,6 +73,44 @@ export default function UserInfo({ navigation, route }) {
           />
         ) : (
           <Text style={styles.displayText}>{phoneNumber}</Text>
+        )}
+        <Text style={styles.headers}>Address:</Text>
+        {editMode ? (
+          <>
+            <TextInput
+              style={styles.textBoxes}
+              onChangeText={(text) => setAddress({ firstLineAddress: text })}
+              value={address.firstLineAddress}
+            />
+            <TextInput
+              style={styles.textBoxes}
+              onChangeText={(text) => setAddress({ secondLineAddress: text })}
+              value={address.secondLineAddress}
+            />
+            <TextInput
+              style={styles.textBoxes}
+              onChangeText={(text) => setAddress({ city: text })}
+              value={address.city}
+            />
+            <TextInput
+              style={styles.textBoxes}
+              onChangeText={(text) => setAddress({ postcode: text })}
+              value={address.postcode}
+            />
+            <TextInput
+              style={styles.textBoxes}
+              onChangeText={(text) => setAddress({ country: text })}
+              value={address.country}
+            />
+          </>
+        ) : (
+          <>
+            <Text style={styles.displayText}>{address.firstLineAddress}</Text>
+            <Text style={styles.displayText}>{address.secondLineAddress}</Text>
+            <Text style={styles.displayText}>{address.city}</Text>
+            <Text style={styles.displayText}>{address.postcode}</Text>
+            <Text style={styles.displayText}>{address.country}</Text>
+          </>
         )}
         {editMode ? (
           <Button

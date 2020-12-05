@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js",
     "lint:js": "eslint . --ext .js,.jsx",
-    "fixAll": "npm run lint:js -- --fix"
+    "fixAll": "npm run lint:js -- --fix",
+    "cleanStart": "npx sequelize db:drop && npx sequelize db:create && sequelize-mig migration:undo && sequelize-mig migration:make && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
   },
   "lint-staged": {
     "./**/*.{js}": [
@@ -30,6 +31,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "faker": "^5.1.0",
     "graphql": "^15.4.0",
     "mysql": "^2.18.1",
     "mysql2": "^2.2.5",
@@ -41,6 +43,8 @@
   },
   "devDependencies": {
     "eslint": "^7.14.0",
-    "lint-staged": "^10.5.2"
+    "lint-staged": "^10.5.2",
+    "sequelize-cli": "^6.2.0",
+    "sequelize-mig": "^2.4.1"
   }
 }

@@ -9,9 +9,10 @@ const resolvers = {
   Query: {
     get_user_by_email: user.get_user_by_email,
     get_users: user.get_users,
-    get_item_by_Id: item.get_item_by_Id,
+    get_user_by_Id: user.get_user_by_Id,
+    get_item_by_Id: item.get_item_by_Id, //necessary?
     get_items: item.get_items,
-    get_category: category.get_category,
+    get_category_by_Id: category.get_category_by_Id,  //necessary?
     get_categories: category.get_categories,
     get_address_by_userId: address.get_address_by_userId,
     get_addresses: address.get_addresses,
@@ -24,7 +25,8 @@ const resolvers = {
   },
 
   Item: {
-    user: item.get_user_by_item
+    user: item.get_user_by_item,
+    category: item.get_category_by_Item
   },
 
   Category: {

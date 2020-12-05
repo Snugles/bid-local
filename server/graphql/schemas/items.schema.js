@@ -4,7 +4,13 @@ type Item {
   name: String!
   minPrice: Int!
   description: String
+<<<<<<< HEAD
   file: Upload
+=======
+  picUrl1: String
+  picUrl2: String
+  picUrl3: String
+>>>>>>> development
   user: User!
   category: Category
 }
@@ -13,6 +19,9 @@ input ItemUpdate {
   name: String!
   minPrice: Int!
   description: String
+  picUrl1: String
+  picUrl2: String
+  picUrl3: String
   categoryId: String
   file: Upload
 }
