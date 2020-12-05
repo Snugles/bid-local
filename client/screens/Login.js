@@ -5,6 +5,7 @@ import { useLazyQuery } from '@apollo/client';
 import Navbar from '../components/Navbar';
 
 export default function Login({ navigation, route }) {
+
   const [initialEmail, setInitialEmail] = useState('');
   const { setEmail } = route.params;
   const [getID, { data, error, loading }] = useLazyQuery(GET_USER_BY_EMAIL);
@@ -19,7 +20,6 @@ export default function Login({ navigation, route }) {
   }, [loading, data, error]);
 
   function login() {
-    console.log('called');
     getID({ variables: { email: initialEmail } });
   }
 

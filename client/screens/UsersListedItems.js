@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { Icon } from "native-base";
 import Navbar from '../components/Navbar';
+import Timer from '../components/Timer';
 import { GET_USER_ITEMS, UPDATE_ITEM } from '../queries/usersListedItems'
 import { useQuery, useMutation } from '@apollo/client';
 
@@ -68,8 +69,6 @@ function Panel (props) {
     isExpanded: false,
   }]);
   const [multiSelect, setMultiSelect] = useState(false);
-  const [timeDiff, setTimeDiff] = useState(props.deadline-new Date(Date.now()));
-  const [time, setTime] = useState('');
   const [layoutHeight, setLayoutHeight] = useState(0);
   const [title, setTitle] = useState(props.name);
   const [description, setDescription] = useState(props.description);
@@ -99,50 +98,7 @@ function Panel (props) {
       }
     };
 
-    console.log(queryVariables)
-
     changeItem({variables:queryVariables});
-  }
-
-  useEffect(()=>{
-    let timer = setTimeout(()=>setTime(updateTime(timeDiff)), 1000);
-
-    return ()=>{
-      clearTimeout(timer);
-    }
-  },[timeDiff]);
-
-  function updateTime (diff) { 
-    if (diff > 0) {
-      const days=Math.floor(diff / (1000 * 60 * 60 * 24));
-      if (days>0) {
-        return `${days} days`;
-      }
-      const hours=Math.floor((diff / (1000 * 60 * 60)) % 24);
-      if (hours>0) {
-        return `${hours} hours`;
-      }
-      let minutes=Math.floor((diff / 1000 / 60) % 60);
-      if (minutes>0) {
-        if (minutes<10) {
-          minutes='0'+minutes;
-        }
-        return `${minutes} minutes`;
-      }
-      let seconds=Math.floor((diff / 1000) % 60);
-      if (seconds>0) {
-        if (seconds<10) {
-          seconds='0'+seconds;
-        }
-        return `${seconds} seconds`;
-      }
-      setTimeDiff(timeDiff-1000);
-      // if (hours>0) {
-      //   return `${days} days  ${hours} hours\n${minutes} mintues  ${seconds} seconds`
-      // }
-    } else {
-      return 'finished';
-    }
   }
 
   if (Platform.OS === 'android') {
@@ -177,7 +133,8 @@ function Panel (props) {
             <Text style={styles2.titleText}>{title}</Text>
             <Text>{props.price+'€'}</Text>
           </View>
-          <Text>{time}</Text>
+          <Text>Time:</Text>
+          <Timer deadline={props.deadline}/>
         </View>
         <ScrollView>
             <ExpandableComponent
@@ -216,7 +173,6 @@ const ExpandableComponent = ({saveChanges,onClickFunction, title, description, l
       <View>
         <Text>Title</Text>
         <TextInput style={styles2.textBoxes} value={title} onChangeText={text => {
-          console.log(text)
           setTitle(text)}}></TextInput>
         <Text>Description</Text>
         <TextInput style={styles2.textBoxes} value={description} onChangeText={text => setDescription(text)}></TextInput>
