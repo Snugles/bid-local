@@ -1,4 +1,4 @@
-const Sequelize = require("sequelize");
+const Sequelize = require('sequelize');
 
 /**
  * Actions summary:
@@ -12,28 +12,28 @@ const Sequelize = require("sequelize");
 
 const info = {
   revision: 1,
-  name: "noname",
-  created: "2020-12-05T11:19:12.146Z",
-  comment: "",
+  name: 'noname',
+  created: '2020-12-05T12:11:17.001Z',
+  comment: '',
 };
 
 const migrationCommands = (transaction) => {
   return [
     {
-      fn: "createTable",
+      fn: 'createTable',
       params: [
-        "categories",
+        'categories',
         {
-          id: { type: Sequelize.UUID, field: "id", primaryKey: true },
-          name: { type: Sequelize.STRING, field: "name", unique: true },
+          id: { type: Sequelize.UUID, field: 'id', primaryKey: true },
+          name: { type: Sequelize.STRING, field: 'name', unique: true },
           createdAt: {
             type: Sequelize.DATE,
-            field: "createdAt",
+            field: 'createdAt',
             allowNull: false,
           },
           updatedAt: {
             type: Sequelize.DATE,
-            field: "updatedAt",
+            field: 'updatedAt',
             allowNull: false,
           },
         },
@@ -41,33 +41,33 @@ const migrationCommands = (transaction) => {
       ],
     },
     {
-      fn: "createTable",
+      fn: 'createTable',
       params: [
-        "users",
+        'users',
         {
-          id: { type: Sequelize.UUID, field: "id", primaryKey: true },
+          id: { type: Sequelize.UUID, field: 'id', primaryKey: true },
           email: {
             type: Sequelize.STRING,
-            field: "email",
+            field: 'email',
             unique: true,
             allowNull: false,
           },
           password: {
             type: Sequelize.TEXT,
-            field: "password",
+            field: 'password',
             allowNull: false,
           },
-          firstName: { type: Sequelize.TEXT, field: "firstName" },
-          lastName: { type: Sequelize.TEXT, field: "lastName" },
-          phoneNumber: { type: Sequelize.STRING(25), field: "phoneNumber" },
+          firstName: { type: Sequelize.TEXT, field: 'firstName' },
+          lastName: { type: Sequelize.TEXT, field: 'lastName' },
+          phoneNumber: { type: Sequelize.STRING(25), field: 'phoneNumber' },
           createdAt: {
             type: Sequelize.DATE,
-            field: "createdAt",
+            field: 'createdAt',
             allowNull: false,
           },
           updatedAt: {
             type: Sequelize.DATE,
-            field: "updatedAt",
+            field: 'updatedAt',
             allowNull: false,
           },
         },
@@ -75,43 +75,43 @@ const migrationCommands = (transaction) => {
       ],
     },
     {
-      fn: "createTable",
+      fn: 'createTable',
       params: [
-        "addresses",
+        'addresses',
         {
-          id: { type: Sequelize.UUID, field: "id", primaryKey: true },
+          id: { type: Sequelize.UUID, field: 'id', primaryKey: true },
           firstLineAddress: {
             type: Sequelize.TEXT,
-            field: "firstLineAddress",
+            field: 'firstLineAddress',
             notEmpty: true,
           },
           secondLineAddress: {
             type: Sequelize.TEXT,
-            field: "secondLineAddress",
+            field: 'secondLineAddress',
           },
-          city: { type: Sequelize.STRING, field: "city", notEmpty: true },
+          city: { type: Sequelize.STRING, field: 'city', notEmpty: true },
           postcode: {
             type: Sequelize.STRING,
-            field: "postcode",
+            field: 'postcode',
             notEmpty: true,
           },
-          country: { type: Sequelize.STRING, field: "country", notEmpty: true },
+          country: { type: Sequelize.STRING, field: 'country', notEmpty: true },
           userId: {
             type: Sequelize.UUID,
-            onUpdate: "CASCADE",
-            onDelete: "NO ACTION",
-            references: { model: "users", key: "id" },
-            field: "userId",
+            onUpdate: 'CASCADE',
+            onDelete: 'NO ACTION',
+            references: { model: 'users', key: 'id' },
+            field: 'userId',
             allowNull: false,
           },
           createdAt: {
             type: Sequelize.DATE,
-            field: "createdAt",
+            field: 'createdAt',
             allowNull: false,
           },
           updatedAt: {
             type: Sequelize.DATE,
-            field: "updatedAt",
+            field: 'updatedAt',
             allowNull: false,
           },
         },
@@ -119,41 +119,41 @@ const migrationCommands = (transaction) => {
       ],
     },
     {
-      fn: "createTable",
+      fn: 'createTable',
       params: [
-        "items",
+        'items',
         {
-          id: { type: Sequelize.UUID, field: "id", primaryKey: true },
-          name: { type: Sequelize.STRING, field: "name", allowNull: false },
-          minPrice: { type: Sequelize.INTEGER, field: "minPrice", default: 0 },
-          description: { type: Sequelize.TEXT, field: "description" },
-          picUrl1: { type: Sequelize.TEXT, field: "picUrl1" },
-          picUrl2: { type: Sequelize.TEXT, field: "picUrl2" },
-          picUrl3: { type: Sequelize.TEXT, field: "picUrl3" },
+          id: { type: Sequelize.UUID, field: 'id', primaryKey: true },
+          name: { type: Sequelize.STRING, field: 'name', allowNull: false },
+          minPrice: { type: Sequelize.INTEGER, field: 'minPrice', default: 0 },
+          description: { type: Sequelize.TEXT, field: 'description' },
+          picUrl1: { type: Sequelize.TEXT, field: 'picUrl1' },
+          picUrl2: { type: Sequelize.TEXT, field: 'picUrl2' },
+          picUrl3: { type: Sequelize.TEXT, field: 'picUrl3' },
           userId: {
             type: Sequelize.UUID,
-            onUpdate: "CASCADE",
-            onDelete: "CASCADE",
-            references: { model: "users", key: "id" },
-            field: "userId",
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
+            references: { model: 'users', key: 'id' },
+            field: 'userId',
             allowNull: false,
           },
           categoryId: {
             type: Sequelize.UUID,
-            onUpdate: "CASCADE",
-            onDelete: "CASCADE",
-            references: { model: "categories", key: "id" },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
+            references: { model: 'categories', key: 'id' },
             allowNull: true,
-            field: "categoryId",
+            field: 'categoryId',
           },
           createdAt: {
             type: Sequelize.DATE,
-            field: "createdAt",
+            field: 'createdAt',
             allowNull: false,
           },
           updatedAt: {
             type: Sequelize.DATE,
-            field: "updatedAt",
+            field: 'updatedAt',
             allowNull: false,
           },
         },
@@ -166,20 +166,20 @@ const migrationCommands = (transaction) => {
 const rollbackCommands = (transaction) => {
   return [
     {
-      fn: "dropTable",
-      params: ["addresses", { transaction }],
+      fn: 'dropTable',
+      params: ['addresses', { transaction }],
     },
     {
-      fn: "dropTable",
-      params: ["categories", { transaction }],
+      fn: 'dropTable',
+      params: ['categories', { transaction }],
     },
     {
-      fn: "dropTable",
-      params: ["items", { transaction }],
+      fn: 'dropTable',
+      params: ['items', { transaction }],
     },
     {
-      fn: "dropTable",
-      params: ["users", { transaction }],
+      fn: 'dropTable',
+      params: ['users', { transaction }],
     },
   ];
 };
