@@ -28,5 +28,4 @@ extend type Mutation {
   update_user(userId:String!,user:UserUpdate!): User!
   delete_user(userId:String!): Boolean!
 }
-
 `;
