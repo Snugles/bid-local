@@ -8,6 +8,14 @@ const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
 
+
+let users = { //placeholder for logged in user
+  1: {
+    id: '1',
+    username: 'Robin Wieruch',
+  }
+};
+
 let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
@@ -34,4 +42,7 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-module.exports = db;
+module.exports = {
+  db,
+  users, //login placeholder
+};
