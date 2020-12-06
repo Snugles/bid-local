@@ -45,31 +45,40 @@ export default function Home({ navigation, route }) {
 
   const categ = ['ALL', 'ELECTRONICS', 'HOUSES', 'VEHICLES'];
 
-  const mockdata = [
-    {
-      title: 'Item Title 1',
-      startingPrice: '20€',
-      image: require('../assets/item-test-1.jpg'),
-      itemId: 'd15da980-9d9e-4b5a-8b1c-f4c3223ea2a6',
-    },
-    {
-      title: 'Item Title 2',
-      startingPrice: '25€',
-      image: require('../assets/item-test-2.jpg'),
-      itemId: 'd4f446d7-9805-4214-995c-65e1a4744799',
-    },
-    {
-      title: 'Item Title 3',
-      startingPrice: '13€',
-      image: require('../assets/item-test-3.jpg'),
-      itemId: 'd15da980-9d9e-4b5a-8b1c-f4c3223ea2a6',
-    },
-  ];
-
   if (categories.loading) return <Text>Loading...</Text>;
   if (categories.error) {
     console.log('error', categories.error);
     return <Text>Error: </Text>;
+  }
+  function categoryTest (){
+    const output = [];
+    for (const component of items.data.get_items){
+      if (currentCategory==='ALL'||(component.category&&component.category.name===currentCategory)) {
+        output.push(<TouchableWithoutFeedback
+            key={component.id}
+            onPress={() => {
+              navigation.navigate('Item', { id: component.id });
+          }}>
+            <View style={styles.itemView}>
+              <ImageBackground
+                style={styles.itemImage}
+                resizeMode="cover"
+                source={{ uri:component.picUrl1 }}>
+                <Timer
+                  style={styles.itemTime}
+                  deadline={new Date('December 25, 2020 12:00:00')}/>
+              </ImageBackground>
+            <Text style={styles.itemTitle}>{component.name}</Text>
+            <Text style={styles.itemPrice}>{component.minPrice}€</Text>
+          </View>
+        </TouchableWithoutFeedback>
+        )
+      }
+    }
+    if (!output.length) {
+      return <Text style={styles.error}>No items found</Text>;
+    }
+    return output;
   }
 
   if (isLoading) {
@@ -123,30 +132,7 @@ export default function Home({ navigation, route }) {
             />
             <View style={styles.homeItems}>
               {items.data
-                ? items.data.get_items.map((item, index) => (
-                    <TouchableWithoutFeedback
-                      key={index}
-                      onPress={() => {
-                        navigation.navigate('Item', { id: item.id });
-                      }}
-                    >
-                      <View style={styles.itemView}>
-                        <ImageBackground
-                          style={styles.itemImage}
-                          resizeMode="cover"
-                          source={{ uri:item.picUrl1 }}
-                        >
-                          <Timer
-                            style={styles.itemTime}
-                            deadline={new Date('December 25, 2020 12:00:00')}
-                          />
-                        </ImageBackground>
-                        <Text style={styles.itemTitle}>{item.name}</Text>
-                        <Text style={styles.itemPrice}>{item.minPrice}€</Text>
-                      </View>
-                    </TouchableWithoutFeedback>
-                  ))
-                : null}
+                ? categoryTest() : null}
             </View>
           </View>
         </ScrollView>
@@ -217,4 +203,11 @@ const styles = StyleSheet.create({
     marginBottom: '-40%',
     zIndex: 1,
   },
+  error:{
+    fontFamily: 'Roboto_medium',
+    fontSize: 25,
+    color: '#67A036',
+    textAlign: 'center',
+    marginBottom:1000
+  }
 });

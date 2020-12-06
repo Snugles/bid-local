@@ -16,6 +16,9 @@ query get_items {
     name
     minPrice
     picUrl1
+    category {
+      name
+    }
   }
 }
 `;
