@@ -6,7 +6,7 @@ const address = require('./address');
 
 const resolvers = {
   Query: {
-    //me: (parent, args, { me }) => me,
+    me: user.me,
     get_user_by_email: user.get_user_by_email,
     get_users: user.get_users,
     get_user_by_Id: user.get_user_by_Id,

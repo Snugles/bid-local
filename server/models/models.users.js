@@ -19,5 +19,12 @@ module.exports = (sequelize, DataTypes) => {
 
   Users.beforeCreate(user => user.id = uuidv4());
 
+  Users.findByLogin = async login => { //needed for login
+    let user = await User.findOne({
+      where: { email: login },
+    });
+    return user;
+  };
+
   return Users;
 };

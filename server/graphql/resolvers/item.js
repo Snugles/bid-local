@@ -1,5 +1,5 @@
 exports.get_item_by_Id = async (_, { id }, { models }) => {
-  const item = await models.items.findOne({ where: { id: id } });
+  const item = await models.items.findByPk(id);
   return item;
 };
 

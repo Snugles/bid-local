@@ -10,7 +10,12 @@ module.exports = new ApolloServer({
   resolvers,
   context: {
     models,
-    //me: models.users[1] //accessing an object for logged in user
+    me: models.users[1] //accessing an object for logged in user
   }
 });
+
+// context: async () => ({
+//   models,
+//   me: await models.Users.findByLogin('user@user.com') //accessing an object for logged in user
+// })
 
