@@ -134,11 +134,11 @@ export default function Home({ navigation, route }) {
                         <ImageBackground
                           style={styles.itemImage}
                           resizeMode="cover"
-                          source={require('../assets/item-test-1.jpg')}
+                          source={{ uri:item.picUrl1 }}
                         >
                           <Timer
                             style={styles.itemTime}
-                            deadline={new Date('December 5, 2020 12:00:00')}
+                            deadline={new Date('December 25, 2020 12:00:00')}
                           />
                         </ImageBackground>
                         <Text style={styles.itemTitle}>{item.name}</Text>
