@@ -4,7 +4,7 @@ const cors = require('cors');
 const app = require('express')();
 const { ApolloServer } = require('apollo-server-express');
 const server = require('./graphql');
-const { db } = require('./models/index');
+const db = require('./models/index');
 
 
 app.use(cors());
