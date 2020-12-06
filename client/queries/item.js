@@ -7,6 +7,9 @@ query  get_item_by_Id ( $id: ID! ){
     name
     minPrice
     description
+    picUrl1
+    picUrl2
+    picUrl3
     user {
       firstName
       lastName

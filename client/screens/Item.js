@@ -14,6 +14,7 @@ import Navbar from '../components/Navbar';
 import Timer from '../components/Timer';
 import { GET_ITEM_BY_ID } from '../queries/item';
 import { useQuery } from '@apollo/client';
+import { Image } from 'native-base';
 
 export default function Item({ navigation, route }) {
   const windowWidth = Dimensions.get('window').width;
@@ -33,22 +34,6 @@ export default function Item({ navigation, route }) {
     console.log('data: ', data);
   }, [loading, data, error]);
 
-  const mockdata = {
-    title: 'Item Title',
-    startingPrice: '20€',
-    images: [
-      require('../assets/item-test-1.jpg'),
-      require('../assets/item-test-2.jpg'),
-      require('../assets/item-test-3.jpg'),
-    ],
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque suscipit, eros at scelerisque convallis, risus felis tristique tortor, non mattis elit nulla vitae libero. Aliquam sollicitudin ex pellentesque tempus cursus. Etiam fermentum nisi tincidunt, tincidunt elit ac, malesuada dui. Nunc tempus fermentum volutpat. Aenean accumsan nisi vitae volutpat tristique.',
-    sellerInfo: {
-      username: 'username',
-      email: 'user@email.com',
-      telephone: '1234569732',
-    },
-  };
 
   const imageList = ({ item, index }) => {
     return (
@@ -94,7 +79,7 @@ export default function Item({ navigation, route }) {
             paddingVertical: 10,
           }}
           layout={'default'}
-          data={mockdata.images}
+          data={[{uri:data.get_item_by_Id.picUrl1},{uri:data.get_item_by_Id.picUrl2},{uri:data.get_item_by_Id.picUrl3}]}
           sliderWidth={windowWidth}
           itemWidth={windowWidth - windowWidth / 6}
           renderItem={imageList}
@@ -104,7 +89,7 @@ export default function Item({ navigation, route }) {
           <Text style={styles.itemPrice}>{data.get_item_by_Id.minPrice}€</Text>
           <View style={styles.time}>
             <Text style={{ color: 'white', fontSize: 16 }}>Time Left:</Text>
-            <Timer style={{ color: 'white', fontSize: 25 }} deadline={new Date('December 5, 2020 12:00:00')}/>
+            <Timer style={{ color: 'white', fontSize: 25 }} deadline={new Date('December 25, 2020 12:00:00')}/>
           </View>
           <View style={styles.bidView}>
             <View style={styles.bidBorder}>
