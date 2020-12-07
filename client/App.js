@@ -1,4 +1,9 @@
-import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/client';
+import {
+  ApolloClient,
+  ApolloProvider,
+  HttpLink,
+  InMemoryCache,
+} from '@apollo/client';
 import { APOLLO_SERVER_URI } from '@env';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
