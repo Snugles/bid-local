@@ -1,6 +1,6 @@
 module.exports = `
 type Category {
-  id: String!
+  id: ID!
   name: String!
   item: [Item]
 }
