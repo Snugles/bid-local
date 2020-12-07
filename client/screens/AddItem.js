@@ -2,7 +2,6 @@ import { useMutation, useQuery } from '@apollo/client';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useEffect, useState } from 'react';
 import {
-  Dimensions,
   Image,
   ScrollView,
   StyleSheet,
@@ -17,18 +16,17 @@ import Navbar from '../components/Navbar';
 import { CREATE_ITEM, GET_CATEGORIES } from '../queries/addItem';
 import { CLOUDINARY_URL, CLOUDINARY_KEY } from '@env';
 
-const windowWidth = Dimensions.get('window').width;
-
 export default function AddItem({ navigation, route }) {
   const [title, setTitle] = React.useState('');
   const [price, setPrice] = React.useState('');
   const [description, setDescription] = React.useState('');
-  const [createItem, { data, error, loading }] = useMutation(CREATE_ITEM);
+  const [createItem, { data, error }] = useMutation(CREATE_ITEM);
   const categories = useQuery(GET_CATEGORIES);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [showModal, setModal] = useState();
   const [images, setImages] = useState([]);
   const [imageUrls, setImageUrls] = useState([]);
+  const [typeError, setTypeError] =useState('');
   const { id } = route.params;
 
   useEffect(() => {
@@ -39,6 +37,7 @@ export default function AddItem({ navigation, route }) {
   }, [data]);
 
   function handleCurrency(input) {
+    setTypeError('');
     if (input) {
       if (input.search(/[^0-9,]/g) === -1) {
         // if string only contains (0123456789,)
@@ -52,7 +51,7 @@ export default function AddItem({ navigation, route }) {
           setPrice(input);
         }
       } else {
-        console.log('invalid character');
+        setTypeError('Invalid Character');
       }
     } else {
       setPrice(input);
@@ -72,9 +71,6 @@ export default function AddItem({ navigation, route }) {
       },
       categoryId: selectedCategories[0].id,
     };
-
-    console.log(queryVariables);
-
     createItem({ variables: queryVariables });
   }
 
@@ -142,6 +138,7 @@ export default function AddItem({ navigation, route }) {
           keyboardType="numeric"
           placeholder="0,00"
         />
+        {typeError?<Text style={{ color:'purple',fontSize: 18 }}>{typeError}</Text>:null}
         <Text style={{marginTop: 15}}>Description:</Text>
         <TextInput
           style={styles.textBoxes}
