@@ -4,6 +4,8 @@ const item = require('./item');
 const category = require('./category');
 const address = require('./address');
 const image = require('./image');
+const {combineResolvers} = require('graphql-resolvers');
+const {isAuthenticated} = require('./authorization');
 
 const resolvers = {
   Query: {
@@ -44,7 +46,7 @@ const resolvers = {
     delete_user: user.delete_user,
     sign_up: user.sign_up,
     sign_in: user.sign_in,
-    create_item: item.create_item,
+    create_item: combineResolvers(isAuthenticated,item.create_item),
     delete_item_by_id: item.delete_item_by_id,
     update_item: item.update_item,
     create_category: category.create_category,

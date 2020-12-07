@@ -1,5 +1,7 @@
-import { ForbiddenError } from 'apollo-server';
-import { skip } from 'graphql-resolvers';
+const { ForbiddenError } = require('apollo-server');
+const { skip } = require('graphql-resolvers');
 
-export const isAuthenticated = (_, __, { me }) =>
-  me ? skip : new ForbiddenError('Not authenticated as user.');
+module.exports.isAuthenticated = (_, __, { me }) =>{
+  console.log('Authenticating...');
+  return me ? skip : new ForbiddenError('Not authenticated as user.');
+};

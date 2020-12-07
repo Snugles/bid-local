@@ -120,7 +120,7 @@ exports.create_user = async (_, { user }, { models }) => {
 
 
 exports.sign_up = async (_, { email, password }, { models, secret }) => {
-
+  console.log('User Sign Up:');
   const user = await models.users.create({
     email: email,
     password: password,
@@ -132,6 +132,7 @@ exports.sign_up = async (_, { email, password }, { models, secret }) => {
 };
 
 exports.sign_in = async (_,{ email, password },{ models, secret }) => {
+  console.log('User Sign in:');
   const user = await models.users.findByLogin(email);
 
   if (!user) {
@@ -145,7 +146,7 @@ exports.sign_in = async (_,{ email, password },{ models, secret }) => {
   if (!isValid) {
     throw new AuthenticationError('Invalid password.'); //probably want to give a more generic message for security
   }
-
+  console.log('Returning Token:');
   return { token: createToken(user, secret, '10h') };
 };
 
