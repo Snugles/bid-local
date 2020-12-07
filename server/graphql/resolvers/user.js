@@ -77,6 +77,20 @@ exports.create_user = async (_, { user }, { models }) => {
   }
 };
 
+const createToken = async (user) => {
+  return user.email;
+};
+
+exports.sign_up = async (_, { email, password }, { models }) => {
+
+  const user = await models.users.create({
+    email: email,
+    password: password,
+  });
+
+  return { token: createToken(user) };
+};
+
 exports.delete_user = async (_, { userId }, { models }) => {
   const destroyed = await models.users.destroy({
     where: {
@@ -93,7 +107,7 @@ exports.update_user = async (_, { userId, user }, { models }) => {
   try {
     let userFound = await models.users.findOne({ where: { id: userId } });
     if (userFound) {
-      userFound = Object.assign(userFound,user);
+      userFound = Object.assign(userFound, user);
       await userFound.save();
       return userFound;
     }
