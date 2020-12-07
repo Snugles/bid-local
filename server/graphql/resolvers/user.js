@@ -131,6 +131,23 @@ exports.sign_up = async (_, { email, password }, { models, secret }) => {
   return { token: createToken(user, secret, '10h') };
 };
 
+exports.sign_in = async (_,{ email, password },{ models, secret }) => {
+  const user = await models.users.findByLogin(email);
+
+  if (!user) {
+    throw new UserInputError(
+      'No user found with this email credentials.',
+    );
+  }
+
+  const isValid = await user.validatePassword(password);
+
+  if (!isValid) {
+    throw new AuthenticationError('Invalid password.'); //probably want to give a more generic message for security
+  }
+
+  return { token: createToken(user, secret, '10h') };
+};
 
 /**
  * Utility Functions

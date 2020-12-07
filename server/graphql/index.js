@@ -4,7 +4,7 @@ const { ApolloServer } = require('apollo-server-express');
 const schemas = require('./schemas');
 const resolvers = require('./resolvers');
 const models = require('../models');
-require('dotenv/config');
+
 
 let newLogin;
 (async () => {

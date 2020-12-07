@@ -43,6 +43,7 @@ const resolvers = {
     update_user: user.update_user,
     delete_user: user.delete_user,
     sign_up: user.sign_up,
+    sign_in: user.sign_in,
     create_item: item.create_item,
     delete_item_by_id: item.delete_item_by_id,
     update_item: item.update_item,
