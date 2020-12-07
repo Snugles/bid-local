@@ -4,9 +4,9 @@ type Item {
   name: String!
   minPrice: Int!
   description: String
-  picUrl1: String
-  picUrl2: String
-  picUrl3: String
+  picUrl1: Upload
+  picUrl2: Upload
+  picUrl3: Upload
   user: User!
   category: Category
 }
