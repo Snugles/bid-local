@@ -9,14 +9,13 @@ const db = require('./models/index');
 
 const app = express();
 app.use(cors());
-app.use(express.static(join(__dirname, './uploads')));
+app.use(express.static(join(__dirname, './uploads'))); //IS THIS STILL NECESSARY?
 
 const PORT = process.env.PORT || 8000;
 
 server.applyMiddleware({ app, path: '/graphql' });
 
 
-//(async () => {
 try {
   db.sequelize.sync().then(async () => {
     app.listen({ port: 8000 }, () => {
@@ -26,4 +25,3 @@ try {
 } catch (error) {
   console.log('Error connecting to db', error);
 }
-//})();

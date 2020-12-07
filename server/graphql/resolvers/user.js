@@ -4,6 +4,9 @@
  * which makes all the async await irrelevant in some cases
  * but to be explicit it can remain.
  */
+const jwt = require('jsonwebtoken');
+
+
 exports.get_user_by_email = async (_, { email }, { models }) => {
   try {
     const user = await models.users.findOne({ where: { email: email } });
@@ -61,36 +64,6 @@ exports.get_address = async (user, _, { models }) => {
   }
 };
 
-exports.create_user = async (_, { user }, { models }) => {
-  try {
-    const { email, password, firstName, lastName, phoneNumber } = user;
-    const userFound = await models.users.findOne({ where: { email: email } });
-    if (!userFound) {
-      const createdUser = await models.users.create({ email: email, password: password, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber });
-      return createdUser;
-    }
-    else {
-      return new Error('There is alreary a user with this email');
-    }
-  } catch (error) {
-    console.error('Error', error);
-  }
-};
-
-const createToken = async (user) => {
-  return user.email;
-};
-
-exports.sign_up = async (_, { email, password }, { models }) => {
-
-  const user = await models.users.create({
-    email: email,
-    password: password,
-  });
-
-  return { token: createToken(user) };
-};
-
 exports.delete_user = async (_, { userId }, { models }) => {
   const destroyed = await models.users.destroy({
     where: {
@@ -126,4 +99,45 @@ exports.me = async (_, __, { models, me }) => { //placeholder for login
   } catch (error) {
     console.error('Error', error);
   }
+};
+
+exports.create_user = async (_, { user }, { models }) => {
+  try {
+    const { email, password, firstName, lastName, phoneNumber } = user;
+    const userFound = await models.users.findOne({ where: { email: email } });
+    if (!userFound) {
+      const createdUser = await models.users.create({ email: email, password: password, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber });
+      return createdUser;
+    }
+    else {
+      return new Error('There is alreary a user with this email');
+    }
+  } catch (error) {
+    console.error('Error', error);
+  }
+};
+
+
+
+exports.sign_up = async (_, { email, password }, { models, secret }) => {
+
+  const user = await models.users.create({
+    email: email,
+    password: password,
+  });
+
+  console.log('SECRET:',secret);
+
+  return { token: createToken(user, secret, '10h') };
+};
+
+
+/**
+ * Utility Functions
+ */
+const createToken = async (user, secret, expiresIn) => {
+  const {id, email} = user;
+  return await jwt.sign({id,email}, secret, {
+    expiresIn,
+  });
 };
