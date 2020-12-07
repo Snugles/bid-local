@@ -2,15 +2,20 @@ import { useMutation, useQuery } from '@apollo/client';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useEffect, useState } from 'react';
 import {
-  Dimensions, Image, ScrollView,
+  Dimensions,
+  Image,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  TouchableHighlight, TouchableOpacity,
-  TouchableWithoutFeedback, View
+  TouchableHighlight,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View
 } from 'react-native';
 import Navbar from '../components/Navbar';
 import { CREATE_ITEM, GET_CATEGORIES } from '../queries/addItem';
+import { CLOUDINARY_URL, CLOUDINARY_KEY } from '@env';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -22,20 +27,16 @@ export default function AddItem({ navigation, route }) {
   const categories = useQuery(GET_CATEGORIES);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [showModal, setModal] = useState();
-
   const [images, setImages] = useState([]);
+  const [imageUrls, setImageUrls] = useState([]);
+  const { id } = route.params;
 
   useEffect(() => {
+    console.log('error: ', error);
     if (data) {
       navigation.navigate('Item', { id: data.create_item.id });
     }
   }, [data]);
-
-  useEffect(() => {
-    console.log('selectedCategories: ', selectedCategories);
-  }, [selectedCategories]);
-
-  const { email } = route.params;
 
   function handleCurrency(input) {
     if (input) {
@@ -60,14 +61,14 @@ export default function AddItem({ navigation, route }) {
 
   function handleSubmit() {
     const queryVariables = {
-      userId: '2960b4a0-0036-4583-a966-28d03d91d021',
+      userId: id.current,
       item: {
         name: title,
         minPrice: parseInt(price),
         description: description,
-        // picUrl1: String,
-        // picUrl2: String,
-        // picUrl3: String,
+        picUrl1: (imageUrls[0] ? imageUrls[0] : ''),
+        picUrl2: (imageUrls[1] ? imageUrls[1] : ''),
+        picUrl3: (imageUrls[2] ? imageUrls[2] : ''),
       },
       categoryId: selectedCategories[0].id,
     };
@@ -99,14 +100,13 @@ export default function AddItem({ navigation, route }) {
     });
 
     console.log(result);
-    const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/madhushree25/image/upload";
     if (!result.cancelled) {
       setImages(imgs => [...imgs, result.uri]);
       let base64Img = `data:image/jpg;base64,${result.base64}`;
 
       let data = {
       "file": base64Img,
-      "upload_preset": "ofoblmjj",
+      "upload_preset": CLOUDINARY_KEY,
       }
 
       fetch(CLOUDINARY_URL, {
@@ -116,8 +116,8 @@ export default function AddItem({ navigation, route }) {
       },
       method: 'POST',
     }).then(async r => {
-      let data = await r.json()
-      console.log(data.secure_url);
+      let data = await r.json();
+      setImageUrls(urls => [...urls, data.secure_url]);
     });
     }
   }
