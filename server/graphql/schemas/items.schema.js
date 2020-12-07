@@ -8,11 +8,8 @@ type Item {
   picUrl2: String
   picUrl3: String
   auctionEnd: String!
-  minimumBid: Int
-  firstBidder: ID
-  firstBidderAmount: Int
-  secondBidder: ID
-  secondBidderAmount: Int
+  minimumBid
+  bidder: ID
   user: User!
   category: Category
 }

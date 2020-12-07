@@ -67,20 +67,9 @@ exports.update_item = async (_, { itemId, item }, { models }) => {
 
 exports.place_a_bid = async (_, { itemId, userId, biddingPrice }, {models}) => {
   let itemDB = await models.items.findOne({ where: { id: itemId}});
-
-  // check if bidding is less than minimumBid
-  if (biddingPrice > itemDB.minPrice) {
-    if (itemDB.firstBidder == null) {
-      itemDB.minimumBid++;
-      itemDB.firstBidder = userId;
-      itemDB.firstBidderAmount = biddingPrice;
-    } else if (itemDB.firstBidder != null && itemDB.secondBidder == null) {
-      if (itemDB.firstBidderAmount < biddingPrice) {
-        itemDB.minimumBid = itemDB.firstBidderAmount + 1;
-        itemDB.secondBidder = userId;
-        itemDB.secondBidderAmount = biddingPrice;
-      }
-    }
+  if (biddingPrice > itemDB.minimumBid) {
+    itemDB.minimumBid++;
+    itemDB.bidder = userId;
   }
   await itemDB.save();
   return itemDB;

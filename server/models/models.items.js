@@ -48,30 +48,10 @@ module.exports = (sequelize, DataTypes) => {
         isDecimal: true
       }
     },
-    firstBidder: {
+    bidder: {
       type: DataTypes.UUID,
       validate: {
         isUUID: 4,
-      }
-    },
-    firstBidderAmount: {
-      type: DataTypes.INTEGER,
-      default: 0,
-      validate: {
-        isDecimal: true
-      }
-    },
-    secondBidder: {
-      type: DataTypes.UUID,
-      validate: {
-        isUUID: 4,
-      }
-    },
-    secondBidderAmount: {
-      type: DataTypes.INTEGER,
-      default: 0,
-      validate: {
-        isDecimal: true
       }
     },
     userId: {
