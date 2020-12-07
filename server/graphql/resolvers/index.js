@@ -53,6 +53,9 @@ const resolvers = {
     update_address: address.update_address,
     place_a_bid: item.place_a_bid,
     image_uploader: image.image_uploader
+  },
+  Subscription: {
+    bidPlaced: item.bidPlaced
   }
 };
 

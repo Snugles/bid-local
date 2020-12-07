@@ -1,22 +1,18 @@
+import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  ImageBackground,
-  Dimensions,
-  TextInput,
-  TouchableHighlight,
+  Dimensions, ImageBackground, ScrollView, StyleSheet,
+  Text, TextInput, TouchableHighlight, View
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import Navbar from '../components/Navbar';
+import NewBidNotification from '../components/NewBidNotification';
 import Timer from '../components/Timer';
+import useBidPlaced from '../components/useBidPlaced';
 import { GET_ITEM_BY_ID } from '../queries/item';
-import { useQuery } from '@apollo/client';
-import { Image } from 'native-base';
 
 export default function Item({ navigation, route }) {
+  useBidPlaced();
   const windowWidth = Dimensions.get('window').width;
   const [offerBid, setOfferBid] = useState('');
   const [images, setImages] = useState([]);
@@ -138,6 +134,7 @@ export default function Item({ navigation, route }) {
             </Text>
           </View>
         </View>
+        <NewBidNotification />
       </ScrollView>
     </>
   );
