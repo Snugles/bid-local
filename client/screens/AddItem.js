@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useEffect, useState } from 'react';
 import {
-  Dimensions, Image, ScrollView, StyleSheet,
+  Dimensions, Image, ScrollView,
   Text,
 
 
@@ -27,7 +27,7 @@ export default function AddItem({ navigation, route }) {
   const categories = useQuery(GET_CATEGORIES);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [showModal, setModal] = useState();
-  
+
   const [images, setImages] = useState([]);
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export default function AddItem({ navigation, route }) {
         minPrice: parseInt(price),
         description: description,
       },
-      categoryId: selectedCategories[0].id
+      categoryId: selectedCategories[0].id,
     };
 
     console.log(queryVariables);
@@ -79,20 +79,20 @@ export default function AddItem({ navigation, route }) {
     createItem({ variables: queryVariables });
   }
 
-  function handleCategories (cat) {
-    setSelectedCategories( selArr =>{
+  function handleCategories(cat) {
+    setSelectedCategories((selArr) => {
       let initialLength = selArr.length;
-      let reduced = selArr.reduce((accumulator, current)=>{
+      let reduced = selArr.reduce((accumulator, current) => {
         if (current.id !== cat.id) accumulator.push(current);
         return accumulator;
       }, []);
-      
-      if (initialLength === reduced.length) return ([cat, ...reduced]);
+
+      if (initialLength === reduced.length) return [cat, ...reduced];
       else return reduced;
     });
   }
 
-  async function pickImage () {
+  async function pickImage() {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -121,6 +121,7 @@ export default function AddItem({ navigation, route }) {
       let data = await r.json()
       console.log(data.secure_url);
     });
+    }
   }
 }
 
@@ -151,145 +152,115 @@ export default function AddItem({ navigation, route }) {
         />
         <Text>Categories:</Text>
         <View style={styles.selectedCategories}>
-          {
-            selectedCategories.map((cat, index)=>(
-              <Text key={index} style={styles.selectedCategory}>{cat.name}</Text>
-            ))
-          }
+          {selectedCategories.map((cat, index) => (
+            <Text key={index} style={styles.selectedCategory}>
+              {cat.name}
+            </Text>
+          ))}
         </View>
-        <TouchableWithoutFeedback onPress={()=>{setModal(true); setSelectedCategories([])}}>
-          <Text style={{padding: 10, borderWidth: 1, borderColor: 'gray', marginTop: 10}}>Pick Categories</Text>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setModal(true);
+            setSelectedCategories([]);
+          }}
+        >
+          <Text
+            style={{
+              padding: 10,
+              borderWidth: 1,
+              borderColor: 'gray',
+              marginTop: 10,
+            }}
+          >
+            Pick Categories
+          </Text>
         </TouchableWithoutFeedback>
         <View style={styles.itemView}>
           {images.length > 0
-            ?
-            images.map((img, index)=>(
-              <Image key={index} style={styles.itemImage} source={{uri: img}} />
-            ))
-            :
-            null
-          }
+            ? images.map((img, index) => (
+                <Image
+                  key={index}
+                  style={styles.itemImage}
+                  source={{ uri: img }}
+                />
+              ))
+            : null}
           <TouchableOpacity onPress={pickImage}>
-            <Image style={styles.itemImage} source={require('../assets/plus.png')} />
+            <Image
+              style={styles.itemImage}
+              source={require('../assets/plus.png')}
+            />
           </TouchableOpacity>
         </View>
         <TouchableHighlight style={styles.addItemButton} onPress={handleSubmit}>
           <Text style={{ fontSize: 18, color: 'white' }}>ADD ITEM</Text>
         </TouchableHighlight>
       </ScrollView>
-      {showModal
-        ?
+      {showModal ? (
         <View style={styles.categoryModal}>
           <ScrollView style={styles.categoryModalContent}>
-            <Text style={{padding: 15, backgroundColor: 'lightgray', fontSize: 18}}>CATEGORIES</Text>
+            <Text
+              style={{
+                padding: 15,
+                backgroundColor: 'lightgray',
+                fontSize: 18,
+                fontFamily: 'Roboto_medium',
+              }}
+            >
+              CATEGORIES
+            </Text>
             {categories.data
-              ?
-              categories.data.get_categories.map(cat=> {
-                return <CategoryModalField key={cat.id} category={cat} handleCategories={handleCategories} />
-              })
-              :
-              null
-            }
+              ? categories.data.get_categories.map((cat) => {
+                  return (
+                    <CategoryModalField
+                      key={cat.id}
+                      category={cat}
+                      handleCategories={handleCategories}
+                    />
+                  );
+                })
+              : null}
           </ScrollView>
-          <TouchableHighlight onPress={()=>setModal(false)}>
-            <Text style={{textAlign: 'center', backgroundColor: 'lightgray', padding: 10}}>Submit</Text>
+          <TouchableHighlight onPress={() => setModal(false)}>
+            <Text
+              style={{
+                textAlign: 'center',
+                backgroundColor: 'lightgray',
+                padding: 10,
+                fontFamily: 'Roboto_medium',
+              }}
+            >
+              Submit
+            </Text>
           </TouchableHighlight>
         </View>
-        :
-        null
-      }
-      
+      ) : null}
     </>
   );
-}
 
-function CategoryModalField ({category, handleCategories}) {
+function CategoryModalField({ category, handleCategories }) {
   const [active, setActive] = useState(false);
 
   return (
-    <TouchableWithoutFeedback onPress={()=>{setActive((act)=>{return !act}); handleCategories(category)}}>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        setActive((act) => {
+          return !act;
+        });
+        handleCategories(category);
+      }}
+    >
       <View style={styles.categoryField}>
-        <Text style={{fontSize: 16}}>{category.name}</Text>
-        <View style={[styles.selected, (active?{backgroundColor: 'lightblue'}:null)]}></View>
+        <Text style={[{ fontSize: 16 }, styles.text]}>{category.name}</Text>
+        <View
+          style={[
+            styles.selected,
+            active ? { backgroundColor: 'lightblue' } : null,
+          ]}
+        ></View>
       </View>
     </TouchableWithoutFeedback>
-  )
+  );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 15,
-  },
-  textBoxes: {
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#EF476F',
-    width: '90%',
-    padding: 10,
-    marginBottom: 15,
-  },
-  itemView: {
-    width: '100%',
-    marginBottom: 15,
-    flexShrink: 0,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    padding: 20,
-  },
-  itemImage: {
-    flexShrink: 0,
-    width: 80,
-    height: 80,
-    margin: 10,
-  },
-  addItemButton: {
-    justifyContent: 'center',
-    backgroundColor: '#06D6A0',
-    padding: 15,
-    margin: 10,
-  },
-  categoryModal: {
-    position: "absolute",
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#000000bb',
-    padding: 15,
-    zIndex: 10,
-  },
-  categoryModalContent: {
-    backgroundColor: 'white',
-    borderColor: 'gray',
-    borderWidth: 1
-  },
-  categoryField: {
-    padding: 10,
-    borderColor: 'lightgray',
-    borderBottomWidth: 1,
-    flexDirection: 'row',
-  },
-  selected: {
-    width: 20,
-    height: 20,
-    marginLeft: 'auto',
-    borderRadius: 10,
-    borderColor: 'lightgray',
-    borderWidth: 1
 
-  },
-  selectedCategories: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    padding: 10,
-    justifyContent: "center",
-  },
-  selectedCategory: {
-    padding: 10,
-    borderWidth: 1,
-    borderColor: 'lightgray',
-    borderRadius: 20,
-    margin: 5,
-    fontSize: 12,
-  }
-});

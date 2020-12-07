@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
-  View,
   Text,
   ScrollView,
   Button,
   TextInput,
 } from 'react-native';
 import Navbar from '../components/Navbar';
-import { GET_EMAIL } from '../queries/userInfo.query';
-import { useQuery } from '@apollo/client';
+import { GET_EMAIL, UPDATE_USER } from '../queries/userInfo';
+import { useQuery, useMutation } from '@apollo/client';
 
 export default function UserInfo({ navigation, route }) {
   const { email } = route.params;
@@ -25,28 +24,60 @@ export default function UserInfo({ navigation, route }) {
     country: '',
   });
   const [editMode, setEditMode] = useState(false);
-  const { data, error, loading } = useQuery(GET_EMAIL, {
+  const [id, setID] = useState('');
+  const [changeUser, changed] = useMutation(UPDATE_USER);
+  const user = useQuery(GET_EMAIL, {
     variables: { email: email },
   });
 
   useEffect(() => {
-    console.log(loading);
-    console.log(error);
-    if (data) {
-      setPhoneNumber(data.get_user_by_email.phoneNumber);
+    if (user.data) {
+      console.log(user.data.get_user_by_email);
+      setPhoneNumber(user.data.get_user_by_email.phoneNumber);
+      setID(user.data.get_user_by_email.id);
       setAddress({
-        firstLineAddress: data.get_user_by_email.firstLineAddress,
-        secondLineAddress: data.get_user_by_email.secondLineAddress,
-        city: data.get_user_by_email.city,
-        postcode: data.get_user_by_email.postcode,
-        country: data.get_user_by_email.country,
+        firstLineAddress: user.data.get_user_by_email.address.firstLineAddress,
+        secondLinAddress: user.data.get_user_by_email.address.secondLineAddress,
+        city: user.data.get_user_by_email.address.city,
+        postcode: user.data.get_user_by_email.address.postcode,
+        country: user.data.get_user_by_email.address.country,
       });
-
-      console.log(data);
+      return;
     }
-  }, [loading, data, error]);
+    console.log(user.error);
+  }, [user]);
+
+  useEffect(() => {
+    console.log('dancing queen'+changed.error);
+    if (changed.data) {
+      console.log(changed.data);
+      setPhoneNumber(changed.data.update_user.phoneNumber);
+      setID(changed.data.update_user.id);
+      setAddress({
+        firstLineAddress: changed.data.update_user.address.firstLineAddress,
+        secondLineAddress: changed.data.update_user.address.secondLineAddress,
+        city: changed.data.update_user.address.city,
+        postcode: changed.data.update_user.address.postcode,
+        country: changed.data.update_user.address.country,
+      });
+      return;
+    }
+  }, [changed]);
 
   function toggle() {
+    if (editMode) {
+      const queryVariables = {
+        userId: id,
+        user: {
+          phoneNumber:phoneNumber,
+          email:email,
+          password:"feXoIik8"
+        }
+      };
+      console.log(queryVariables)
+  
+      changeUser({variables:queryVariables});
+    }
     setEditMode(!editMode);
   }
 
