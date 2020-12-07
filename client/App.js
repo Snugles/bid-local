@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet } from 'react-native';
 import Navigator from './routes/HomeStack';
 import * as Font from 'expo-font';
@@ -19,7 +19,7 @@ const getFonts = () => {
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const [email, setEmail] = useState('test@email2.com');
+  const email = useRef('');
 
   useEffect(() => {
     console.log(email);
@@ -36,7 +36,7 @@ export default function App() {
   return (
     <ApolloProvider client={client}>
       {fontsLoaded ? (
-        <Navigator setEmail={setEmail} email={email} />
+        <Navigator email={email} />
       ) : (
         <AppLoading
           startAsync={getFonts}

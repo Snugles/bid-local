@@ -7,7 +7,7 @@ import Navbar from '../components/Navbar';
 
 export default function Login({ navigation, route }) {
   const [initialEmail, setInitialEmail] = useState('');
-  const { setEmail } = route.params;
+  const { email } = route.params;
   const [getID, { data, error, loading }] = useLazyQuery(GET_USER_BY_EMAIL);
   const [id, SetID] = useState({});
 
@@ -17,7 +17,7 @@ export default function Login({ navigation, route }) {
     console.log('data: ', data);
     if (data && data.get_user_by_email) {
       SetID(data.get_user_by_email.id);
-      setEmail(data.get_user_by_email.email);
+      email.current = data.get_user_by_email.email;
       navigation.navigate('Home');
     }
   }, [loading, data, error]);

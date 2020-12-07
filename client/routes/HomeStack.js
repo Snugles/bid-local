@@ -10,7 +10,7 @@ import UserInfo from '../screens/UserInfo';
 
 const Stack = createStackNavigator();
 
-const HomeStack = ({ setEmail, email }) => {
+const HomeStack = ({ email }) => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login" headerMode={null}>
@@ -37,7 +37,7 @@ const HomeStack = ({ setEmail, email }) => {
         <Stack.Screen
           name="Login"
           component={Login}
-          initialParams={{ email: email, setEmail: setEmail }}
+          initialParams={{ email: email }}
         />
         <Stack.Screen
           name="UserInfo"
