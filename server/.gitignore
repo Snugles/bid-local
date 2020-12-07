@@ -2,4 +2,4 @@
 .env
 /config/*
 /migrations/*
-
+/models/_current.json

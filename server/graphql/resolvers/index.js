@@ -3,6 +3,7 @@ const user = require('./user');
 const item = require('./item');
 const category = require('./category');
 const address = require('./address');
+const image = require('./image');
 
 const resolvers = {
   Query: {
@@ -16,6 +17,7 @@ const resolvers = {
     get_categories: category.get_categories,
     get_address_by_userId: address.get_address_by_userId,
     get_addresses: address.get_addresses,
+    get_info: image.get_info,
   },
 
   User: {
@@ -40,6 +42,7 @@ const resolvers = {
     create_user: user.create_user,
     update_user: user.update_user,
     delete_user: user.delete_user,
+    sign_up: user.sign_up,
     create_item: item.create_item,
     delete_item_by_id: item.delete_item_by_id,
     update_item: item.update_item,
@@ -48,7 +51,8 @@ const resolvers = {
     update_category: category.update_category,
     create_address: address.create_address,
     update_address: address.update_address,
-    place_a_bid: item.place_a_bid
+    place_a_bid: item.place_a_bid,
+    image_uploader: image.image_uploader
   }
 };
 
