@@ -1,8 +1,21 @@
-
+/**
+ * Note: Apollo server accepts promises and knows to wait
+ * for the actual result from the database,
+ * which makes all the async await irrelevant in some cases
+ * but to be explicit it can remain.
+ */
 exports.get_user_by_email = async (_, { email }, { models }) => {
-  console.log('email is', email);
   try {
     const user = await models.users.findOne({ where: { email: email } });
+    return user;
+  } catch (error) {
+    console.error('Error', error);
+  }
+};
+
+exports.get_user_by_Id = async (_, { id }, { models }) => {
+  try {
+    const user = await models.users.findByPk(id);
     return user;
   } catch (error) {
     console.error('Error', error);
@@ -87,6 +100,15 @@ exports.update_user = async (_, { userId, user }, { models }) => {
     else {
       return new Error('User doesn\'t exist');
     }
+  } catch (error) {
+    console.error('Error', error);
+  }
+};
+
+exports.me = async (_, __, { models, me }) => { //placeholder for login
+  if (!me) return null;
+  try {
+    return await models.users.findByPk(me.id);
   } catch (error) {
     console.error('Error', error);
   }

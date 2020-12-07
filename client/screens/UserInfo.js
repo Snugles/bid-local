@@ -1,38 +1,84 @@
 import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
-  View,
   Text,
   ScrollView,
   Button,
   TextInput,
 } from 'react-native';
 import Navbar from '../components/Navbar';
-import { GET_EMAIL } from '../queries/userInfo.query';
-import { useQuery } from '@apollo/client';
+import { GET_EMAIL, UPDATE_USER } from '../queries/userInfo';
+import { useQuery, useMutation } from '@apollo/client';
 
 export default function UserInfo({ navigation, route }) {
-  const { email } = route.params;
+  const email = route.params.email.current ;
+  console.log('userInfo email: ', email);
 
   // const [username, setUsername] = useState('snuglywugly');
 
-  const [phoneNumber, setPhoneNumber] = useState('07425 058395');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [address, setAddress] = useState({
+    firstLineAddress: '',
+    secondLineAddress: '',
+    city: '',
+    postcode: '',
+    country: '',
+  });
   const [editMode, setEditMode] = useState(false);
-  const { data, error, loading } = useQuery(GET_EMAIL, {
+  const [id, setID] = useState('');
+  const [changeUser, changed] = useMutation(UPDATE_USER);
+  const user = useQuery(GET_EMAIL, {
     variables: { email: email },
   });
 
   useEffect(() => {
-    console.log(loading);
-    console.log(error);
-    if (data) {
-      setPhoneNumber(data.get_user_by_email.phoneNumber);
-
-      console.log(data);
+    if (user.data) {
+      console.log(user.data.get_user_by_email);
+      setPhoneNumber(user.data.get_user_by_email.phoneNumber);
+      setID(user.data.get_user_by_email.id);
+      setAddress({
+        firstLineAddress: user.data.get_user_by_email.address.firstLineAddress,
+        secondLinAddress: user.data.get_user_by_email.address.secondLineAddress,
+        city: user.data.get_user_by_email.address.city,
+        postcode: user.data.get_user_by_email.address.postcode,
+        country: user.data.get_user_by_email.address.country,
+      });
+      return;
     }
-  }, [loading, data, error]);
+    console.log(user.error);
+  }, [user]);
+
+  useEffect(() => {
+    console.log('dancing queen'+changed.error);
+    if (changed.data) {
+      console.log(changed.data);
+      setPhoneNumber(changed.data.update_user.phoneNumber);
+      setID(changed.data.update_user.id);
+      setAddress({
+        firstLineAddress: changed.data.update_user.address.firstLineAddress,
+        secondLineAddress: changed.data.update_user.address.secondLineAddress,
+        city: changed.data.update_user.address.city,
+        postcode: changed.data.update_user.address.postcode,
+        country: changed.data.update_user.address.country,
+      });
+      return;
+    }
+  }, [changed]);
 
   function toggle() {
+    if (editMode) {
+      const queryVariables = {
+        userId: id,
+        user: {
+          phoneNumber:phoneNumber,
+          email:email,
+          password:"feXoIik8"
+        }
+      };
+      console.log(queryVariables)
+  
+      changeUser({variables:queryVariables});
+    }
     setEditMode(!editMode);
   }
 
@@ -40,16 +86,6 @@ export default function UserInfo({ navigation, route }) {
     <>
       <Navbar navigation={navigation} canGoBack={true} />
       <ScrollView style={styles.container}>
-        {/* <Text style={styles.headers}>Username:</Text>
-        {editMode ? (
-          <TextInput
-            style={styles.textBoxes}
-            onChangeText={(text) => setUsername(text)}
-            value={username}
-          />
-        ) : (
-          <Text style={styles.displayText}>{username}</Text>
-        )} */}
         <Text style={styles.headers}>Email:</Text>
         {editMode ? (
           <TextInput
@@ -69,6 +105,44 @@ export default function UserInfo({ navigation, route }) {
           />
         ) : (
           <Text style={styles.displayText}>{phoneNumber}</Text>
+        )}
+        <Text style={styles.headers}>Address:</Text>
+        {editMode ? (
+          <>
+            <TextInput
+              style={styles.textBoxes}
+              onChangeText={(text) => setAddress({ firstLineAddress: text })}
+              value={address.firstLineAddress}
+            />
+            <TextInput
+              style={styles.textBoxes}
+              onChangeText={(text) => setAddress({ secondLineAddress: text })}
+              value={address.secondLineAddress}
+            />
+            <TextInput
+              style={styles.textBoxes}
+              onChangeText={(text) => setAddress({ city: text })}
+              value={address.city}
+            />
+            <TextInput
+              style={styles.textBoxes}
+              onChangeText={(text) => setAddress({ postcode: text })}
+              value={address.postcode}
+            />
+            <TextInput
+              style={styles.textBoxes}
+              onChangeText={(text) => setAddress({ country: text })}
+              value={address.country}
+            />
+          </>
+        ) : (
+          <>
+            <Text style={styles.displayText}>{address.firstLineAddress}</Text>
+            <Text style={styles.displayText}>{address.secondLineAddress}</Text>
+            <Text style={styles.displayText}>{address.city}</Text>
+            <Text style={styles.displayText}>{address.postcode}</Text>
+            <Text style={styles.displayText}>{address.country}</Text>
+          </>
         )}
         {editMode ? (
           <Button

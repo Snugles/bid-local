@@ -30,6 +30,29 @@ mutation {
   }
 }
 
+{
+  get_user_by_Id(id:"019b2553-cea3-4380-ba84-c4a163d6c1e6") {
+    id
+    firstName
+    lastName
+    password
+    email
+    phoneNumber
+    item {
+      id
+      name
+    }
+    address {
+      id
+      firstLineAddress
+      secondLineAddress
+      city
+      postcode
+      country
+    }
+  }
+}
+
 // Edit/Update user
 mutation {
   update_user (
@@ -72,23 +95,6 @@ mutation {
   }
 }
 
-//Update/Edit Item
-mutation {
-  update_item (itemId:"bb222ce4-57ab-4bea-bbca-27326fc077fe",item: {
-      name: "car"
-      minPrice: 30
-  }) {
-    id
-    name
-    minPrice
-    user{
-      id
-      email
-      password
-    }
-  }
-}
-
 // List all items
 query {
   get_items{
@@ -96,6 +102,12 @@ query {
     name
     minPrice
     description
+    picUrl1
+    picUrl2
+    picUrl3
+    category{
+      name
+    }
     user {
       email
     }
@@ -104,11 +116,38 @@ query {
 
 // Get item by Id (Insert the correct id given from database)
 query{
-  get_item_by_Id(id:"bb222ce4-57ab-4bea-bbca-27326fc077fe"){
+  get_item_by_Id(id:"109bf017-ec5b-4b0a-abaf-4dd596a2c552"){
+    id
+    name
+    minPrice
+    picUrl1
+    picUrl2
+    picUrl3
+    description
+    category {
+      name
+    }
+  }
+}
+
+//Update/Edit Item
+mutation {
+  update_item (itemId:"25f69313-7860-47b3-b850-54f9e7e000de",item: {
+      name: "car"
+      minPrice: 30
+  }) {
     id
     name
     minPrice
     description
+    picUrl1
+    picUrl2
+    picUrl3
+    user{
+      id
+      email
+      password
+    }
   }
 }
 
@@ -126,11 +165,14 @@ mutation{
   }
 }
 
-//List all categories
+//List all categories (and items within them)
 query {
   get_categories{
     id
     name
+    item {
+      name
+    }
   }
 }
 

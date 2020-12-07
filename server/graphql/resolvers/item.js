@@ -1,5 +1,5 @@
 exports.get_item_by_Id = async (_, { id }, { models }) => {
-  const item = await models.items.findOne({ where: { id: id } });
+  const item = await models.items.findByPk(id);
   return item;
 };
 
@@ -13,22 +13,30 @@ exports.get_user_by_item = async (item, _, { models }) => {
   return user;
 };
 
-exports.create_item = async (_, { userId, item }, { models }) => {
-  const { name, minPrice, description, categoryId, imageToUpload } = item;
+exports.get_category_by_Item = async (item, _, { models }) => {
+  const user = await models.categories.findOne({ where: { id: item.categoryId } });
+  return user;
+};
+
+exports.create_item = async (_, { userId, item }, { models }) => {  //from the context, for login (_, { text }, { models, me })
+  const { name, minPrice, description, picUrl1, picUrl2, picUrl3, categoryId } = item;
   try {
     const item = {
       name,
       minPrice,
       description,
-      imageToUpload,
-      userId, //make dynamic
-      categoryId, //make dynamic
+      picUrl1,
+      picUrl2,
+      picUrl3,
+      userId, //me.id
+      categoryId,
     };
     const createdItem = await models.items.create(item);
 
     return createdItem;
   } catch (error) {
     console.error('Error', error);
+    return error;
   }
 
 };

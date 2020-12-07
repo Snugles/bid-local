@@ -17,6 +17,13 @@ module.exports = (sequelize, DataTypes) => {
     Users.hasOne(models.addresses, { onDelete: 'CASCADE' });
   };
 
+  Users.findByLogin = async login => { //needed for login
+    let user = await Users.findOne({
+      where: { email: login },
+    });
+    return user;
+  };
+
   Users.beforeCreate(user => user.id = uuidv4());
 
   return Users;
