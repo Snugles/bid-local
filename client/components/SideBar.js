@@ -31,31 +31,31 @@ export default function SideBar({ navigation, hideSide, setHideSide }) {
 
   return (
     <Animated.View style={[styles.container, {transform: [{ translateX: fadeAnim }]} ]}>
-        <Content>
-          <List>
-            <ListItem onPress={()=>{navigation.navigate('Login'); setHideSide(true)}}>
-              <Icon type="MaterialCommunityIcons" name="login" style={styles.sidebarIcon}/>
-              <Text style={styles.sidebarText}>Login</Text>
-            </ListItem>
-            <ListItem onPress={()=>{navigation.navigate('UserInfo'); setHideSide(true)}}>
-              <Icon type="MaterialCommunityIcons" name="account" style={styles.sidebarIcon}/>
-              <Text style={styles.sidebarText}>User Info</Text>
-            </ListItem>
-            <ListItem style={styles.sidebarItem} onPress={()=>{navigation.navigate('Home'); setHideSide(true)}}>
-              <Icon type="MaterialCommunityIcons" name="home" style={styles.sidebarIcon}/>
-              <Text style={styles.sidebarText}>Home</Text>
-            </ListItem>
-            <ListItem onPress={()=>{navigation.navigate('UsersItems'); setHideSide(true)}}>
-              <Icon type="MaterialCommunityIcons" name="format-list-bulleted-square" style={styles.sidebarIcon}/>
-              <Text style={styles.sidebarText}>User Items</Text>
-            </ListItem>
-            <ListItem onPress={()=>{navigation.navigate('AddItem'); setHideSide(true)}}>
-              <Icon type="MaterialCommunityIcons" name="plus" style={styles.sidebarIcon}/>
-              <Text style={styles.sidebarText}>Add Item</Text>
-            </ListItem>
-          </List>
-        </Content>
-      </Animated.View>
+      <Content>
+        <List>
+          <ListItem onPress={()=>{navigation.navigate('Login'); setHideSide(true)}}>
+            <Icon type="MaterialCommunityIcons" name="logout" style={styles.sidebarIcon}/>
+            <Text style={styles.sidebarText}>Logout</Text>
+          </ListItem>
+          <ListItem onPress={()=>{navigation.navigate('UserInfo'); setHideSide(true)}}>
+            <Icon type="MaterialCommunityIcons" name="account" style={styles.sidebarIcon}/>
+            <Text style={styles.sidebarText}>User Info</Text>
+          </ListItem>
+          <ListItem style={styles.sidebarItem} onPress={()=>{navigation.navigate('Home'); setHideSide(true)}}>
+            <Icon type="MaterialCommunityIcons" name="home" style={styles.sidebarIcon}/>
+            <Text style={styles.sidebarText}>Home</Text>
+          </ListItem>
+          <ListItem onPress={()=>{navigation.navigate('UsersItems'); setHideSide(true)}}>
+            <Icon type="MaterialCommunityIcons" name="format-list-bulleted-square" style={styles.sidebarIcon}/>
+            <Text style={styles.sidebarText}>User Items</Text>
+          </ListItem>
+          <ListItem onPress={()=>{navigation.navigate('AddItem'); setHideSide(true)}}>
+            <Icon type="MaterialCommunityIcons" name="plus" style={styles.sidebarIcon}/>
+            <Text style={styles.sidebarText}>Add Item</Text>
+          </ListItem>
+        </List>
+      </Content>
+    </Animated.View>
   );
 }
 

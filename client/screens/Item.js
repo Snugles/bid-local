@@ -19,6 +19,7 @@ import { Image } from 'native-base';
 export default function Item({ navigation, route }) {
   const windowWidth = Dimensions.get('window').width;
   const [offerBid, setOfferBid] = useState('');
+  const [images, setImages] = useState([]);
 
   const { loading, error, data } = useQuery(GET_ITEM_BY_ID, {
     variables: {
@@ -29,10 +30,12 @@ export default function Item({ navigation, route }) {
   const { email } = route.params;
 
   useEffect(() => {
-    console.log('loading: ', loading);
-    console.log('error: ', error);
-    console.log('data: ', data);
-  }, [loading, data, error]);
+    if (data) {
+      if (data.get_item_by_Id.picUrl3 !== '') setImages([{uri:data.get_item_by_Id.picUrl1}, {uri:data.get_item_by_Id.picUrl2}, {uri:data.get_item_by_Id.picUrl3}]);
+      else if (data.get_item_by_Id.picUrl2 !== '') setImages([{uri:data.get_item_by_Id.picUrl1}, {uri:data.get_item_by_Id.picUrl2}]);
+      else setImages([{uri:data.get_item_by_Id.picUrl1}]);
+    }
+  }, [data]);
 
 
   const imageList = ({ item, index }) => {
@@ -79,7 +82,7 @@ export default function Item({ navigation, route }) {
             paddingVertical: 10,
           }}
           layout={'default'}
-          data={[{uri:data.get_item_by_Id.picUrl1},{uri:data.get_item_by_Id.picUrl2},{uri:data.get_item_by_Id.picUrl3}]}
+          data={images}
           sliderWidth={windowWidth}
           itemWidth={windowWidth - windowWidth / 6}
           renderItem={imageList}

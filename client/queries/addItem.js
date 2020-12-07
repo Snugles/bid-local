@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const CREATE_ITEM = gql`
 mutation create_item(
-  $userId: String!,
+  $userId: ID!,
   $item: ItemUpdate!
   ) {
   create_item(

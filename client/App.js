@@ -15,6 +15,7 @@ const getFonts = () => {
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const email = useRef('');
+  const id = useRef('');
 
   useEffect(() => {
     console.log(email);
@@ -30,7 +31,7 @@ export default function App() {
   return (
     <ApolloProvider client={client}>
       {fontsLoaded ? (
-        <Navigator email={email} />
+        <Navigator email={email} id={id}/>
       ) : (
         <AppLoading
           startAsync={getFonts}
