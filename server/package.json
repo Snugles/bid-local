@@ -34,6 +34,7 @@
     "express": "^4.17.1",
     "faker": "^5.1.0",
     "graphql": "^15.4.0",
+    "graphql-resolvers": "^0.4.2",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "mysql2": "^2.2.5",
