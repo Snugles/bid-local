@@ -26,12 +26,6 @@ export default function UsersItems({navigation,route}) {
   });
 
   useEffect(()=>{
-    console.log('loading: ', loading);
-    console.log('error: ', error);
-    console.log('data: ', data);
-  }, [loading, error, data]);
-
-  useEffect(()=>{
     getItems();
   }, []);
   
@@ -41,35 +35,35 @@ export default function UsersItems({navigation,route}) {
   return (
     <SafeAreaView>
     <Navbar navigation={navigation} canGoBack={true}/>
-    <ScrollView style={styles.container}>
-    <Button title="Refresh"
-        onPress={() => {
-          getItems();
-        }}
-        color="#0C637F88"/>
-    <TouchableOpacity
+      <ScrollView style={styles.container}>
+      <Button title="Refresh"
           onPress={() => {
-            navigation.navigate('AddItem');
+            getItems();
           }}
-          style={styles.box}
-        >
-          <Text style={styles.text}>Add additional item</Text>
-          <Icon
-            type="MaterialCommunityIcons"
-            name="plus"
-            style={{ color: 'white', fontSize: 70 }}
-          />
-      </TouchableOpacity>
-      {data ? data.get_user_by_email.item.map((item)=>(
-        <Panel
-          key={item.id}
-          id={item.id}
-          name={item.name} 
-          description={item.description} 
-          deadline={new Date('December 5, 2020 12:00:00')}
-          price={item.minPrice}/>
-          )): null}
-    </ScrollView>
+          color="#0C637F88"/>
+        <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('AddItem');
+              }}
+              style={styles.box}
+            >
+              <Text style={styles.text}>Add additional item</Text>
+              <Icon
+                type="MaterialCommunityIcons"
+                name="plus"
+                style={{ color: 'white', fontSize: 70 }}
+              />
+          </TouchableOpacity>
+        {data ? data.get_user_by_email.item.map((item)=>(
+          <Panel
+            key={item.id}
+            id={item.id}
+            name={item.name} 
+            description={item.description} 
+            deadline={new Date('December 5, 2020 12:00:00')}
+            price={item.minPrice}/>
+            )): null}
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -78,17 +72,10 @@ function Panel (props) {
   const [listDataSource, setListDataSource] = useState([{
     isExpanded: false,
   }]);
-  const [multiSelect, setMultiSelect] = useState(false);
   const [layoutHeight, setLayoutHeight] = useState(0);
   const [title, setTitle] = useState(props.name);
   const [description, setDescription] = useState(props.description);
   const [changeItem, {data, error, loading}] = useMutation(UPDATE_ITEM);
-  
-  useEffect(()=>{
-    console.log('loading: ', loading);
-    console.log('error: ', error);
-    console.log('data: ', data);
-  }, [loading, error, data]);
 
   useEffect(() => {
     if (listDataSource[0].isExpanded) {
@@ -118,16 +105,13 @@ function Panel (props) {
   const updateLayout = (index) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     const array = [...listDataSource];
-    if (multiSelect) {
-      array[index]['isExpanded'] = !array[index]['isExpanded'];
-    } else {
-      array.map((value, placeindex) =>
-        placeindex === index
-          ? (array[placeindex]['isExpanded'] =
-            !array[placeindex]['isExpanded'])
-          : (array[placeindex]['isExpanded'] = false),
-      );
-    }
+
+    array.map((value, placeindex) =>
+      placeindex === index
+        ?(array[placeindex]['isExpanded'] =
+        !array[placeindex]['isExpanded'])
+        :(array[placeindex]['isExpanded'] = false),
+    );
     setListDataSource(array);
   };
 
@@ -143,8 +127,10 @@ function Panel (props) {
             <Text style={styles2.titleText}>{title}</Text>
             <Text>{props.price+'€'}</Text>
           </View>
-          <Text>Time:</Text>
-          <Timer deadline={props.deadline}/>
+          <View style={styles2.timer}>
+            <Text>Time:</Text>
+            <Timer deadline={props.deadline}/>
+          </View>
         </View>
         <ScrollView>
             <ExpandableComponent
@@ -164,6 +150,7 @@ function Panel (props) {
     </SafeAreaView>
   );
 };
+
 const ExpandableComponent = ({saveChanges,onClickFunction, title, description, layoutHeight, setDescription, setTitle}) => {
   return (
     <View>
@@ -196,41 +183,6 @@ const ExpandableComponent = ({saveChanges,onClickFunction, title, description, l
   );
 };
 
-const styles2 = StyleSheet.create({
-  container: {
-    width: '95%',
-    flexShrink: 0,
-    padding:10,
-  },
-  titleText: {
-    flexShrink: 0,
-    width: '95%',
-    fontSize: 22,
-    fontWeight: 'bold',
-    width:'100%'
-  },
-  header: {
-    width: '95%',
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  textBoxes: {
-    borderWidth:1,
-    borderStyle:'solid',
-    borderColor:'#EF476F',
-    width:'95%',
-    padding:10
-  },
-  text: {
-    width:'95%',
-    fontSize:16,
-  },
-  content: {
-    width:'95%',
-    backgroundColor:'#fff',
-  },
-});
-
 const styles = StyleSheet.create({
   container: {
     flexDirection:'column',
@@ -261,4 +213,43 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
   },
+});
+
+const styles2 = StyleSheet.create({
+  container: {
+    width: '95%',
+    flexShrink: 0,
+    padding:10,
+  },
+  titleText: {
+    flexShrink: 0,
+    width: '95%',
+    fontSize: 22,
+    fontWeight: 'bold',
+    width:'100%'
+  },
+  header: {
+    width: '95%',
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  textBoxes: {
+    borderWidth:1,
+    borderStyle:'solid',
+    borderColor:'#EF476F',
+    padding:10,
+    marginBottom:3
+  },
+  text: {
+    width:'95%',
+    fontSize:16,
+  },
+  content: {
+    width:'95%',
+    backgroundColor:'#fff',
+  },
+  timer:{
+    borderLeftWidth:1,
+    padding:3
+  }
 });

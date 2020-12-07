@@ -14,12 +14,12 @@ import Navbar from '../components/Navbar';
 import Timer from '../components/Timer';
 import { GET_ITEM_BY_ID } from '../queries/item';
 import { useQuery } from '@apollo/client';
-import { Image } from 'native-base';
 
 export default function Item({ navigation, route }) {
   const windowWidth = Dimensions.get('window').width;
   const [offerBid, setOfferBid] = useState('');
   const [images, setImages] = useState([]);
+  const [typeError, setTypeError] =useState('');
 
   const { loading, error, data } = useQuery(GET_ITEM_BY_ID, {
     variables: {
@@ -41,14 +41,16 @@ export default function Item({ navigation, route }) {
   const imageList = ({ item, index }) => {
     return (
       <ImageBackground
+        key={index}
         style={styles.itemImage}
         resizeMode="contain"
         source={item}
-      ></ImageBackground>
+      />
     );
   };
 
   function handleCurrency(input) {
+    setTypeError('');
     if (input) {
       if (input.search(/[^0-9,]/g) === -1) {
         // if string only contains (0123456789,)
@@ -62,7 +64,7 @@ export default function Item({ navigation, route }) {
           setOfferBid(input);
         }
       } else {
-        console.log('invalid character');
+        setTypeError('Invalid Character');
       }
     } else {
       setOfferBid(input);
@@ -114,6 +116,7 @@ export default function Item({ navigation, route }) {
               <Text style={{ fontSize: 16, color: 'white' }}>MAKE OFFER</Text>
             </TouchableHighlight>
           </View>
+            {typeError?<Text style={{ color: 'red', fontSize: 25 }}>{typeError}</Text>:null}
 
           <Text style={{ fontWeight: '700', fontSize: 18 }}>
             Item Description:
