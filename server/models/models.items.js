@@ -41,16 +41,37 @@ module.exports = (sequelize, DataTypes) => {
     auctionEnd: {
       type: DataTypes.DATE,
     },
+    minimumBid: {
+      type: DataTypes.INTEGER,
+      default: 0,
+      validate: {
+        isDecimal: true
+      }
+    },
     firstBidder: {
       type: DataTypes.UUID,
       validate: {
         isUUID: 4,
       }
     },
+    firstBidderAmount: {
+      type: DataTypes.INTEGER,
+      default: 0,
+      validate: {
+        isDecimal: true
+      }
+    },
     secondBidder: {
       type: DataTypes.UUID,
       validate: {
         isUUID: 4,
+      }
+    },
+    secondBidderAmount: {
+      type: DataTypes.INTEGER,
+      default: 0,
+      validate: {
+        isDecimal: true
       }
     },
     userId: {

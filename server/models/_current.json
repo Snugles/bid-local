@@ -120,13 +120,28 @@
                     "field": "auctionEnd",
                     "seqType": "Sequelize.DATE"
                 },
+                "minimumBid": {
+                    "default": 0,
+                    "field": "minimumBid",
+                    "seqType": "Sequelize.INTEGER"
+                },
                 "firstBidder": {
                     "field": "firstBidder",
                     "seqType": "Sequelize.UUID"
                 },
+                "firstBidderAmount": {
+                    "default": 0,
+                    "field": "firstBidderAmount",
+                    "seqType": "Sequelize.INTEGER"
+                },
                 "secondBidder": {
                     "field": "secondBidder",
                     "seqType": "Sequelize.UUID"
+                },
+                "secondBidderAmount": {
+                    "default": 0,
+                    "field": "secondBidderAmount",
+                    "seqType": "Sequelize.INTEGER"
                 },
                 "userId": {
                     "allowNull": false,
