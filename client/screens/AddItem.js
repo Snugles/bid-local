@@ -3,15 +3,10 @@ import * as ImagePicker from 'expo-image-picker';
 import React, { useEffect, useState } from 'react';
 import {
   Dimensions, Image, ScrollView,
+  StyleSheet,
   Text,
-
-
-
   TextInput,
-
-
   TouchableHighlight, TouchableOpacity,
-
   TouchableWithoutFeedback, View
 } from 'react-native';
 import Navbar from '../components/Navbar';
@@ -70,6 +65,9 @@ export default function AddItem({ navigation, route }) {
         name: title,
         minPrice: parseInt(price),
         description: description,
+        // picUrl1: String,
+        // picUrl2: String,
+        // picUrl3: String,
       },
       categoryId: selectedCategories[0].id,
     };
@@ -131,12 +129,12 @@ export default function AddItem({ navigation, route }) {
         style={styles.container}
         contentContainerStyle={{ alignItems: 'center' }}
       >
-        <Text>Title:</Text>
+        <Text style={{marginTop: 15}}>Title:</Text>
         <TextInput
           style={styles.textBoxes}
           onChangeText={(text) => setTitle(text)}
         />
-        <Text>Starting Price:</Text>
+        <Text style={{marginTop: 15}}>Starting Price:</Text>
         <TextInput
           style={styles.textBoxes}
           value={price}
@@ -144,12 +142,12 @@ export default function AddItem({ navigation, route }) {
           keyboardType="numeric"
           placeholder="0,00"
         />
-        <Text>Description:</Text>
+        <Text style={{marginTop: 15}}>Description:</Text>
         <TextInput
           style={styles.textBoxes}
           onChangeText={(text) => setDescription(text)}
         />
-        <Text>Categories:</Text>
+        <Text style={{marginTop: 15}}>Categories:</Text>
         <View style={styles.selectedCategories}>
           {selectedCategories.map((cat, index) => (
             <Text key={index} style={styles.selectedCategory}>
@@ -168,12 +166,13 @@ export default function AddItem({ navigation, route }) {
               padding: 10,
               borderWidth: 1,
               borderColor: 'gray',
-              marginTop: 10,
+              marginTop: 5,
             }}
           >
             Pick Categories
           </Text>
         </TouchableWithoutFeedback>
+        <Text style={{marginTop: 15}}>Title:</Text>
         <View style={styles.itemView}>
           {images.length > 0
             ? images.map((img, index) => (
@@ -192,7 +191,7 @@ export default function AddItem({ navigation, route }) {
           </TouchableOpacity>
         </View>
         <TouchableHighlight style={styles.addItemButton} onPress={handleSubmit}>
-          <Text style={{ fontSize: 18, color: 'white' }}>ADD ITEM</Text>
+          <Text style={{ fontSize: 18, color: 'white', backgroundColor: '#06D6A0', padding: 15 }}>ADD ITEM</Text>
         </TouchableHighlight>
       </ScrollView>
       {showModal ? (
@@ -236,6 +235,7 @@ export default function AddItem({ navigation, route }) {
       ) : null}
     </>
   );
+}
 
 function CategoryModalField({ category, handleCategories }) {
   const [active, setActive] = useState(false);
@@ -261,5 +261,75 @@ function CategoryModalField({ category, handleCategories }) {
     </TouchableWithoutFeedback>
   );
 }
-}
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 15,
+  },
+  itemView: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  itemImage: {
+    flexShrink: 0,
+    width: 100,
+    height: 100,
+    width: 80,
+    height: 80,
+    margin: 10,
+  },
+  textBoxes: {
+    borderWidth: 1,
+    borderColor: '#EF476F',
+    width: '90%',
+    padding: 10,
+  },
+  addItemButton: {
+    justifyContent: 'center',
+    padding: 15,
+    margin: 10,
+  },
+  categoryModal: {
+    position: "absolute",
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#000000bb',
+    padding: 15,
+    zIndex: 10,
+  },
+  categoryModalContent: {
+    backgroundColor: 'white',
+    borderColor: 'gray',
+    borderWidth: 1
+  },
+  categoryField: {
+    padding: 10,
+    borderColor: 'lightgray',
+    borderBottomWidth: 1,
+    flexDirection: 'row',
+  },
+  selected: {
+    width: 20,
+    height: 20,
+    marginLeft: 'auto',
+    borderRadius: 10,
+    borderColor: 'lightgray',
+    borderWidth: 1
+
+  },
+  selectedCategories: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    padding: 10,
+    justifyContent: "center",
+  },
+  selectedCategory: {
+    padding: 10,
+    borderWidth: 1,
+    borderColor: 'lightgray',
+    borderRadius: 20,
+    margin: 5,
+    fontSize: 12,
+  }
+});
