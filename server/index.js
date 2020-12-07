@@ -1,13 +1,15 @@
 'use strict';
 
 const cors = require('cors');
-const app = require('express')();
+const express = require('express');
+const { join } = require('path');
 const { ApolloServer } = require('apollo-server-express');
 const server = require('./graphql');
 const db = require('./models/index');
 
-
+const app = express();
 app.use(cors());
+app.use(express.static(join(__dirname, './uploads')));
 
 const PORT = process.env.PORT || 8000;
 

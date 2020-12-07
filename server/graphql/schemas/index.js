@@ -4,6 +4,7 @@ const usersSchema = require('./users.schema');
 const itemsSchema = require('./items.schema');
 const categoriesSchema = require('./categories.schema');
 const addressesSchema = require('./addresses.schema');
+const imageSchema = require('./image.schema');
 
 
 module.exports = gql`
@@ -18,4 +19,5 @@ module.exports = gql`
    ${itemsSchema}
    ${categoriesSchema}
    ${addressesSchema}
+   ${imageSchema}
  `;
