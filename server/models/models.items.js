@@ -12,7 +12,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: true,
+        notEmpty: {
+          args: true,
+          msg: 'You must set the item\'s title.',
+        }
       }
     },
     minPrice: {

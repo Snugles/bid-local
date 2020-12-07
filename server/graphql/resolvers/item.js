@@ -36,6 +36,7 @@ exports.create_item = async (_, { userId, item }, { models }) => {  //from the c
     return createdItem;
   } catch (error) {
     console.error('Error', error);
+    return error;
   }
 
 };

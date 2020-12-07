@@ -106,6 +106,7 @@ exports.update_user = async (_, { userId, user }, { models }) => {
 };
 
 exports.me = async (_, __, { models, me }) => { //placeholder for login
+  if (!me) return null;
   try {
     return await models.users.findByPk(me.id);
   } catch (error) {
