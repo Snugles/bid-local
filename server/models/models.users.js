@@ -1,5 +1,6 @@
 'use strict';
 const { v4: uuidv4 } = require('uuid');
+const bcrypt = require('bcrypt');
 
 module.exports = (sequelize, DataTypes) => {
 
@@ -51,7 +52,15 @@ module.exports = (sequelize, DataTypes) => {
     return user;
   };
 
-  Users.beforeCreate(user => user.id = uuidv4());
+  Users.beforeCreate(async user => {
+    user.id = uuidv4();
+    user.password = await user.generatePasswordHash();
+  });
+
+  Users.prototype.generatePasswordHash = async function () {
+    const saltRounds = 10;
+    return await bcrypt.hash(this.password, saltRounds);
+  };
 
   return Users;
 };
