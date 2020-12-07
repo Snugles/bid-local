@@ -16,11 +16,12 @@ import { Icon } from "native-base";
 import Navbar from '../components/Navbar';
 import Timer from '../components/Timer';
 import { GET_USER_ITEMS, UPDATE_ITEM } from '../queries/usersListedItems'
-import { useQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 
 export default function UsersItems({navigation,route}) {
   const { email } = route.params;
-  const {loading, error, data} = useQuery(GET_USER_ITEMS, {
+  const [getItems,{loading, error, data}] = useLazyQuery(GET_USER_ITEMS, {
+    fetchPolicy: 'cache-and-network',
     variables: { email: email }
   });
 
@@ -29,6 +30,10 @@ export default function UsersItems({navigation,route}) {
     console.log('error: ', error);
     console.log('data: ', data);
   }, [loading, error, data]);
+
+  useEffect(()=>{
+    getItems();
+  }, []);
   
   if (loading) return (<Text>Loading...</Text>);
   if (error) return (<Text>Error: {error}</Text>);
@@ -37,6 +42,11 @@ export default function UsersItems({navigation,route}) {
     <SafeAreaView>
     <Navbar navigation={navigation} canGoBack={true}/>
     <ScrollView style={styles.container}>
+    <Button title="Refresh"
+        onPress={() => {
+          getItems();
+        }}
+        color="#0C637F88"/>
     <TouchableOpacity
           onPress={() => {
             navigation.navigate('AddItem');
@@ -50,7 +60,7 @@ export default function UsersItems({navigation,route}) {
             style={{ color: 'white', fontSize: 70 }}
           />
       </TouchableOpacity>
-      {data.get_user_by_email.item.map((item)=>(
+      {data ? data.get_user_by_email.item.map((item)=>(
         <Panel
           key={item.id}
           id={item.id}
@@ -58,7 +68,7 @@ export default function UsersItems({navigation,route}) {
           description={item.description} 
           deadline={new Date('December 5, 2020 12:00:00')}
           price={item.minPrice}/>
-          ))}
+          )): null}
     </ScrollView>
     </SafeAreaView>
   );

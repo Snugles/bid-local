@@ -8,8 +8,10 @@ import {
   Dimensions,
   Image,
   SafeAreaView,
+  Button
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { useFocusEffect } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Navbar from '../components/Navbar';
 import Timer from '../components/Timer';
@@ -21,7 +23,9 @@ const windowWidth = Dimensions.get('window').width;
 export default function Home({ navigation, route }) {
   const [currentCategory, setCurrentCategory] = useState('ALL');
   const categories = useQuery(GET_CATEGORIES);
-  const [getItems, items] = useLazyQuery(GET_ITEMS);
+  const [getItems, items] = useLazyQuery(GET_ITEMS, {
+    fetchPolicy: 'cache-and-network',
+  });
   const [isLoading, setIsLoading] = useState(true);
 
   const { email } = route.params;
@@ -42,8 +46,6 @@ export default function Home({ navigation, route }) {
   useEffect(() => {
     console.log(currentCategory);
   }, [currentCategory]);
-
-  const categ = ['ALL', 'ELECTRONICS', 'HOUSES', 'VEHICLES'];
 
   if (categories.loading) return <Text>Loading...</Text>;
   if (categories.error) {
@@ -93,6 +95,11 @@ export default function Home({ navigation, route }) {
       <>
         <Navbar navigation={navigation} canGoBack={false} />
         <ScrollView style={styles.container}>
+        <Button title="Refresh"
+        onPress={() => {
+          getItems();
+        }}
+        color="#0C637F88"/>
           <View style={styles.homeContent}>
             <Text style={styles.categoryTitle}>Category:</Text>
             <DropDownPicker
