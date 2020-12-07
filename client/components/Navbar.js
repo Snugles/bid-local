@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, {useState} from 'react';
-import { Header, Button, Icon, Left, Right, Body } from "native-base";
+import { Header, Button, Left, Right, Body } from "native-base";
 import { StyleSheet, ImageBackground, StatusBar } from 'react-native';
 import SideBar from './SideBar';
 
