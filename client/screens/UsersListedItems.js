@@ -19,7 +19,7 @@ import { GET_USER_ITEMS, UPDATE_ITEM } from '../queries/usersListedItems'
 import { useQuery, useMutation } from '@apollo/client';
 
 export default function UsersItems({navigation,route}) {
-  const { email } = route.params;
+  const email = route.params.email.current;
   const {loading, error, data} = useQuery(GET_USER_ITEMS, {
     variables: { email: email }
   });

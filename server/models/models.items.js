@@ -12,7 +12,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: true,
+        notEmpty: {
+          args: true,
+          msg: 'You must set the item\'s title.',
+        }
       }
     },
     minPrice: {
@@ -52,8 +55,7 @@ module.exports = (sequelize, DataTypes) => {
   Items.beforeCreate(item => item.id = uuidv4());
   Items.associate = (models) => {
     Items.belongsTo(models.users, {
-      foreignKey: 'userId',
-      onDelete: 'CASCADE'
+      foreignKey: 'userId'
     });
     Items.belongsTo(models.categories);
   };
