@@ -1,5 +1,5 @@
 exports.get_item_by_Id = async (_, { id }, { models }) => {
-  const item = await models.items.findOne({ where: { id: id } });
+  const item = await models.items.findByPk(id);
   return item;
 };
 
@@ -18,7 +18,7 @@ exports.get_category_by_Item = async (item, _, { models }) => {
   return user;
 };
 
-exports.create_item = async (_, { userId, item }, { models }) => {
+exports.create_item = async (_, { userId, item }, { models }) => {  //from the context, for login (_, { text }, { models, me })
   const { name, minPrice, description, picUrl1, picUrl2, picUrl3, categoryId } = item;
   try {
     const item = {
@@ -28,14 +28,15 @@ exports.create_item = async (_, { userId, item }, { models }) => {
       picUrl1,
       picUrl2,
       picUrl3,
-      userId, //make dynamic
-      categoryId, //make dynamic
+      userId, //me.id
+      categoryId,
     };
     const createdItem = await models.items.create(item);
 
     return createdItem;
   } catch (error) {
     console.error('Error', error);
+    return error;
   }
 
 };

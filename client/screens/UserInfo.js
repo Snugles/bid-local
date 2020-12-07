@@ -11,7 +11,8 @@ import { GET_EMAIL, UPDATE_USER } from '../queries/userInfo';
 import { useQuery, useMutation } from '@apollo/client';
 
 export default function UserInfo({ navigation, route }) {
-  const { email } = route.params;
+  const email = route.params.email.current ;
+  console.log('userInfo email: ', email);
 
   // const [username, setUsername] = useState('snuglywugly');
 

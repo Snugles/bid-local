@@ -13,8 +13,15 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Users.associate = (models) => {
-    Users.hasMany(models.items);
-    Users.hasOne(models.addresses);
+    Users.hasMany(models.items, { onDelete: 'CASCADE' });
+    Users.hasOne(models.addresses, { onDelete: 'CASCADE' });
+  };
+
+  Users.findByLogin = async login => { //needed for login
+    let user = await Users.findOne({
+      where: { email: login },
+    });
+    return user;
   };
 
   Users.beforeCreate(user => user.id = uuidv4());

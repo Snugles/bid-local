@@ -123,7 +123,6 @@ export default function AddItem({ navigation, route }) {
     });
     }
   }
-}
 
   return (
     <>
@@ -262,5 +261,5 @@ function CategoryModalField({ category, handleCategories }) {
     </TouchableWithoutFeedback>
   );
 }
-
+}
 

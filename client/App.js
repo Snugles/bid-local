@@ -2,7 +2,7 @@ import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/c
 import { APOLLO_SERVER_URI } from '@env';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Navigator from './routes/HomeStack';
 
@@ -14,7 +14,7 @@ const getFonts = () => {
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const [email, setEmail] = useState('test@email2.com');
+  const email = useRef('');
 
   useEffect(() => {
     console.log(email);
@@ -30,7 +30,7 @@ export default function App() {
   return (
     <ApolloProvider client={client}>
       {fontsLoaded ? (
-        <Navigator setEmail={setEmail} email={email} />
+        <Navigator email={email} />
       ) : (
         <AppLoading
           startAsync={getFonts}
