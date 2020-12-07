@@ -1,5 +1,3 @@
-const cloudinary = require('cloudinary').v2;
-
 exports.get_item_by_Id = async (_, { id }, { models }) => {
   const item = await models.items.findOne({ where: { id: id } });
   return item;
@@ -21,7 +19,7 @@ exports.get_category_by_Item = async (item, _, { models }) => {
 };
 
 exports.create_item = async (_, { userId, item }, { models }) => {
-  const { name, minPrice, description, picUrl1,picUrl2,picUrl3, categoryId } = item;
+  const { name, minPrice, description, picUrl1, picUrl2, picUrl3, categoryId } = item;
   try {
     const item = {
       name,
@@ -33,11 +31,9 @@ exports.create_item = async (_, { userId, item }, { models }) => {
       userId, //make dynamic
       categoryId, //make dynamic
     };
-    const uploadResponse = await cloudinary.uploader.upload(fileStr, {});
-    console.log(uploadResponse);
-    //const createdItem = await models.items.create(item);
+    const createdItem = await models.items.create(item);
 
-    //return createdItem;
+    return createdItem;
   } catch (error) {
     console.error('Error', error);
   }

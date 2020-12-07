@@ -97,14 +97,32 @@ export default function AddItem({ navigation, route }) {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       quality: 1,
+      base64: true
     });
 
     console.log(result);
-
+    const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/madhushree25/image/upload";
     if (!result.cancelled) {
       setImages(imgs => [...imgs, result.uri]);
-    }
+      let base64Img = `data:image/jpg;base64,${result.base64}`;
+
+      let data = {
+      "file": base64Img,
+      "upload_preset": "ofoblmjj",
+      }
+
+      fetch(CLOUDINARY_URL, {
+      body: JSON.stringify(data),
+      headers: {
+        'content-type': 'application/json'
+      },
+      method: 'POST',
+    }).then(async r => {
+      let data = await r.json()
+      console.log(data.secure_url);
+    });
   }
+}
 
   return (
     <>
