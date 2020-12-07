@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, Animated } from 'react-native';
-import { Container, Content, Text, List, ListItem, Icon } from "native-base";
+import { Content, Text, List, ListItem, Icon } from "native-base";
 
 export default function SideBar({ navigation, hideSide, setHideSide }) {
 

@@ -34,10 +34,7 @@ export default function Login({ navigation, route }) {
       </View>
       <View style={styles.container}>
         <Item floatingLabel style={styles.labelContainer}>
-          <Label style={styles.label}>
-            {' '}
-            Email
-          </Label>
+          <Label style={styles.label}>Email</Label>
           <Input
             onChangeText={(text) => setInitialEmail(text)}
             value={initialEmail}
