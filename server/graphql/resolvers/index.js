@@ -48,6 +48,7 @@ const resolvers = {
     update_category: category.update_category,
     create_address: address.create_address,
     update_address: address.update_address,
+    place_a_bid: item.place_a_bid
   }
 };
 

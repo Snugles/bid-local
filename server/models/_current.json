@@ -116,6 +116,18 @@
                     "field": "picUrl3",
                     "seqType": "Sequelize.TEXT"
                 },
+                "auctionEnd": {
+                    "field": "auctionEnd",
+                    "seqType": "Sequelize.DATE"
+                },
+                "firstBidder": {
+                    "field": "firstBidder",
+                    "seqType": "Sequelize.UUID"
+                },
+                "secondBidder": {
+                    "field": "secondBidder",
+                    "seqType": "Sequelize.UUID"
+                },
                 "userId": {
                     "allowNull": false,
                     "field": "userId",
@@ -123,7 +135,7 @@
                         "model": "users",
                         "key": "id"
                     },
-                    "onDelete": "CASCADE",
+                    "onDelete": "NO ACTION",
                     "onUpdate": "CASCADE",
                     "seqType": "Sequelize.UUID"
                 },
@@ -196,8 +208,8 @@
             "indexes": []
         }
     },
-    "path": "/home/serendatapy/Documents/codeworks/final-project/bid-local/server/models/_current.json",
-    "backupPath": "/home/serendatapy/Documents/codeworks/final-project/bid-local/server/models/_current_bak.json",
+    "path": "/Users/madhushree/Sites/projects/CODEWORKS/thesis-project/bid-local/server/models/_current.json",
+    "backupPath": "/Users/madhushree/Sites/projects/CODEWORKS/thesis-project/bid-local/server/models/_current_bak.json",
     "exists": false,
     "revision": 1
 }

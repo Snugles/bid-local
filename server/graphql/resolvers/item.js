@@ -19,7 +19,7 @@ exports.get_category_by_Item = async (item, _, { models }) => {
 };
 
 exports.create_item = async (_, { userId, item }, { models }) => {  //from the context, for login (_, { text }, { models, me })
-  const { name, minPrice, description, picUrl1, picUrl2, picUrl3, categoryId } = item;
+  const { name, minPrice, description, picUrl1, picUrl2, picUrl3, auctionEnd, categoryId } = item;
   try {
     const item = {
       name,
@@ -28,6 +28,7 @@ exports.create_item = async (_, { userId, item }, { models }) => {  //from the c
       picUrl1,
       picUrl2,
       picUrl3,
+      auctionEnd: Date.parse(auctionEnd),
       userId, //me.id
       categoryId,
     };
@@ -59,6 +60,15 @@ exports.delete_item_by_id = async (_, { id }, { models }) => {
 exports.update_item = async (_, { itemId, item }, { models }) => {
   let itemDB = await models.items.findOne({ where: { id: itemId } });
   itemDB = Object.assign(itemDB, item);
+  await itemDB.save();
+  return itemDB;
+};
+
+exports.place_a_bid = async (_, { itemId, bid }, {models}) => {
+  const { biddingPrice, userId } = bid;
+  let itemDB = await models.items.findOne({ where: { id: itemId}});
+  itemDB.firstBidder = userId;
+  itemDB.minPrice = biddingPrice;
   await itemDB.save();
   return itemDB;
 };
