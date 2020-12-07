@@ -1,20 +1,21 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
+import * as ImagePicker from 'expo-image-picker';
+import React, { useEffect, useState } from 'react';
 import {
-  StyleSheet,
+  Dimensions, Image, ScrollView,
   Text,
-  View,
-  ScrollView,
-  Image,
+
+
+
   TextInput,
-  Dimensions,
-  TouchableOpacity,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
+
+
+  TouchableHighlight, TouchableOpacity,
+
+  TouchableWithoutFeedback, View
 } from 'react-native';
 import Navbar from '../components/Navbar';
 import { CREATE_ITEM, GET_CATEGORIES } from '../queries/addItem';
-import { useMutation, useQuery } from '@apollo/client';
-import * as ImagePicker from 'expo-image-picker';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -96,12 +97,30 @@ export default function AddItem({ navigation, route }) {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       quality: 1,
+      base64: true
     });
 
     console.log(result);
-
+    const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/madhushree25/image/upload";
     if (!result.cancelled) {
-      setImages((imgs) => [...imgs, result.uri]);
+      setImages(imgs => [...imgs, result.uri]);
+      let base64Img = `data:image/jpg;base64,${result.base64}`;
+
+      let data = {
+      "file": base64Img,
+      "upload_preset": "ofoblmjj",
+      }
+
+      fetch(CLOUDINARY_URL, {
+      body: JSON.stringify(data),
+      headers: {
+        'content-type': 'application/json'
+      },
+      method: 'POST',
+    }).then(async r => {
+      let data = await r.json()
+      console.log(data.secure_url);
+    });
     }
   }
 
@@ -217,7 +236,6 @@ export default function AddItem({ navigation, route }) {
       ) : null}
     </>
   );
-}
 
 function CategoryModalField({ category, handleCategories }) {
   const [active, setActive] = useState(false);
@@ -243,83 +261,5 @@ function CategoryModalField({ category, handleCategories }) {
     </TouchableWithoutFeedback>
   );
 }
+}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 15,
-  },
-  textBoxes: {
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#EF476F',
-    width: '90%',
-    padding: 10,
-    marginBottom: 15,
-  },
-  itemView: {
-    width: '100%',
-    marginBottom: 15,
-    flexShrink: 0,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    padding: 20,
-  },
-  itemImage: {
-    flexShrink: 0,
-    width: 80,
-    height: 80,
-    margin: 10,
-  },
-  addItemButton: {
-    justifyContent: 'center',
-    backgroundColor: '#06D6A0',
-    padding: 15,
-    margin: 10,
-  },
-  categoryModal: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#000000bb',
-    padding: 15,
-    zIndex: 10,
-  },
-  categoryModalContent: {
-    backgroundColor: 'white',
-    borderColor: 'gray',
-    borderWidth: 1,
-  },
-  categoryField: {
-    padding: 10,
-    borderColor: 'lightgray',
-    borderBottomWidth: 1,
-    flexDirection: 'row',
-  },
-  selected: {
-    width: 20,
-    height: 20,
-    marginLeft: 'auto',
-    borderRadius: 10,
-    borderColor: 'lightgray',
-    borderWidth: 1,
-  },
-  selectedCategories: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    padding: 10,
-    justifyContent: 'center',
-  },
-  selectedCategory: {
-    padding: 10,
-    borderWidth: 1,
-    borderColor: 'lightgray',
-    borderRadius: 20,
-    margin: 5,
-    fontSize: 12,
-  },
-  text: {
-    fontFamily: 'Roboto_medium',
-  },
-});
