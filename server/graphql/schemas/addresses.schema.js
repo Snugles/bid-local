@@ -1,6 +1,6 @@
 module.exports = `
 type Address {
-  id: String!
+  id: ID!
   firstLineAddress: String!
   secondLineAddress: String
   city: String!
@@ -18,18 +18,18 @@ input AddressUpdate {
 }
 
 extend type Query {
-  get_address_by_userId(userId: String!): Address
+  get_address_by_userId(userId: ID!): Address
   get_addresses: [Address]
 }
 
 extend type Mutation {
   create_address(
-    userId:String!
+    userId:ID!
     address:AddressUpdate!
     ): Address
 
   update_address(
-    addressId:String!
+    addressId:ID!
     address:AddressUpdate!
     ): Address!
   }

@@ -19,7 +19,7 @@ import { GET_USER_ITEMS, UPDATE_ITEM } from '../queries/usersListedItems'
 import { useLazyQuery, useMutation } from '@apollo/client';
 
 export default function UsersItems({navigation,route}) {
-  const { email } = route.params;
+  const email = route.params.email.current;
   const [getItems,{loading, error, data}] = useLazyQuery(GET_USER_ITEMS, {
     fetchPolicy: 'cache-and-network',
     variables: { email: email }
