@@ -19,7 +19,7 @@ export const GET_EMAIL = gql`
 
 export const UPDATE_USER = gql`
 mutation update_user (
-  $userId: String!
+  $userId: ID!
   $user: UserUpdate!
 ) {
   update_user (

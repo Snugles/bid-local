@@ -1,18 +1,9 @@
 import { gql } from '@apollo/client';
 
-export const BID_SUBSCRIPTION = gql`
-  subscription BidPlaced {
-    bidPlaced {
-      name
-      minimumBid
-    }
-  }
-`;
-
 export const PLACE_A_BID = gql`
 mutation place_a_bid (
-  $itemId: String!
-  $userId: String!
+  $itemId: ID!,
+  $userId: ID!,
 ) {
   place_a_bid (
     userId: $userId
@@ -28,7 +19,7 @@ query  get_item_by_Id ( $id: ID! ){
   get_item_by_Id(id: $id){
     id
     name
-    minPrice
+    auctionEnd
     minimumBid
     description
     picUrl1

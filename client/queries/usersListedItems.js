@@ -10,8 +10,9 @@ query get_user_by_email (
     item {
       id
       name
-      minPrice
+      minimumBid
       description
+      auctionEnd
     }
   }
 }
@@ -19,7 +20,7 @@ query get_user_by_email (
 
 export const UPDATE_ITEM = gql`
 mutation update_item (
-  $itemId: String!
+  $itemId: ID!
   $item: ItemUpdate!
 ) {
   update_item (
@@ -28,8 +29,6 @@ mutation update_item (
   ) {
     id
     name
-    minPrice
-    description
   }
 }
 `;

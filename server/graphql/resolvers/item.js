@@ -68,22 +68,25 @@ exports.update_item = async (_, { itemId, item }, { models }) => {
 };
 
 exports.place_a_bid = async (_, { itemId, userId }, {models}) => {
-  let itemDB = await models.items.findOne({ where: { id: itemId}});
-  // console.log('test');
-  // if (biddingPrice > itemDB.minimumBid) {
-  //   itemDB.minimumBid++;
-  //   itemDB.bidder = userId;
-  // }
-  console.log(itemDB);
-  itemDB.minimumBid++;
-  itemDB.bidder = userId;
-
-  pubsub.publish('bidPlaced', {
-    bidPlaced: itemDB
-  });
-
-  await itemDB.save();
-  return itemDB;
+  console.log('test');
+  try {
+    let itemDB = await models.items.findOne({ where: { id: itemId}});
+    // if (biddingPrice > itemDB.minimumBid) {
+    //   itemDB.minimumBid++;
+    //   itemDB.bidder = userId;
+    // }
+    itemDB.minimumBid++;
+    itemDB.bidder = userId;
+  
+    pubsub.publish('bidPlaced', {
+      bidPlaced: itemDB
+    });
+  
+    await itemDB.save();
+    return itemDB;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 

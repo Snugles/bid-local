@@ -16,10 +16,12 @@ import Navbar from '../components/Navbar';
 import Timer from '../components/Timer';
 import { GET_CATEGORIES, GET_ITEMS } from '../queries/home';
 import { useQuery, useLazyQuery } from '@apollo/client';
+import bidSubscription from '../queries/subscription';
 
 const windowWidth = Dimensions.get('window').width;
 
 export default function Home({ navigation, route }) {
+  bidSubscription();
   const [currentCategory, setCurrentCategory] = useState('ALL');
   const categories = useQuery(GET_CATEGORIES);
   const [getItems, items] = useLazyQuery(GET_ITEMS, {
@@ -65,10 +67,10 @@ export default function Home({ navigation, route }) {
                 source={{ uri:component.picUrl1 }}>
                 <Timer
                   style={styles.itemTime}
-                  deadline={new Date('December 25, 2020 12:00:00')}/>
+                  deadline={component.auctionEnd}/>
               </ImageBackground>
             <Text style={styles.itemTitle}>{component.name}</Text>
-            <Text style={styles.itemPrice}>{component.minPrice}€</Text>
+            <Text style={styles.itemPrice}>{component.minimumBid}€</Text>
           </View>
         </TouchableWithoutFeedback>
         )

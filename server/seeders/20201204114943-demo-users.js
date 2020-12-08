@@ -53,14 +53,17 @@ const items = [...Array(numItems+1)].map((item, index) => (
   {
     id: faker.random.uuid(),
     name: faker.commerce.productName(),
-    minPrice: parseInt(faker.commerce.price(), 10),
+    minPrice:10,
+    minimumBid: parseInt(faker.commerce.price(), 10),
     description: faker.commerce.productDescription(),
     picUrl1: faker.image.image(),
     picUrl2: faker.image.image(),
     picUrl3: faker.image.image(),
     userId: users[randNumb(numItems+1)].id,
     categoryId: categories[randNumb(10)].id,
+    auctionEnd: new Date((new Date()).setDate(new Date().getDate() + Math.random()*7)+0.5), //randomises a date in the next week
     createdAt: new Date(),
+    bidder:users[randNumb(numItems+1)].id,
     updatedAt: new Date()
   }
 ));

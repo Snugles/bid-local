@@ -1,4 +1,4 @@
-import { useQuery, useSubscription, useMutation } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import {
   Dimensions, ImageBackground, ScrollView, StyleSheet,
@@ -7,15 +7,15 @@ import {
 import Carousel from 'react-native-snap-carousel';
 import Navbar from '../components/Navbar';
 import Timer from '../components/Timer';
-import { GET_ITEM_BY_ID, BID_SUBSCRIPTION, PLACE_A_BID } from '../queries/item';
+import { GET_ITEM_BY_ID, PLACE_A_BID } from '../queries/item';
+import bidSubscription from '../queries/subscription';
 
 export default function Item({ navigation, route }) {
-  const bid = useSubscription(BID_SUBSCRIPTION);
+  bidSubscription();
   const windowWidth = Dimensions.get('window').width;
   const [offerBid, setOfferBid] = useState('');
   const [images, setImages] = useState([]);
   const [typeError, setTypeError] =useState('');
-  const [price, setPrice] = useState('');
 
   const [changeItem, changedItem] = useMutation(PLACE_A_BID);
   const { loading, error, data } = useQuery(GET_ITEM_BY_ID, {
@@ -25,10 +25,9 @@ export default function Item({ navigation, route }) {
   });
 
   const { email } = route.params;
-
+  console.log('mounted')
   useEffect(() => {
     if (data) {
-      setPrice(data.get_item_by_Id.minimumBid);
       if (data.get_item_by_Id.picUrl3 !== '') setImages([{uri:data.get_item_by_Id.picUrl1}, {uri:data.get_item_by_Id.picUrl2}, {uri:data.get_item_by_Id.picUrl3}]);
       else if (data.get_item_by_Id.picUrl2 !== '') setImages([{uri:data.get_item_by_Id.picUrl1}, {uri:data.get_item_by_Id.picUrl2}]);
       else setImages([{uri:data.get_item_by_Id.picUrl1}]);
@@ -36,25 +35,13 @@ export default function Item({ navigation, route }) {
   }, [data]);
 
   useEffect(() => {
-    console.log('bid.data');
-    console.log(bid.data);
-    console.log('bid.loading');
-    console.log(bid.loading);
-    console.log('bid.error');
-    console.log(bid.error);
-    if (bid.data) {
-      setPrice(bid.data.bidPlaced.minimumBid);
-    }
-  }, [bid]);
-
-  // useEffect(() => {
-  //   console.log('changedItem.data');
-  //   console.log(changedItem.data);
-  //   console.log('changedItem.loading');
-  //   console.log(changedItem.loading);
-  //   console.log('bchangedItemd.error');
-  //   console.log(changedItem.error);
-  // }, [changedItem]);
+    console.log('changedItem.data');
+    console.log(changedItem.data);
+    console.log('changedItem.loading');
+    console.log(changedItem.loading);
+    console.log('changedItem.error:');
+    console.log(changedItem.error);
+  }, [changedItem]);
 
 
   const imageList = ({ item, index }) => {
@@ -119,10 +106,10 @@ export default function Item({ navigation, route }) {
         />
         <View style={styles.itemInfo}>
           <Text style={styles.itemTitle}>{data.get_item_by_Id.name}</Text>
-          <Text style={styles.itemPrice}>{price}€</Text>
+          <Text style={styles.itemPrice}>{data.get_item_by_Id.minimumBid}€</Text>
           <View style={styles.time}>
             <Text style={{ color: 'white', fontSize: 16 }}>Time Left:</Text>
-            <Timer style={{ color: 'white', fontSize: 25 }} deadline={new Date('December 25, 2020 12:00:00')}/>
+            <Timer style={{ color: 'white', fontSize: 25 }} deadline={data.get_item_by_Id.auctionEnd}/>
           </View>
           <View style={styles.bidView}>
             <View style={styles.bidBorder}>
