@@ -13,7 +13,7 @@ const resolvers = {
     me: user.me, //necessary?
     get_user_by_email: user.get_user_by_email, //to deprecate for sign in
     get_users: user.get_users, //to deprecate/block/admin only
-    get_user_by_Id: user.get_user_by_Id, //to deprecate/block/admin only
+    get_user_info: combineResolvers(isAuthenticated,user.get_user_info),
     get_item_by_Id: item.get_item_by_Id, //necessary?
     get_items: item.get_items,
     get_category_by_Id: category.get_category_by_Id,  //necessary?

@@ -16,9 +16,9 @@ exports.get_user_by_email = async (_, { email }, { models }) => {
   }
 };
 
-exports.get_user_by_Id = async (_, { id }, { models }) => {
+exports.get_user_info = async (_,__, { models, me }) => {
   try {
-    const user = await models.users.findByPk(id);
+    const user = await models.users.findByPk(me.id);
     return user;
   } catch (error) {
     console.error('Error', error);
