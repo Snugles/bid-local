@@ -38,6 +38,22 @@ module.exports = (sequelize, DataTypes) => {
     picUrl3: {
       type: DataTypes.TEXT,
     },
+    auctionEnd: {
+      type: DataTypes.DATE,
+    },
+    minimumBid: {
+      type: DataTypes.INTEGER,
+      default: 0,
+      validate: {
+        isDecimal: true
+      }
+    },
+    bidder: {
+      type: DataTypes.UUID,
+      validate: {
+        isUUID: 4,
+      }
+    },
     userId: {
       type: DataTypes.UUID,
       allowNull: false,

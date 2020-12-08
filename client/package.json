@@ -13,8 +13,15 @@
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/native": "^5.8.10",
     "@react-navigation/stack": "^5.12.8",
+<<<<<<< HEAD
+=======
+    "apollo-boost": "^0.4.9",
+    "apollo-link-http": "^1.5.17",
+    "apollo-link-ws": "^1.0.20",
+>>>>>>> 6a7d96ba7f21d56e04003c24c0848238ca296f65
     "expo": "~39.0.2",
     "expo-font": "^8.3.0",
+    "expo-image-picker": "~9.1.1",
     "expo-status-bar": "~1.0.2",
     "graphql": "^15.4.0",
     "native-base": "^2.13.14",
@@ -31,7 +38,7 @@
     "react-native-screens": "~2.10.1",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-web": "~0.13.12",
-    "expo-image-picker": "~9.1.1"
+    "subscriptions-transport-ws": "^0.9.18"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0"

@@ -1,0 +1,216 @@
+{
+    "tables": {
+        "addresses": {
+            "tableName": "addresses",
+            "schema": {
+                "id": {
+                    "primaryKey": true,
+                    "field": "id",
+                    "seqType": "Sequelize.UUID"
+                },
+                "firstLineAddress": {
+                    "notEmpty": true,
+                    "field": "firstLineAddress",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "secondLineAddress": {
+                    "field": "secondLineAddress",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "city": {
+                    "notEmpty": true,
+                    "field": "city",
+                    "seqType": "Sequelize.STRING"
+                },
+                "postcode": {
+                    "notEmpty": true,
+                    "field": "postcode",
+                    "seqType": "Sequelize.STRING"
+                },
+                "country": {
+                    "notEmpty": true,
+                    "field": "country",
+                    "seqType": "Sequelize.STRING"
+                },
+                "userId": {
+                    "allowNull": false,
+                    "field": "userId",
+                    "references": {
+                        "model": "users",
+                        "key": "id"
+                    },
+                    "onDelete": "NO ACTION",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "categories": {
+            "tableName": "categories",
+            "schema": {
+                "id": {
+                    "primaryKey": true,
+                    "field": "id",
+                    "seqType": "Sequelize.UUID"
+                },
+                "name": {
+                    "unique": true,
+                    "field": "name",
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "items": {
+            "tableName": "items",
+            "schema": {
+                "id": {
+                    "primaryKey": true,
+                    "field": "id",
+                    "seqType": "Sequelize.UUID"
+                },
+                "name": {
+                    "allowNull": false,
+                    "field": "name",
+                    "seqType": "Sequelize.STRING"
+                },
+                "minPrice": {
+                    "default": 0,
+                    "field": "minPrice",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "description": {
+                    "field": "description",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "picUrl1": {
+                    "field": "picUrl1",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "picUrl2": {
+                    "field": "picUrl2",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "picUrl3": {
+                    "field": "picUrl3",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "auctionEnd": {
+                    "field": "auctionEnd",
+                    "seqType": "Sequelize.DATE"
+                },
+                "minimumBid": {
+                    "default": 0,
+                    "field": "minimumBid",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "bidder": {
+                    "field": "bidder",
+                    "seqType": "Sequelize.UUID"
+                },
+                "userId": {
+                    "allowNull": false,
+                    "field": "userId",
+                    "references": {
+                        "model": "users",
+                        "key": "id"
+                    },
+                    "onDelete": "NO ACTION",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                },
+                "categoryId": {
+                    "field": "categoryId",
+                    "allowNull": true,
+                    "references": {
+                        "model": "categories",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "users": {
+            "tableName": "users",
+            "schema": {
+                "id": {
+                    "primaryKey": true,
+                    "field": "id",
+                    "seqType": "Sequelize.UUID"
+                },
+                "email": {
+                    "allowNull": false,
+                    "unique": true,
+                    "field": "email",
+                    "seqType": "Sequelize.STRING"
+                },
+                "password": {
+                    "allowNull": false,
+                    "field": "password",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "firstName": {
+                    "field": "firstName",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "lastName": {
+                    "field": "lastName",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "phoneNumber": {
+                    "field": "phoneNumber",
+                    "seqType": "Sequelize.STRING(25)"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        }
+    },
+    "path": "/Users/madhushree/Sites/projects/CODEWORKS/thesis-project/bid-local/server/models/_current.json",
+    "backupPath": "/Users/madhushree/Sites/projects/CODEWORKS/thesis-project/bid-local/server/models/_current_bak.json",
+    "exists": false,
+    "revision": 1
+}
