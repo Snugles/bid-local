@@ -7,7 +7,7 @@ import {
 import { APOLLO_SERVER_URI } from '@env';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Navigator from './routes/HomeStack';
 
@@ -21,10 +21,6 @@ export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const email = useRef('');
   const id = useRef('');
-
-  useEffect(() => {
-    console.log(email);
-  }, [email]);
 
   const uri = APOLLO_SERVER_URI;
   const link = new HttpLink({ uri: uri });

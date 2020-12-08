@@ -11,7 +11,6 @@ import {
   Button
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { useFocusEffect } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Navbar from '../components/Navbar';
 import Timer from '../components/Timer';
@@ -34,7 +33,6 @@ export default function Home({ navigation, route }) {
     setTimeout(() => {
       setIsLoading(false);
     }, 2000);
-    // setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -49,7 +47,6 @@ export default function Home({ navigation, route }) {
 
   if (categories.loading) return <Text>Loading...</Text>;
   if (categories.error) {
-    console.log('error', categories.error);
     return <Text>Error: </Text>;
   }
   function categoryTest (){

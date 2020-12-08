@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Text
-} from 'react-native';
+import { Text } from 'react-native';
 
 export default function Timer({deadline, style}) {
   const [timeDiff, setTimeDiff] = useState(deadline-new Date(Date.now()));
