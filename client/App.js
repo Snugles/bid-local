@@ -14,6 +14,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import Navigator from './routes/HomeStack';
 import { setContext } from '@apollo/client/link/context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const getFonts = () => {
   return Font.loadAsync({
@@ -24,24 +25,57 @@ const getFonts = () => {
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const email = useRef('');
-  const id = useRef('');
   const token = useRef('');
+  const [initial, setInitial] = useState('');
   const uri = APOLLO_SERVER_URI;
   const webUri = APOLLO_WEB_SERVER_URI;
 
+  const storeToken = async (value) => {
+    try {
+      await AsyncStorage.setItem('@token', value)
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const getToken = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@token')
+      console.log('value: ', value);
+      if(value !== null) {
+        token.current = value;
+        return true;
+      }
+      return false;
+    } catch(e) {
+      console.log(e);
+    }
+  }
 
   const authLink = setContext((_, { headers }) => {
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImEwYzgwMTIzLWY5ZjEtNDJmZS1iZDhlLTQxZTM4NDk4NGU2YyIsImVtYWlsIjoidGVzdEB1c2VyLmNvbSIsImlhdCI6MTYwNzQ0MDYzNywiZXhwIjoxNjA3NDc2NjM3fQ.7fA6v0gVMSA0_VXJjcHwrfdk2-C6I6SyF1GMN6d9D1k";
+    const tkn = token.current;
     return {
       headers: {
         ...headers,
-        'x-token': token ? `${token}` : "",
+        'x-token': tkn,
       }
     }
   });
 
   useEffect(() => {
-    console.log(token);
+    getToken();
+  }, []);
+
+  useEffect(() => {
+    if (initial === '') {
+      console.log('initial token: ',token);
+      if (token && token.current!=='') {
+        setInitial('Home');
+      } else {
+        setInitial('Login');
+      }
+    }
+    storeToken(token.current);
   }, [token]);
 
   const wsLink = new WebSocketLink({
@@ -73,7 +107,11 @@ export default function App() {
   return (
     <ApolloProvider client={client}>
       {fontsLoaded ? (
-        <Navigator email={email} token={token}/>
+        initial !== ''
+        ?
+        <Navigator email={email} token={token} initial={initial}/>
+        :
+        null
       ) : (
         <AppLoading
           startAsync={getFonts}

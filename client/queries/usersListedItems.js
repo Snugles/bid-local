@@ -15,7 +15,7 @@ query get_user_info {
 
 export const UPDATE_ITEM = gql`
 mutation update_item (
-  $itemId: String!
+  $itemId: ID!
   $item: ItemUpdate!
 ) {
   update_item (

@@ -28,7 +28,6 @@ export default function AddItem({ navigation, route }) {
   const [images, setImages] = useState([]);
   const [imageUrls, setImageUrls] = useState([]);
   const [typeError, setTypeError] = useState('');
-  const { token } = route.params;
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
