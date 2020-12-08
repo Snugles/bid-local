@@ -36,6 +36,29 @@ mutation {
   }
 }
 
+{
+  get_user_info {
+    id
+    firstName
+    lastName
+    password
+    email
+    phoneNumber
+    item {
+      id
+      name
+    }
+    address {
+      id
+      firstLineAddress
+      secondLineAddress
+      city
+      postcode
+      country
+    }
+  }
+}
+
 HTTP HEADERS
 {
   "x-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA4Y2NjNGM4LTU3NTUtNGE3ZS04MzY3LTJiNzkyYmFkYjA5MiIsImVtYWlsIjoibW9vbWluZzZAZ21haWwuY29tIiwiaWF0IjoxNjA3NDIxNTc2LCJleHAiOjE2MDc0NTc1NzZ9.V_TGleKT3IMozmiinXte5HrqMuwus_ILQU_uDS_sB5A"
