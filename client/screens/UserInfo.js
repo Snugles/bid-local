@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, ScrollView, Button, TextInput } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  ScrollView,
+  Button,
+  TextInput,
+  SafeAreaView,
+} from 'react-native';
 import Navbar from '../components/Navbar';
 import { GET_EMAIL, UPDATE_USER } from '../queries/userInfo';
 import { useQuery, useMutation } from '@apollo/client';
