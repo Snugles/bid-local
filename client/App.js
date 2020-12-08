@@ -4,9 +4,10 @@ import { APOLLO_SERVER_URI, APOLLO_WEB_SERVER_URI } from '@env';
 import { WebSocketLink } from 'apollo-link-ws';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import Navigator from './routes/HomeStack';
+import { setContext } from '@apollo/client/link/context';
 
 const getFonts = () => {
   return Font.loadAsync({
@@ -18,19 +19,32 @@ export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const email = useRef('');
   const id = useRef('');
+  const token = useRef('');
+  const uri = APOLLO_SERVER_URI;
+  const webUri = APOLLO_WEB_SERVER_URI;
+
+
+  const authLink = setContext((_, { headers }) => {
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NWJlMjc3LWNlMDEtNGQyMy1hZTgzLTRlNGIwNDEyZDM5ZiIsImVtYWlsIjoidGVzdEB1c2VyLmNvbSIsImlhdCI6MTYwNzQzMTM5NywiZXhwIjoxNjA3NDY3Mzk3fQ.P6SzTuZFXogmLvDKWxy8cGMINHKEuBKHrIlcSkrUl0w";
+    return {
+      headers: {
+        ...headers,
+        'x-token': token ? `${token}` : "",
+      }
+    }
+  });
 
   useEffect(() => {
-    console.log(email);
-  }, [email]);
+    console.log(token);
+  }, [token]);
 
   const wsLink = new WebSocketLink({
-    uri: APOLLO_WEB_SERVER_URI,
+    uri: webUri,
     options: {
       reconnect: true
     }
   });
   
-  const uri = APOLLO_SERVER_URI;
   const link = new HttpLink({ uri: uri });
   
   const splitLink = split(
@@ -46,14 +60,14 @@ export default function App() {
   );
 
   const client = new ApolloClient({
-    link: splitLink,
+    link: authLink.concat(splitLink),
     cache: new InMemoryCache(),
   });
 
   return (
     <ApolloProvider client={client}>
       {fontsLoaded ? (
-        <Navigator email={email} id={id}/>
+        <Navigator email={email} token={token}/>
       ) : (
         <AppLoading
           startAsync={getFonts}
