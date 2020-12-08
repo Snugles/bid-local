@@ -1,4 +1,5 @@
-const pubsub = require('../utils/PubSub');
+const pubsub = require('../utils/pubsub');
+console.log('PUBSUB output ', pubsub.publish);
 exports.get_item_by_Id = async (_, { id }, { models }) => {
   const item = await models.items.findByPk(id);
   return item;
@@ -68,6 +69,7 @@ exports.update_item = async (_, { itemId, item }, { models }) => {
 
 exports.place_a_bid = async (_, { itemId, userId, biddingPrice }, {models}) => {
   let itemDB = await models.items.findOne({ where: { id: itemId}});
+  console.log('test');
   if (biddingPrice > itemDB.minimumBid) {
     itemDB.minimumBid++;
     itemDB.bidder = userId;
@@ -80,4 +82,4 @@ exports.place_a_bid = async (_, { itemId, userId, biddingPrice }, {models}) => {
   return itemDB;
 };
 
-exports.bidPlaced = subscribe => pubsub.asyncIterator(['bidPlaced']);
+

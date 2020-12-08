@@ -14,6 +14,9 @@ let newLogin;
 const server = new ApolloServer({
   typeDefs: schemas,
   resolvers,
+  subscriptions: {
+    onConnect: () => console.log('Connected to websocket'),
+  },
   context: async () => ({
     models,
     me: newLogin,//await models.users.findByLogin('user@user.com') //accessing an object for logged in user
