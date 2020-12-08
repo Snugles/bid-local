@@ -8,6 +8,7 @@ import {
   Dimensions,
   TextInput,
   TouchableHighlight,
+  RefreshControl,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import Navbar from '../components/Navbar';
@@ -19,7 +20,7 @@ export default function Item({ navigation, route }) {
   const windowWidth = Dimensions.get('window').width;
   const [offerBid, setOfferBid] = useState('');
   const [images, setImages] = useState([]);
-  const [typeError, setTypeError] =useState('');
+  const [typeError, setTypeError] = useState('');
 
   const { loading, error, data } = useQuery(GET_ITEM_BY_ID, {
     variables: {
@@ -27,16 +28,33 @@ export default function Item({ navigation, route }) {
     },
   });
 
+  const [refresh, setRefresh] = useState(false);
+  const onRefresh = useCallback(() => {
+    setRefresh(true);
+
+    setTimeout(() => {
+      setRefresh(false);
+    }, 2000);
+  }, []);
+
   const { email } = route.params;
 
   useEffect(() => {
     if (data) {
-      if (data.get_item_by_Id.picUrl3 !== '') setImages([{uri:data.get_item_by_Id.picUrl1}, {uri:data.get_item_by_Id.picUrl2}, {uri:data.get_item_by_Id.picUrl3}]);
-      else if (data.get_item_by_Id.picUrl2 !== '') setImages([{uri:data.get_item_by_Id.picUrl1}, {uri:data.get_item_by_Id.picUrl2}]);
-      else setImages([{uri:data.get_item_by_Id.picUrl1}]);
+      if (data.get_item_by_Id.picUrl3 !== '')
+        setImages([
+          { uri: data.get_item_by_Id.picUrl1 },
+          { uri: data.get_item_by_Id.picUrl2 },
+          { uri: data.get_item_by_Id.picUrl3 },
+        ]);
+      else if (data.get_item_by_Id.picUrl2 !== '')
+        setImages([
+          { uri: data.get_item_by_Id.picUrl1 },
+          { uri: data.get_item_by_Id.picUrl2 },
+        ]);
+      else setImages([{ uri: data.get_item_by_Id.picUrl1 }]);
     }
   }, [data]);
-
 
   const imageList = ({ item, index }) => {
     return (
@@ -71,13 +89,24 @@ export default function Item({ navigation, route }) {
     }
   }
 
-  if (loading) return <Text>Loading...</Text>;
+  if (loading)
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <Text style={styles.loading}>Loading...</Text>
+        <Image source={require('../assets/ecommerce.gif')} />
+      </SafeAreaView>
+    );
   if (error) return <Text>Error: {error}</Text>;
 
   return (
     <>
       <Navbar navigation={navigation} canGoBack={true} />
-      <ScrollView style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+        }
+      >
         <Carousel
           containerCustomStyle={{
             backgroundColor: '#06D6A0',
@@ -94,7 +123,10 @@ export default function Item({ navigation, route }) {
           <Text style={styles.itemPrice}>{data.get_item_by_Id.minPrice}€</Text>
           <View style={styles.time}>
             <Text style={{ color: 'white', fontSize: 16 }}>Time Left:</Text>
-            <Timer style={{ color: 'white', fontSize: 25 }} deadline={new Date('December 25, 2020 12:00:00')}/>
+            <Timer
+              style={{ color: 'white', fontSize: 25 }}
+              deadline={new Date('December 25, 2020 12:00:00')}
+            />
           </View>
           <View style={styles.bidView}>
             <View style={styles.bidBorder}>
@@ -116,7 +148,9 @@ export default function Item({ navigation, route }) {
               <Text style={{ fontSize: 16, color: 'white' }}>MAKE OFFER</Text>
             </TouchableHighlight>
           </View>
-            {typeError?<Text style={{ color: 'red', fontSize: 25 }}>{typeError}</Text>:null}
+          {typeError ? (
+            <Text style={{ color: 'red', fontSize: 25 }}>{typeError}</Text>
+          ) : null}
 
           <Text style={{ fontWeight: '700', fontSize: 18 }}>
             Item Description:
@@ -207,5 +241,20 @@ const styles = StyleSheet.create({
   },
   userInfo: {
     marginTop: 20,
+  },
+  loadingContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: '#fff',
+    fontFamily: 'Roboto_medium',
+  },
+  loading: {
+    fontFamily: 'Roboto_medium',
+    fontSize: 50,
+    color: '#67A036',
+    marginTop: '60%',
+    textAlign: 'center',
+    marginBottom: '-40%',
+    zIndex: 1,
   },
 });
