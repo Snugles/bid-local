@@ -1,4 +1,5 @@
-const pubsub = require('../utils/pubsub');
+const pubsub = require('../utils/PubSub');
+
 console.log('PUBSUB output ', pubsub.publish);
 exports.get_item_by_Id = async (_, { id }, { models }) => {
   console.log('Getting ITEM:',id);

@@ -6,7 +6,7 @@ const address = require('./address');
 const image = require('./image');
 const {combineResolvers} = require('graphql-resolvers');
 const {isAuthenticated,isItemOwner,isAddressOwner} = require('./authorization');
-const pubsub = require('../utils/pubsub');
+const pubsub = require('../utils/PubSub');
 
 const resolvers = {
   Query: {
