@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useQuery, useSubscription, useMutation } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import {
   Dimensions, ImageBackground, ScrollView, StyleSheet,
@@ -7,16 +7,17 @@ import {
 import Carousel from 'react-native-snap-carousel';
 import Navbar from '../components/Navbar';
 import Timer from '../components/Timer';
-import useBidPlaced from '../components/useBidPlaced';
-import { GET_ITEM_BY_ID } from '../queries/item';
+import { GET_ITEM_BY_ID, BID_SUBSCRIPTION, PLACE_A_BID } from '../queries/item';
 
 export default function Item({ navigation, route }) {
-  useBidPlaced();
+  const bid = useSubscription(BID_SUBSCRIPTION);
   const windowWidth = Dimensions.get('window').width;
   const [offerBid, setOfferBid] = useState('');
   const [images, setImages] = useState([]);
   const [typeError, setTypeError] =useState('');
+  const [price, setPrice] = useState('');
 
+  const [changeItem, changedItem] = useMutation(PLACE_A_BID);
   const { loading, error, data } = useQuery(GET_ITEM_BY_ID, {
     variables: {
       id: route.params.id,
@@ -27,11 +28,33 @@ export default function Item({ navigation, route }) {
 
   useEffect(() => {
     if (data) {
+      setPrice(data.get_item_by_Id.minimumBid);
       if (data.get_item_by_Id.picUrl3 !== '') setImages([{uri:data.get_item_by_Id.picUrl1}, {uri:data.get_item_by_Id.picUrl2}, {uri:data.get_item_by_Id.picUrl3}]);
       else if (data.get_item_by_Id.picUrl2 !== '') setImages([{uri:data.get_item_by_Id.picUrl1}, {uri:data.get_item_by_Id.picUrl2}]);
       else setImages([{uri:data.get_item_by_Id.picUrl1}]);
     }
   }, [data]);
+
+  useEffect(() => {
+    console.log('bid.data');
+    console.log(bid.data);
+    console.log('bid.loading');
+    console.log(bid.loading);
+    console.log('bid.error');
+    console.log(bid.error);
+    if (bid.data) {
+      setPrice(bid.data.bidPlaced.minimumBid);
+    }
+  }, [bid]);
+
+  // useEffect(() => {
+  //   console.log('changedItem.data');
+  //   console.log(changedItem.data);
+  //   console.log('changedItem.loading');
+  //   console.log(changedItem.loading);
+  //   console.log('bchangedItemd.error');
+  //   console.log(changedItem.error);
+  // }, [changedItem]);
 
 
   const imageList = ({ item, index }) => {
@@ -44,6 +67,15 @@ export default function Item({ navigation, route }) {
       />
     );
   };
+
+  function LatestBid() {
+    const mutationVariables = {
+      itemId: route.params.id,
+      userId: "04489e5a-ebfb-4fa3-9b86-436ba519d8bd",
+    };
+    console.log(mutationVariables)
+    changeItem({variables:mutationVariables});
+  }
 
   function handleCurrency(input) {
     setTypeError('');
@@ -87,7 +119,7 @@ export default function Item({ navigation, route }) {
         />
         <View style={styles.itemInfo}>
           <Text style={styles.itemTitle}>{data.get_item_by_Id.name}</Text>
-          <Text style={styles.itemPrice}>{data.get_item_by_Id.minPrice}€</Text>
+          <Text style={styles.itemPrice}>{price}€</Text>
           <View style={styles.time}>
             <Text style={{ color: 'white', fontSize: 16 }}>Time Left:</Text>
             <Timer style={{ color: 'white', fontSize: 25 }} deadline={new Date('December 25, 2020 12:00:00')}/>
@@ -99,14 +131,14 @@ export default function Item({ navigation, route }) {
                 value={offerBid}
                 onChangeText={(text) => handleCurrency(text)}
                 keyboardType="numeric"
-                placeholder="0,00"
+                placeholder={(data.get_item_by_Id.minimumBid+1).toString()}
               />
               <Text style={styles.bidCurrency}>€</Text>
             </View>
             <TouchableHighlight
               style={styles.bidButton}
               onPress={() => {
-                navigation.goBack();
+                LatestBid();
               }}
             >
               <Text style={{ fontSize: 16, color: 'white' }}>MAKE OFFER</Text>

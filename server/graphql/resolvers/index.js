@@ -4,7 +4,7 @@ const item = require('./item');
 const category = require('./category');
 const address = require('./address');
 const image = require('./image');
-const pubsub = require('../utils/pubsub');
+const pubsub = require('../utils/PubSub');
 
 const resolvers = {
   Query: {

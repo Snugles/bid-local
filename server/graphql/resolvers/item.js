@@ -1,4 +1,4 @@
-const pubsub = require('../utils/pubsub');
+const pubsub = require('../utils/PubSub.js');
 console.log('PUBSUB output ', pubsub.publish);
 exports.get_item_by_Id = async (_, { id }, { models }) => {
   const item = await models.items.findByPk(id);
@@ -74,7 +74,7 @@ exports.place_a_bid = async (_, { itemId, userId }, {models}) => {
   //   itemDB.minimumBid++;
   //   itemDB.bidder = userId;
   // }
-
+  console.log(itemDB);
   itemDB.minimumBid++;
   itemDB.bidder = userId;
 
