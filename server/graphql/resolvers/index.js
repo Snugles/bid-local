@@ -9,17 +9,17 @@ const {isAuthenticated,isItemOwner,isAddressOwner} = require('./authorization');
 
 const resolvers = {
   Query: {
-    me: user.me,
-    get_user_by_email: user.get_user_by_email,
-    get_users: user.get_users,
-    get_user_by_Id: user.get_user_by_Id,
+    me: user.me, //necessary?
+    get_user_by_email: user.get_user_by_email, //to deprecate for sign in
+    get_users: user.get_users, //to deprecate/block/admin only
+    get_user_by_Id: user.get_user_by_Id, //to deprecate/block/admin only
     get_item_by_Id: item.get_item_by_Id, //necessary?
     get_items: item.get_items,
     get_category_by_Id: category.get_category_by_Id,  //necessary?
     get_categories: category.get_categories,
-    get_address_by_userId: address.get_address_by_userId,
-    get_addresses: address.get_addresses,
-    get_info: image.get_info,
+    get_address_by_userId: address.get_address_by_userId, //necessary?
+    get_addresses: address.get_addresses, //to deprecate/block/admin only
+    get_info: image.get_info, //to protect
   },
 
   User: {
@@ -28,7 +28,7 @@ const resolvers = {
   },
 
   Item: {
-    user: item.get_user_by_item,  // return me  <-- the authenticated user
+    user: item.get_user_by_item,  // to check if necessary, security risk?
     category: item.get_category_by_Item
   },
 
@@ -37,24 +37,24 @@ const resolvers = {
   },
 
   Address: {
-    user: address.get_user_by_address
+    user: address.get_user_by_address // to check if necessary, security risk?
   },
 
   Mutation: {
-    create_user: user.create_user,
+    create_user: user.create_user, //to deprecate/block/admin only
     update_user: combineResolvers(isAuthenticated,user.update_user),
-    delete_user: user.delete_user,
+    delete_user: user.delete_user, //to deprecate/block/admin only
     sign_up: user.sign_up,
     sign_in: user.sign_in,
     create_item: combineResolvers(isAuthenticated,item.create_item),
     delete_item_by_id: combineResolvers(isItemOwner,item.delete_item_by_id),
     update_item: combineResolvers(isItemOwner,item.update_item),
-    create_category: category.create_category,
-    delete_category: category.delete_category,
-    update_category: category.update_category,
+    create_category: category.create_category, //to deprecate/block/admin only
+    delete_category: category.delete_category, //to deprecate/block/admin only
+    update_category: category.update_category, //to deprecate/block/admin only
     create_address: combineResolvers(isAuthenticated,address.create_address),
     update_address: combineResolvers(isAddressOwner,address.update_address),
-    image_uploader: image.image_uploader
+    image_uploader: image.image_uploader //to protect
   }
 };
 

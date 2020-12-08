@@ -20,7 +20,7 @@ exports.get_category_by_Item = async (item, _, { models }) => {
   return user;
 };
 
-exports.create_item = async (_, { /*userId,*/ item }, { models, me }) => {  //from the context, for login (_, { text }, { models, me })
+exports.create_item = async (_, { item }, { models, me }) => {
   console.log('CREATING ITEM:',me);
   const { name, minPrice, description, picUrl1, picUrl2, picUrl3, categoryId } = item;
   try {
