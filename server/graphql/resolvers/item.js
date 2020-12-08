@@ -67,13 +67,14 @@ exports.update_item = async (_, { itemId, item }, { models }) => {
   return itemDB;
 };
 
-exports.place_a_bid = async (_, { itemId, userId, biddingPrice }, {models}) => {
+exports.place_a_bid = async (_, { itemId, userId }, {models}) => {
   let itemDB = await models.items.findOne({ where: { id: itemId}});
-  console.log('test');
-  if (biddingPrice > itemDB.minimumBid) {
-    itemDB.minimumBid++;
-    itemDB.bidder = userId;
-  }
+  // console.log('test');
+  // if (biddingPrice > itemDB.minimumBid) {
+  //   itemDB.minimumBid++;
+  //   itemDB.bidder = userId;
+  // }
+
   pubsub.publish('bidPlaced', {
     bidPlaced: itemDB
   });

@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import Navbar from '../components/Navbar';
-import NewBidNotification from '../components/NewBidNotification';
 import Timer from '../components/Timer';
 import useBidPlaced from '../components/useBidPlaced';
 import { GET_ITEM_BY_ID } from '../queries/item';
@@ -134,7 +133,6 @@ export default function Item({ navigation, route }) {
             </Text>
           </View>
         </View>
-        <NewBidNotification />
       </ScrollView>
     </>
   );
