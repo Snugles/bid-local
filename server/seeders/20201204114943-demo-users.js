@@ -1,6 +1,8 @@
 'use strict';
 
 const faker = require('faker');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 function randNumb (max) {
   return Math.floor(Math.random() * max);
@@ -8,11 +10,15 @@ function randNumb (max) {
 
 const numItems = 15;
 
+let pass = bcrypt.hashSync('pass', saltRounds);
+console.log('PASSWORD GENERATED:',pass);
+
+
 const users = [...Array(numItems)].map((user) => (
   {
     id: faker.random.uuid(),
     email: faker.internet.email(),
-    password: '$2y$10$JNjo.yE4cW6mmNXXmR/eleLyHubriY273PhuqRNDLigGQH9DrGZYC',
+    password: pass,
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     phoneNumber: `${faker.phone.phoneNumber()}`,
@@ -25,7 +31,7 @@ const adminUser =
 {
   id: faker.random.uuid(),
   email: 'user@user.com',
-  password: '$2y$10$D/V0dM2R4o8N9c/2cQaZ9e2JHYMCyPlNB2hv4TThqTf2XGZidNug6',
+  password: pass,
   firstName: faker.name.firstName(),
   lastName: faker.name.lastName(),
   phoneNumber: `${faker.phone.phoneNumber()}`,

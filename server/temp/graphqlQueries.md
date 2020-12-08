@@ -35,7 +35,7 @@ mutation {
     }
   }
 }
-
+//GET USER INFO REQUIRES A TOKEN
 {
   get_user_info {
     id
@@ -70,7 +70,7 @@ HTTP HEADERS
 //Create an item (INCLUDE TOKEN)
 mutation {
   create_item(
-    item: { name: "5 Little Elephants", minPrice: 30 }
+    item: { name: "Little Elephants", minPrice: 30, auctionEnd:"07 Dec 2020 00:12:00 GMT" }
   ) {
     id
     name
@@ -121,7 +121,7 @@ query{
 
 //Update/Edit Item  TOKEN NEEDED (ALSO HAS TO BE OWNER OF ITEM)
 mutation {
-  update_item (itemId:"503455e5-0008-49ae-b6ed-00c8a7ade28b",item: {
+  update_item (itemId:"33290e0e-aa0a-4ccd-945c-a145b90b9367",item: {
       name: "Elephant ELEPHANT elephants!"
       minPrice: 30
   }) {
@@ -132,6 +132,8 @@ mutation {
     picUrl1
     picUrl2
     picUrl3
+    bidder
+    auctionEnd
     user{
       id
       email
