@@ -3,23 +3,19 @@ import { StyleSheet, Text, View, Image, ImageBackground } from 'react-native';
 import { Item, Input, Label, Button } from 'native-base';
 import { GET_USER_BY_EMAIL } from '../queries/login';
 import { useLazyQuery } from '@apollo/client';
-import Navbar from '../components/Navbar';
 
 export default function Login({ navigation, route }) {
   const [initialEmail, setInitialEmail] = useState('');
   const { email, id } = route.params;
-  const [getID, { data, error, loading }] = useLazyQuery(GET_USER_BY_EMAIL);
+  const [getID, { data }] = useLazyQuery(GET_USER_BY_EMAIL);
 
   useEffect(() => {
-    console.log('loading: ', loading);
-    console.log('error: ', error);
-    console.log('data: ', data);
     if (data && data.get_user_by_email) {
       id.current = data.get_user_by_email.id;
       email.current = data.get_user_by_email.email;
       navigation.navigate('Home');
     }
-  }, [loading, data, error]);
+  }, [data]);
 
   function login() {
     getID({ variables: { email: initialEmail } });
@@ -29,7 +25,7 @@ export default function Login({ navigation, route }) {
     <ImageBackground
       style={{ flex: 1 }}
       source={require('../assets/login-background-keyboard.jpg')}
-    >
+      >
       <View style={styles.logo}>
         <Image style={styles.logoPic} source={require('../assets/logo.png')} />
       </View>
@@ -38,10 +34,7 @@ export default function Login({ navigation, route }) {
       </View>
       <View style={styles.container}>
         <Item floatingLabel style={styles.labelContainer}>
-          <Label style={styles.label}>
-            {'   '}
-            Email
-          </Label>
+          <Label style={styles.label}>Email</Label>
           <Input
             onChangeText={(text) => setInitialEmail(text)}
             value={initialEmail}
@@ -50,19 +43,9 @@ export default function Login({ navigation, route }) {
         </Item>
         <Item floatingLabel last style={styles.labelContainer}>
           <Label style={styles.label}>Password</Label>
-          <Input
-            style={{ color: 'white', fontFamily: 'Roboto_medium' }} // onChangeText={(text) => setInitialEmail(text)}
-            // value={initialEmail}
-          />
+          <Input style={{ color: 'white', fontFamily: 'Roboto_medium' }}/>
         </Item>
-        <View
-        // style={{
-        //   width: '100%',
-        //   height: '30%',
-        //   // justifyContent: 'center',
-        //   alignSelf: 'center',
-        // }}
-        >
+        <View>
           <Button rounded onPress={login} style={styles.button}>
             <Text
               style={{
@@ -85,7 +68,6 @@ const styles = StyleSheet.create({
     padding: 15,
     flex: 1,
     justifyContent: 'center',
-
     marginHorizontal: 10,
   },
   headers: {
@@ -121,8 +103,10 @@ const styles = StyleSheet.create({
     width: '50%',
     resizeMode: 'contain',
   },
-
-  label: { fontFamily: 'Roboto_medium', color: 'white' },
+  label: { 
+    fontFamily: 'Roboto_medium',
+    color: 'white' 
+  },
   labelContainer: {
     alignSelf: 'center',
     marginBottom: 20,
