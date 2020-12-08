@@ -25,6 +25,7 @@ exports.get_category_by_Item = async (item, _, { models }) => {
 
 exports.create_item = async (_, { item }, { models, me }) => {
   console.log('CREATING ITEM:',me);
+  console.log('User Creating Item:',me);
   const { name, minPrice, description, picUrl1, picUrl2, picUrl3, auctionEnd, categoryId } = item;
   try {
     const item = {
@@ -68,11 +69,12 @@ exports.delete_item_by_id = async (_, { itemId }, { models }) => {
 exports.update_item = async (_, { itemId, item }, { models }) => {
   try {
     let itemDB = await models.items.findOne({ where: { id: itemId } });
+    if (!itemDB) throw new Error('No item found');
     itemDB = Object.assign(itemDB, item);
     await itemDB.save();
     return itemDB;
   } catch (e) {
-    return e;
+    return e.message;
   }
 };
 

@@ -8,11 +8,14 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const saltRounds = 10;
+const { AuthenticationError,ValidationError } = require('apollo-server');
+
 
 exports.get_user_by_email = async (_, { email }, { models }) => {
   try {
     const user = await models.users.findOne({ where: { email: email } });
-    return user;
+    if (user) return user;
+    else throw new Error('No user found with that email.');
   } catch (error) {
     console.error('Error', error);
   }
@@ -21,9 +24,10 @@ exports.get_user_by_email = async (_, { email }, { models }) => {
 exports.get_user_info = async (_, __, { models, me }) => {
   try {
     const user = await models.users.findByPk(me.id);
-    return user;
+    if (user) return user;
+    else throw new Error('No user found. If this is unexpected, try to log out and log in again.');
   } catch (error) {
-    console.error('Error', error);
+    return error;
   }
 };
 
@@ -91,10 +95,10 @@ exports.update_user = async (_, { user }, { models, me }) => {
       return userFound;
     }
     else {
-      return new Error('User doesn\'t exist');
+      return new Error('No user found. If this is unexpected, try to log out and log in again.');
     }
   } catch (error) {
-    console.error('Error', error);
+    console.error('Error:', error);
     return error;
   }
 };
@@ -127,37 +131,38 @@ exports.create_user = async (_, { user }, { models }) => {
 
 
 
-exports.sign_up = async (_, { email, password }, { models, secret }) => {
+exports.sign_up = async (_, { user }, { models, secret }) => {
   try {
-    console.log('User Sign Up:');
-    const user = await models.users.create({
-      email: email,
-      password: password,
-    });
-    console.log('SECRET:', secret);
-    return { token: createToken(user, secret, '10h') };
+    const userFound = await models.users.findOne({ where: { email: user.email } });
+    if (userFound) throw new Error('Please choose another email, this one is already taken.');
+    console.log('User Signing Up User...');
+    const { email, password, firstName, lastName, phoneNumber } = user;
+    const createdUser = await models.users.create({ email: email, password: password, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber });
+    console.log('Creating Token...');
+    return { token: createToken(createdUser, secret, '10h') };
   } catch (e) {
-    return e;
+    return new ValidationError(e);
   }
 };
 
 exports.sign_in = async (_, { email, password }, { models, secret }) => {
   try {
-    console.log('User Sign in:');
+    console.log('User Signing in...');
     const user = await models.users.findByLogin(email);
     if (!user) {
-      throw new UserInputError(
+      throw new Error(
         'No user found with this email credentials.',
       );
     }
 
     const isValid = await user.validatePassword(password);
-    if (!isValid) throw new AuthenticationError('Invalid password.'); //probably want to give a more generic message for security
+    if (!isValid) throw new Error('invalid password'); //probably want to give a more generic message for security
+
     console.log('Returning Token:');
     return { token: createToken(user, secret, '10h') };
   }
   catch (e) {
-    return e;
+    return new AuthenticationError(`Invalid Authentication, check email/password: ${e}`);
   }
 };
 

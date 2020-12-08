@@ -1,6 +1,6 @@
 'use strict';
 
-const faker = require('faker');
+const faker = require('faker/locale/en_GB');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
