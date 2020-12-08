@@ -81,6 +81,7 @@ exports.update_user = async (_, { user }, { models, me }) => {
     let userFound = await models.users.findOne({ where: { id: me.id } });
     if (userFound) {
       userFound = Object.assign(userFound, user);
+      console.log('USER FOUND:', userFound);
       await userFound.save();
       return userFound;
     }
