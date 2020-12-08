@@ -32,11 +32,13 @@ const getMe = async req => {
     try {
       console.log('PROCESSING:');
       const response = await jwt.verify(token, process.env.SECRET);
+      const userFound = await models.users.findOne({ where: { email: response.email } });
+      if (!userFound) throw new Error('No user found.');
       console.log('RESULT OF AUTHENTICATION:',response);
       return response;
     } catch (e) {
       throw new AuthenticationError( //token will fail if invalid or expired
-        'Your session expired. Sign in again.',
+        `Your session expired. Sign in again. ${e.message}`,
       );
     }
   }
