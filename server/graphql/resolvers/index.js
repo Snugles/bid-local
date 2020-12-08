@@ -10,17 +10,17 @@ const pubsub = require('../utils/PubSub');
 
 const resolvers = {
   Query: {
-    me: user.me, //necessary?
-    get_user_by_email: user.get_user_by_email, //to deprecate for sign in
-    get_users: user.get_users, //to deprecate/block/admin only
+    //me: user.me, //necessary?
+    //get_user_by_email: user.get_user_by_email, //to deprecate for sign in
+    //get_users: user.get_users, //to deprecate/block/admin only
     get_user_info: combineResolvers(isAuthenticated,user.get_user_info),
-    get_item_by_Id: item.get_item_by_Id, //necessary?
-    get_items: item.get_items,
-    get_category_by_Id: category.get_category_by_Id,  //necessary?
-    get_categories: category.get_categories,
+    get_item_by_Id: item.get_item_by_Id, //OK
+    get_items: item.get_items, //OK
+    //get_category_by_Id: category.get_category_by_Id,  //necessary?
+    get_categories: category.get_categories, //OK
     get_address_by_userId: address.get_address_by_userId, //necessary?
-    get_addresses: address.get_addresses, //to deprecate/block/admin only
-    get_info: image.get_info, //to protect
+    //get_addresses: address.get_addresses, //to deprecate/block/admin only
+    get_info: image.get_info, //OK
   },
 
   User: {
@@ -42,20 +42,20 @@ const resolvers = {
   },
 
   Mutation: {
-    create_user: user.create_user, //to deprecate/block/admin only
-    update_user: combineResolvers(isAuthenticated,user.update_user),
-    delete_user: user.delete_user, //to deprecate/block/admin only
+    //create_user: user.create_user, //to deprecate/block/admin only
+    update_user: combineResolvers(isAuthenticated,user.update_user), //OK
+    //delete_user: user.delete_user, //to deprecate/block/admin only
     sign_up: user.sign_up,
-    sign_in: user.sign_in,
-    create_item: combineResolvers(isAuthenticated,item.create_item),
+    sign_in: user.sign_in, //OK
+    create_item: combineResolvers(isAuthenticated,item.create_item), //OK
     delete_item_by_id: combineResolvers(isItemOwner,item.delete_item_by_id),
-    update_item: combineResolvers(isItemOwner,item.update_item),
+    update_item: combineResolvers(isItemOwner,item.update_item), //OK
     create_category: category.create_category, //to deprecate/block/admin only
     delete_category: category.delete_category, //to deprecate/block/admin only
     update_category: category.update_category, //to deprecate/block/admin only
     create_address: combineResolvers(isAuthenticated,address.create_address),
     update_address: combineResolvers(isAddressOwner,address.update_address),
-    image_uploader: image.image_uploader //to protect
+    //image_uploader: image.image_uploader //to protect
   },
   Subscription: {
     bidPlaced: {
