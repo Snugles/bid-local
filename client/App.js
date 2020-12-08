@@ -1,4 +1,10 @@
-import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache, split } from '@apollo/client';
+import {
+  ApolloClient,
+  ApolloProvider,
+  HttpLink,
+  InMemoryCache,
+  split,
+} from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { APOLLO_SERVER_URI, APOLLO_WEB_SERVER_URI } from '@env';
 import { WebSocketLink } from 'apollo-link-ws';
@@ -25,7 +31,7 @@ export default function App() {
 
 
   const authLink = setContext((_, { headers }) => {
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NWJlMjc3LWNlMDEtNGQyMy1hZTgzLTRlNGIwNDEyZDM5ZiIsImVtYWlsIjoidGVzdEB1c2VyLmNvbSIsImlhdCI6MTYwNzQzMTM5NywiZXhwIjoxNjA3NDY3Mzk3fQ.P6SzTuZFXogmLvDKWxy8cGMINHKEuBKHrIlcSkrUl0w";
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImEwYzgwMTIzLWY5ZjEtNDJmZS1iZDhlLTQxZTM4NDk4NGU2YyIsImVtYWlsIjoidGVzdEB1c2VyLmNvbSIsImlhdCI6MTYwNzQ0MDYzNywiZXhwIjoxNjA3NDc2NjM3fQ.7fA6v0gVMSA0_VXJjcHwrfdk2-C6I6SyF1GMN6d9D1k";
     return {
       headers: {
         ...headers,
@@ -41,12 +47,12 @@ export default function App() {
   const wsLink = new WebSocketLink({
     uri: webUri,
     options: {
-      reconnect: true
-    }
+      reconnect: true,
+    },
   });
   
   const link = new HttpLink({ uri: uri });
-  
+
   const splitLink = split(
     ({ query }) => {
       const definition = getMainDefinition(query);

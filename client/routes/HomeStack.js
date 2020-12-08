@@ -27,7 +27,7 @@ const HomeStack = ({ email , token }) => {
         <Stack.Screen
           name="AddItem"
           component={AddItem}
-          initialParams={{ email: email }}
+          initialParams={{ token: token }}
         />
         <Stack.Screen
           name="UsersItems"
