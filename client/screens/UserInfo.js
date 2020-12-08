@@ -12,9 +12,6 @@ import { useQuery, useMutation } from '@apollo/client';
 
 export default function UserInfo({ navigation, route }) {
   const email = route.params.email.current ;
-  console.log('userInfo email: ', email);
-
-  // const [username, setUsername] = useState('snuglywugly');
 
   const [phoneNumber, setPhoneNumber] = useState('');
   const [address, setAddress] = useState({
@@ -33,7 +30,6 @@ export default function UserInfo({ navigation, route }) {
 
   useEffect(() => {
     if (user.data) {
-      console.log(user.data.get_user_by_email);
       setPhoneNumber(user.data.get_user_by_email.phoneNumber);
       setID(user.data.get_user_by_email.id);
       setAddress({
@@ -45,13 +41,10 @@ export default function UserInfo({ navigation, route }) {
       });
       return;
     }
-    console.log(user.error);
   }, [user]);
 
   useEffect(() => {
-    console.log('dancing queen'+changed.error);
     if (changed.data) {
-      console.log(changed.data);
       setPhoneNumber(changed.data.update_user.phoneNumber);
       setID(changed.data.update_user.id);
       setAddress({
@@ -75,8 +68,6 @@ export default function UserInfo({ navigation, route }) {
           password:"feXoIik8"
         }
       };
-      console.log(queryVariables)
-  
       changeUser({variables:queryVariables});
     }
     setEditMode(!editMode);
