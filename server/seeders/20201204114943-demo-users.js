@@ -3,7 +3,7 @@
 const faker = require('faker');
 
 function randNumb (max) {
-  return Math.floor(Math.random()*max);
+  return Math.floor(Math.random() * max);
 }
 
 const numItems = 15;
@@ -12,7 +12,7 @@ const users = [...Array(numItems)].map((user) => (
   {
     id: faker.random.uuid(),
     email: faker.internet.email(),
-    password: `${faker.internet.password(8)}`,
+    password: '$2y$10$JNjo.yE4cW6mmNXXmR/eleLyHubriY273PhuqRNDLigGQH9DrGZYC',
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     phoneNumber: `${faker.phone.phoneNumber()}`,
@@ -22,16 +22,16 @@ const users = [...Array(numItems)].map((user) => (
 ));
 
 const adminUser =
-  {
-    id: faker.random.uuid(),
-    email: 'user@user.com',
-    password: 'user',
-    firstName: faker.name.firstName(),
-    lastName: faker.name.lastName(),
-    phoneNumber: `${faker.phone.phoneNumber()}`,
-    createdAt: new Date(),
-    updatedAt: new Date()
-  };
+{
+  id: faker.random.uuid(),
+  email: 'user@user.com',
+  password: '$2y$10$D/V0dM2R4o8N9c/2cQaZ9e2JHYMCyPlNB2hv4TThqTf2XGZidNug6',
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+  phoneNumber: `${faker.phone.phoneNumber()}`,
+  createdAt: new Date(),
+  updatedAt: new Date()
+};
 
 users.push(adminUser);
 
@@ -49,7 +49,7 @@ const categories = [
   { id: faker.random.uuid(), name: 'SPORTS', createdAt: new Date(), updatedAt: new Date() },
 ];
 
-const items = [...Array(numItems+1)].map((item, index) => (
+const items = [...Array(numItems + 1)].map((item, index) => (
   {
     id: faker.random.uuid(),
     name: faker.commerce.productName(),
@@ -58,14 +58,17 @@ const items = [...Array(numItems+1)].map((item, index) => (
     picUrl1: faker.image.image(),
     picUrl2: faker.image.image(),
     picUrl3: faker.image.image(),
-    userId: users[randNumb(numItems+1)].id,
+    userId: users[randNumb(numItems + 1)].id,
     categoryId: categories[randNumb(10)].id,
+    auctionEnd: faker.date.soon(),
+    minimumBid: parseInt(faker.commerce.price(), 10),
+    bidder: null,
     createdAt: new Date(),
     updatedAt: new Date()
   }
 ));
 
-const addresses = [...Array(numItems+1)].map((address, index) => (
+const addresses = [...Array(numItems + 1)].map((address, index) => (
   {
     id: faker.random.uuid(),
     firstLineAddress: faker.address.streetAddress(),

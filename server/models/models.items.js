@@ -50,6 +50,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     bidder: {
       type: DataTypes.UUID,
+      allowNull: true,
       validate: {
         isUUID: 4,
       }
