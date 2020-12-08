@@ -75,6 +75,9 @@ exports.place_a_bid = async (_, { itemId, userId }, {models}) => {
   //   itemDB.bidder = userId;
   // }
 
+  itemDB.minimumBid++;
+  itemDB.bidder = userId;
+
   pubsub.publish('bidPlaced', {
     bidPlaced: itemDB
   });
