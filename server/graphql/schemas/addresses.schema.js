@@ -18,13 +18,12 @@ input AddressUpdate {
 }
 
 extend type Query {
-  get_address_by_userId(userId: ID!): Address
+  get_address: Address
   get_addresses: [Address]
 }
 
 extend type Mutation {
   create_address(
-    userId:ID!
     address:AddressUpdate!
     ): Address
 

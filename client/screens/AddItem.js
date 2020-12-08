@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useEffect, useState } from 'react';
 import {
+  SafeAreaView,
   Image,
   ScrollView,
   StyleSheet,
@@ -27,7 +28,6 @@ export default function AddItem({ navigation, route }) {
   const [images, setImages] = useState([]);
   const [imageUrls, setImageUrls] = useState([]);
   const [typeError, setTypeError] = useState('');
-  const { id } = route.params;
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -65,7 +65,6 @@ export default function AddItem({ navigation, route }) {
 
   function handleSubmit() {
     const queryVariables = {
-      userId: id.current,
       item: {
         name: title,
         minPrice: parseInt(price),
@@ -73,8 +72,9 @@ export default function AddItem({ navigation, route }) {
         picUrl1: imageUrls[0] ? imageUrls[0] : '',
         picUrl2: imageUrls[1] ? imageUrls[1] : '',
         picUrl3: imageUrls[2] ? imageUrls[2] : '',
+        auctionEnd: '04 Dec 2020 00:12:00 GMT',
+        categoryId: selectedCategories[0].id,
       },
-      categoryId: selectedCategories[0].id,
     };
     createItem({ variables: queryVariables });
   }
@@ -96,7 +96,7 @@ export default function AddItem({ navigation, route }) {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      quality: 1,
+      quality: 0,
       base64: true,
     });
 
@@ -312,7 +312,6 @@ const styles = StyleSheet.create({
   },
   addItemButton: {
     justifyContent: 'center',
-    padding: 15,
     margin: 10,
   },
   categoryModal: {

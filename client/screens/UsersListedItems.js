@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
+  Image,
   SafeAreaView,
   LayoutAnimation,
   StyleSheet,
@@ -20,11 +21,9 @@ import { GET_USER_ITEMS, UPDATE_ITEM } from '../queries/usersListedItems';
 import { useLazyQuery, useMutation } from '@apollo/client';
 
 export default function UsersItems({ navigation, route }) {
-  const email = route.params.email.current;
   const [isLoading, setIsLoading] = useState(true);
   const [getItems, { loading, error, data }] = useLazyQuery(GET_USER_ITEMS, {
     fetchPolicy: 'cache-and-network',
-    variables: { email: email },
   });
   const [refresh, setRefresh] = useState(false);
 
@@ -92,7 +91,7 @@ export default function UsersItems({ navigation, route }) {
             />
           </TouchableOpacity>
           {data
-            ? data.get_user_by_email.item.map((item) => (
+            ? data.get_user_info.item.map((item) => (
                 <Panel
                   key={item.id}
                   id={item.id}

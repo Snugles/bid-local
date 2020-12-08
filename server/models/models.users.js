@@ -23,7 +23,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: true,
-        len: [1, 42],
       }
     },
     firstName: {
@@ -60,6 +59,10 @@ module.exports = (sequelize, DataTypes) => {
   Users.prototype.generatePasswordHash = async function () {
     const saltRounds = 10;
     return await bcrypt.hash(this.password, saltRounds);
+  };
+
+  Users.prototype.validatePassword = async function (password) {
+    return await bcrypt.compare(password, this.password);
   };
 
   return Users;

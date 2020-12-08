@@ -13,6 +13,8 @@ import * as Font from 'expo-font';
 import React, { useRef, useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import Navigator from './routes/HomeStack';
+import { setContext } from '@apollo/client/link/context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const getFonts = () => {
   return Font.loadAsync({
@@ -23,20 +25,66 @@ const getFonts = () => {
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const email = useRef('');
-  const id = useRef('');
+  const token = useRef('');
+  const [initial, setInitial] = useState('');
+  const uri = APOLLO_SERVER_URI;
+  const webUri = APOLLO_WEB_SERVER_URI;
+
+  const storeToken = async (value) => {
+    try {
+      await AsyncStorage.setItem('@token', value)
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const getToken = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@token')
+      console.log('value: ', value);
+      if(value !== null) {
+        token.current = value;
+        return true;
+      }
+      return false;
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
+  const authLink = setContext((_, { headers }) => {
+    const tkn = token.current;
+    return {
+      headers: {
+        ...headers,
+        'x-token': tkn,
+      }
+    }
+  });
 
   useEffect(() => {
-    console.log(email);
-  }, [email]);
+    getToken();
+  }, []);
+
+  useEffect(() => {
+    if (initial === '') {
+      console.log('initial token: ',token);
+      if (token && token.current!=='') {
+        setInitial('Home');
+      } else {
+        setInitial('Login');
+      }
+    }
+    storeToken(token.current);
+  }, [token]);
 
   const wsLink = new WebSocketLink({
-    uri: APOLLO_WEB_SERVER_URI,
+    uri: webUri,
     options: {
       reconnect: true,
     },
   });
-
-  const uri = APOLLO_SERVER_URI;
+  
   const link = new HttpLink({ uri: uri });
 
   const splitLink = split(
@@ -52,14 +100,18 @@ export default function App() {
   );
 
   const client = new ApolloClient({
-    link: splitLink,
+    link: authLink.concat(splitLink),
     cache: new InMemoryCache(),
   });
 
   return (
     <ApolloProvider client={client}>
       {fontsLoaded ? (
-        <Navigator email={email} id={id} />
+        initial !== ''
+        ?
+        <Navigator email={email} token={token} initial={initial}/>
+        :
+        null
       ) : (
         <AppLoading
           startAsync={getFonts}

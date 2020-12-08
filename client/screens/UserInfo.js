@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
+  Image,
   StyleSheet,
   Text,
   ScrollView,
@@ -8,13 +9,12 @@ import {
   SafeAreaView,
 } from 'react-native';
 import Navbar from '../components/Navbar';
-import { GET_EMAIL, UPDATE_USER } from '../queries/userInfo';
+import { GET_USER_INFO, UPDATE_USER } from '../queries/userInfo';
 import { useQuery, useMutation } from '@apollo/client';
 
 export default function UserInfo({ navigation, route }) {
-  const email = route.params.email.current;
+  const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-
   const [phoneNumber, setPhoneNumber] = useState('');
   const [address, setAddress] = useState({
     firstLineAddress: '',
@@ -26,21 +26,31 @@ export default function UserInfo({ navigation, route }) {
   const [editMode, setEditMode] = useState(false);
   const [id, setID] = useState('');
   const [changeUser, changed] = useMutation(UPDATE_USER);
-  const user = useQuery(GET_EMAIL, {
-    variables: { email: email },
-  });
+  const user = useQuery(GET_USER_INFO);
 
   useEffect(() => {
     if (user.data) {
-      setPhoneNumber(user.data.get_user_by_email.phoneNumber);
-      setID(user.data.get_user_by_email.id);
-      setAddress({
-        firstLineAddress: user.data.get_user_by_email.address.firstLineAddress,
-        secondLinAddress: user.data.get_user_by_email.address.secondLineAddress,
-        city: user.data.get_user_by_email.address.city,
-        postcode: user.data.get_user_by_email.address.postcode,
-        country: user.data.get_user_by_email.address.country,
-      });
+      setEmail(user.data.get_user_info.email);
+      setPhoneNumber(user.data.get_user_info.phoneNumber ? user.data.get_user_info.phoneNumber : '');
+      setID(user.data.get_user_info.id);
+      setAddress(user.data.get_user_info.address
+        ?
+        {
+          firstLineAddress: user.data.get_user_info.address.firstLineAddress,
+          secondLinAddress: user.data.get_user_info.address.secondLineAddress,
+          city: user.data.get_user_info.address.city,
+          postcode: user.data.get_user_info.address.postcode,
+          country: user.data.get_user_info.address.country,
+        }
+        :
+        {
+          firstLineAddress: '',
+          secondLinAddress: '',
+          city: '',
+          postcode: '',
+          country: '',
+        }
+      );
       return;
     }
   }, [user]);
