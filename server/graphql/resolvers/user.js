@@ -76,9 +76,9 @@ exports.delete_user = async (_, { userId }, { models }) => {
   return true;
 };
 
-exports.update_user = async (_, { userId, user }, { models }) => {
+exports.update_user = async (_, { user }, { models, me }) => {
   try {
-    let userFound = await models.users.findOne({ where: { id: userId } });
+    let userFound = await models.users.findOne({ where: { id: me.id } });
     if (userFound) {
       userFound = Object.assign(userFound, user);
       await userFound.save();

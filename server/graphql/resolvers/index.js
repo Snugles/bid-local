@@ -5,7 +5,7 @@ const category = require('./category');
 const address = require('./address');
 const image = require('./image');
 const {combineResolvers} = require('graphql-resolvers');
-const {isAuthenticated} = require('./authorization');
+const {isAuthenticated,isItemOwner,isAddressOwner} = require('./authorization');
 
 const resolvers = {
   Query: {
@@ -42,18 +42,18 @@ const resolvers = {
 
   Mutation: {
     create_user: user.create_user,
-    update_user: user.update_user,
+    update_user: combineResolvers(isAuthenticated,user.update_user),
     delete_user: user.delete_user,
     sign_up: user.sign_up,
     sign_in: user.sign_in,
     create_item: combineResolvers(isAuthenticated,item.create_item),
-    delete_item_by_id: item.delete_item_by_id,
-    update_item: item.update_item,
+    delete_item_by_id: combineResolvers(isItemOwner,item.delete_item_by_id),
+    update_item: combineResolvers(isItemOwner,item.update_item),
     create_category: category.create_category,
     delete_category: category.delete_category,
     update_category: category.update_category,
-    create_address: address.create_address,
-    update_address: address.update_address,
+    create_address: combineResolvers(isAuthenticated,address.create_address),
+    update_address: combineResolvers(isAddressOwner,address.update_address),
     image_uploader: image.image_uploader
   }
 };

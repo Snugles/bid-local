@@ -24,7 +24,6 @@ extend type Query {
 
 extend type Mutation {
   create_address(
-    userId:ID!
     address:AddressUpdate!
     ): Address
 

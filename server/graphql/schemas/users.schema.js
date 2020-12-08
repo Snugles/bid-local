@@ -36,7 +36,7 @@ extend type Query {
 }
 extend type Mutation {
   create_user(user: UserUpdate!): User
-  update_user(userId:ID!,user:UserUpdate!): User!
+  update_user(user:UserUpdate!): User!
   delete_user(userId:ID!): Boolean!
   sign_up(email: String!,password: String!): Token!
   sign_in(email: String!,password: String!): Token!

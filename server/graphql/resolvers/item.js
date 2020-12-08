@@ -1,5 +1,7 @@
 exports.get_item_by_Id = async (_, { id }, { models }) => {
+  console.log('Getting ITEM:',id);
   const item = await models.items.findByPk(id);
+  console.log('Returning:',item);
   return item;
 };
 
@@ -41,11 +43,11 @@ exports.create_item = async (_, { /*userId,*/ item }, { models, me }) => {  //fr
   }
 
 };
-exports.delete_item_by_id = async (_, { id }, { models }) => {
+exports.delete_item_by_id = async (_, { itemId }, { models }) => {
   try {
     const destroyed = await models.items.destroy({
       where: {
-        id: id
+        id: itemId
       }
     });
     if (!destroyed) {
