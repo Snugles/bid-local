@@ -2,6 +2,7 @@
 require('dotenv/config');
 const cors = require('cors');
 const express = require('express');
+const { createServer}  = require('http');
 const { join } = require('path');
 const { ApolloServer } = require('apollo-server-express');
 const server = require('./graphql');
@@ -15,10 +16,12 @@ const PORT = process.env.PORT || 8000;
 
 server.applyMiddleware({ app, path: '/graphql' });
 
+const httpServer = createServer(app);
+server.installSubscriptionHandlers(httpServer);
 
 try {
   db.sequelize.sync().then(async () => {
-    app.listen({ port: 8000 }, () => {
+    httpServer.listen({ port: 8000 }, () => {
       console.log(`Server is running at ${PORT}`);
     });
   });

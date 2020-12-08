@@ -6,6 +6,7 @@ const address = require('./address');
 const image = require('./image');
 const {combineResolvers} = require('graphql-resolvers');
 const {isAuthenticated,isItemOwner,isAddressOwner} = require('./authorization');
+const pubsub = require('../utils/pubsub');
 
 const resolvers = {
   Query: {
@@ -55,6 +56,11 @@ const resolvers = {
     create_address: combineResolvers(isAuthenticated,address.create_address),
     update_address: combineResolvers(isAddressOwner,address.update_address),
     image_uploader: image.image_uploader //to protect
+  },
+  Subscription: {
+    bidPlaced: {
+      subscribe: () => pubsub.asyncIterator(['bidPlaced'])
+    }
   }
 };
 

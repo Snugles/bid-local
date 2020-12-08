@@ -1,3 +1,5 @@
+const pubsub = require('../utils/pubsub');
+console.log('PUBSUB output ', pubsub.publish);
 exports.get_item_by_Id = async (_, { id }, { models }) => {
   console.log('Getting ITEM:',id);
   const item = await models.items.findByPk(id);
@@ -32,6 +34,8 @@ exports.create_item = async (_, { item }, { models, me }) => {
       picUrl2,
       picUrl3,
       userId: me.id,
+      minimumBid: minPrice + 1,
+      auctionEnd: Date.parse(auctionEnd),
       categoryId,
     };
     const createdItem = await models.items.create(item);
@@ -65,4 +69,24 @@ exports.update_item = async (_, { itemId, item }, { models }) => {
   await itemDB.save();
   return itemDB;
 };
+
+exports.place_a_bid = async (_, { itemId, userId }, {models}) => {
+  let itemDB = await models.items.findOne({ where: { id: itemId}});
+  // console.log('test');
+  // if (biddingPrice > itemDB.minimumBid) {
+  //   itemDB.minimumBid++;
+  //   itemDB.bidder = userId;
+  // }
+
+  itemDB.minimumBid++;
+  itemDB.bidder = userId;
+
+  pubsub.publish('bidPlaced', {
+    bidPlaced: itemDB
+  });
+
+  await itemDB.save();
+  return itemDB;
+};
+
 

@@ -56,7 +56,10 @@ const server = new ApolloServer({
       me,
       secret: process.env.SECRET,
     };
-  }
+  },
+  subscriptions: {
+    onConnect: () => console.log('Connected to websocket'),
+  },
 });
 
 module.exports = server;
