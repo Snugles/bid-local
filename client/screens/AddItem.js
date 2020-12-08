@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useEffect, useState } from 'react';
 import {
+  SafeAreaView,
   Image,
   ScrollView,
   StyleSheet,
@@ -10,7 +11,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View
+  View,
 } from 'react-native';
 import Navbar from '../components/Navbar';
 import { CREATE_ITEM, GET_CATEGORIES } from '../queries/addItem';
@@ -26,8 +27,13 @@ export default function AddItem({ navigation, route }) {
   const [showModal, setModal] = useState();
   const [images, setImages] = useState([]);
   const [imageUrls, setImageUrls] = useState([]);
-  const [typeError, setTypeError] =useState('');
-  const { id } = route.params;
+  const [typeError, setTypeError] = useState('');
+  const { token } = route.params;
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
 
   useEffect(() => {
     console.log('error: ', error);
@@ -60,16 +66,16 @@ export default function AddItem({ navigation, route }) {
 
   function handleSubmit() {
     const queryVariables = {
-      userId: id.current,
       item: {
         name: title,
         minPrice: parseInt(price),
         description: description,
-        picUrl1: (imageUrls[0] ? imageUrls[0] : ''),
-        picUrl2: (imageUrls[1] ? imageUrls[1] : ''),
-        picUrl3: (imageUrls[2] ? imageUrls[2] : ''),
+        picUrl1: imageUrls[0] ? imageUrls[0] : '',
+        picUrl2: imageUrls[1] ? imageUrls[1] : '',
+        picUrl3: imageUrls[2] ? imageUrls[2] : '',
+        auctionEnd: '04 Dec 2020 00:12:00 GMT',
+        categoryId: selectedCategories[0].id,
       },
-      categoryId: selectedCategories[0].id,
     };
     createItem({ variables: queryVariables });
   }
@@ -91,147 +97,170 @@ export default function AddItem({ navigation, route }) {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      quality: 1,
-      base64: true
+      quality: 0,
+      base64: true,
     });
 
     console.log(result);
     if (!result.cancelled) {
-      setImages(imgs => [...imgs, result.uri]);
+      setImages((imgs) => [...imgs, result.uri]);
       let base64Img = `data:image/jpg;base64,${result.base64}`;
 
       let data = {
-      "file": base64Img,
-      "upload_preset": CLOUDINARY_KEY,
-      }
+        file: base64Img,
+        upload_preset: CLOUDINARY_KEY,
+      };
 
       fetch(CLOUDINARY_URL, {
-      body: JSON.stringify(data),
-      headers: {
-        'content-type': 'application/json'
-      },
-      method: 'POST',
-    }).then(async r => {
-      let data = await r.json();
-      setImageUrls(urls => [...urls, data.secure_url]);
-    });
+        body: JSON.stringify(data),
+        headers: {
+          'content-type': 'application/json',
+        },
+        method: 'POST',
+      }).then(async (r) => {
+        let data = await r.json();
+        setImageUrls((urls) => [...urls, data.secure_url]);
+      });
     }
   }
 
-  return (
-    <>
-      <Navbar navigation={navigation} canGoBack={true} />
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={{ alignItems: 'center' }}
-      >
-        <Text style={{marginTop: 15}}>Title:</Text>
-        <TextInput
-          style={styles.textBoxes}
-          onChangeText={(text) => setTitle(text)}
-        />
-        <Text style={{marginTop: 15}}>Starting Price:</Text>
-        <TextInput
-          style={styles.textBoxes}
-          value={price}
-          onChangeText={(text) => handleCurrency(text)}
-          keyboardType="numeric"
-          placeholder="0,00"
-        />
-        {typeError?<Text style={{ color:'purple',fontSize: 18 }}>{typeError}</Text>:null}
-        <Text style={{marginTop: 15}}>Description:</Text>
-        <TextInput
-          style={styles.textBoxes}
-          onChangeText={(text) => setDescription(text)}
-        />
-        <Text style={{marginTop: 15}}>Categories:</Text>
-        <View style={styles.selectedCategories}>
-          {selectedCategories.map((cat, index) => (
-            <Text key={index} style={styles.selectedCategory}>
-              {cat.name}
-            </Text>
-          ))}
-        </View>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            setModal(true);
-            setSelectedCategories([]);
-          }}
+  if (isLoading) {
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <Text style={styles.loading}>Loading...</Text>
+        <Image source={require('../assets/ecommerce.gif')} />
+      </SafeAreaView>
+    );
+  } else {
+    return (
+      <>
+        <Navbar navigation={navigation} canGoBack={true} />
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={{ alignItems: 'center' }}
         >
-          <Text
-            style={{
-              padding: 10,
-              borderWidth: 1,
-              borderColor: 'gray',
-              marginTop: 5,
+          <Text style={{ marginTop: 15 }}>Title:</Text>
+          <TextInput
+            style={styles.textBoxes}
+            onChangeText={(text) => setTitle(text)}
+          />
+          <Text style={{ marginTop: 15 }}>Starting Price:</Text>
+          <TextInput
+            style={styles.textBoxes}
+            value={price}
+            onChangeText={(text) => handleCurrency(text)}
+            keyboardType="numeric"
+            placeholder="0,00"
+          />
+          {typeError ? (
+            <Text style={{ color: 'purple', fontSize: 18 }}>{typeError}</Text>
+          ) : null}
+          <Text style={{ marginTop: 15 }}>Description:</Text>
+          <TextInput
+            style={styles.textBoxes}
+            onChangeText={(text) => setDescription(text)}
+          />
+          <Text style={{ marginTop: 15 }}>Categories:</Text>
+          <View style={styles.selectedCategories}>
+            {selectedCategories.map((cat, index) => (
+              <Text key={index} style={styles.selectedCategory}>
+                {cat.name}
+              </Text>
+            ))}
+          </View>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setModal(true);
+              setSelectedCategories([]);
             }}
           >
-            Pick Categories
-          </Text>
-        </TouchableWithoutFeedback>
-        <Text style={{marginTop: 15}}>Title:</Text>
-        <View style={styles.itemView}>
-          {images.length > 0
-            ? images.map((img, index) => (
-                <Image
-                  key={index}
-                  style={styles.itemImage}
-                  source={{ uri: img }}
-                />
-              ))
-            : null}
-          <TouchableOpacity onPress={pickImage}>
-            <Image
-              style={styles.itemImage}
-              source={require('../assets/plus.png')}
-            />
-          </TouchableOpacity>
-        </View>
-        <TouchableHighlight style={styles.addItemButton} onPress={handleSubmit}>
-          <Text style={{ fontSize: 18, color: 'white', backgroundColor: '#06D6A0', padding: 15 }}>ADD ITEM</Text>
-        </TouchableHighlight>
-      </ScrollView>
-      {showModal ? (
-        <View style={styles.categoryModal}>
-          <ScrollView style={styles.categoryModalContent}>
             <Text
               style={{
-                padding: 15,
-                backgroundColor: 'lightgray',
-                fontSize: 18,
-                fontFamily: 'Roboto_medium',
-              }}
-            >
-              CATEGORIES
-            </Text>
-            {categories.data
-              ? categories.data.get_categories.map((cat) => {
-                  return (
-                    <CategoryModalField
-                      key={cat.id}
-                      category={cat}
-                      handleCategories={handleCategories}
-                    />
-                  );
-                })
-              : null}
-          </ScrollView>
-          <TouchableHighlight onPress={() => setModal(false)}>
-            <Text
-              style={{
-                textAlign: 'center',
-                backgroundColor: 'lightgray',
                 padding: 10,
-                fontFamily: 'Roboto_medium',
+                borderWidth: 1,
+                borderColor: 'gray',
+                marginTop: 5,
               }}
             >
-              Submit
+              Pick Categories
+            </Text>
+          </TouchableWithoutFeedback>
+          <Text style={{ marginTop: 15 }}>Title:</Text>
+          <View style={styles.itemView}>
+            {images.length > 0
+              ? images.map((img, index) => (
+                  <Image
+                    key={index}
+                    style={styles.itemImage}
+                    source={{ uri: img }}
+                  />
+                ))
+              : null}
+            <TouchableOpacity onPress={pickImage}>
+              <Image
+                style={styles.itemImage}
+                source={require('../assets/plus.png')}
+              />
+            </TouchableOpacity>
+          </View>
+          <TouchableHighlight
+            style={styles.addItemButton}
+            onPress={handleSubmit}
+          >
+            <Text
+              style={{
+                fontSize: 18,
+                color: 'white',
+                backgroundColor: '#06D6A0',
+                padding: 15,
+              }}
+            >
+              ADD ITEM
             </Text>
           </TouchableHighlight>
-        </View>
-      ) : null}
-    </>
-  );
+        </ScrollView>
+        {showModal ? (
+          <View style={styles.categoryModal}>
+            <ScrollView style={styles.categoryModalContent}>
+              <Text
+                style={{
+                  padding: 15,
+                  backgroundColor: 'lightgray',
+                  fontSize: 18,
+                  fontFamily: 'Roboto_medium',
+                }}
+              >
+                CATEGORIES
+              </Text>
+              {categories.data
+                ? categories.data.get_categories.map((cat) => {
+                    return (
+                      <CategoryModalField
+                        key={cat.id}
+                        category={cat}
+                        handleCategories={handleCategories}
+                      />
+                    );
+                  })
+                : null}
+            </ScrollView>
+            <TouchableHighlight onPress={() => setModal(false)}>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  backgroundColor: 'lightgray',
+                  padding: 10,
+                  fontFamily: 'Roboto_medium',
+                }}
+              >
+                Submit
+              </Text>
+            </TouchableHighlight>
+          </View>
+        ) : null}
+      </>
+    );
+  }
 }
 
 function CategoryModalField({ category, handleCategories }) {
@@ -284,11 +313,10 @@ const styles = StyleSheet.create({
   },
   addItemButton: {
     justifyContent: 'center',
-    padding: 15,
     margin: 10,
   },
   categoryModal: {
-    position: "absolute",
+    position: 'absolute',
     width: '100%',
     height: '100%',
     backgroundColor: '#000000bb',
@@ -298,7 +326,7 @@ const styles = StyleSheet.create({
   categoryModalContent: {
     backgroundColor: 'white',
     borderColor: 'gray',
-    borderWidth: 1
+    borderWidth: 1,
   },
   categoryField: {
     padding: 10,
@@ -312,14 +340,13 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     borderRadius: 10,
     borderColor: 'lightgray',
-    borderWidth: 1
-
+    borderWidth: 1,
   },
   selectedCategories: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     padding: 10,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   selectedCategory: {
     padding: 10,
@@ -328,5 +355,20 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     margin: 5,
     fontSize: 12,
-  }
+  },
+  loadingContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: '#fff',
+    fontFamily: 'Roboto_medium',
+  },
+  loading: {
+    fontFamily: 'Roboto_medium',
+    fontSize: 50,
+    color: '#67A036',
+    marginTop: '60%',
+    textAlign: 'center',
+    marginBottom: '-40%',
+    zIndex: 1,
+  },
 });

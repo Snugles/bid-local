@@ -25,7 +25,7 @@ exports.get_category_by_Item = async (item, _, { models }) => {
 
 exports.create_item = async (_, { item }, { models, me }) => {
   console.log('CREATING ITEM:',me);
-  const { name, minPrice, description, picUrl1, picUrl2, picUrl3, categoryId } = item;
+  const { name, minPrice, description, picUrl1, picUrl2, picUrl3, auctionEnd, categoryId } = item;
   try {
     const item = {
       name,
