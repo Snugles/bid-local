@@ -18,7 +18,7 @@ exports.get_user_by_email = async (_, { email }, { models }) => {
   }
 };
 
-exports.get_user_info = async (_,__, { models, me }) => {
+exports.get_user_info = async (_, __, { models, me }) => {
   try {
     const user = await models.users.findByPk(me.id);
     return user;
@@ -63,6 +63,7 @@ exports.get_address = async (user, _, { models }) => {
   }
   catch (error) {
     console.error('Error', error);
+    return error;
   }
 };
 
@@ -84,7 +85,7 @@ exports.update_user = async (_, { user }, { models, me }) => {
     if (userFound) {
       userFound = Object.assign(userFound, user);
       console.log('USER FOUND:', userFound);
-      userFound.password = await bcrypt.hash(userFound.password,saltRounds );
+      userFound.password = await bcrypt.hash(userFound.password, saltRounds);
       console.log('USER UPDATED:', userFound);
       await userFound.save();
       return userFound;
@@ -94,6 +95,7 @@ exports.update_user = async (_, { user }, { models, me }) => {
     }
   } catch (error) {
     console.error('Error', error);
+    return error;
   }
 };
 
@@ -119,48 +121,57 @@ exports.create_user = async (_, { user }, { models }) => {
     }
   } catch (error) {
     console.error('Error', error);
+    return error;
   }
 };
 
 
 
 exports.sign_up = async (_, { email, password }, { models, secret }) => {
-  console.log('User Sign Up:');
-  const user = await models.users.create({
-    email: email,
-    password: password,
-  });
-
-  console.log('SECRET:',secret);
-
-  return { token: createToken(user, secret, '10h') };
+  try {
+    console.log('User Sign Up:');
+    const user = await models.users.create({
+      email: email,
+      password: password,
+    });
+    console.log('SECRET:', secret);
+    return { token: createToken(user, secret, '10h') };
+  } catch (e) {
+    return e;
+  }
 };
 
-exports.sign_in = async (_,{ email, password },{ models, secret }) => {
-  console.log('User Sign in:');
-  const user = await models.users.findByLogin(email);
+exports.sign_in = async (_, { email, password }, { models, secret }) => {
+  try {
+    console.log('User Sign in:');
+    const user = await models.users.findByLogin(email);
+    if (!user) {
+      throw new UserInputError(
+        'No user found with this email credentials.',
+      );
+    }
 
-  if (!user) {
-    throw new UserInputError(
-      'No user found with this email credentials.',
-    );
+    const isValid = await user.validatePassword(password);
+    if (!isValid) throw new AuthenticationError('Invalid password.'); //probably want to give a more generic message for security
+    console.log('Returning Token:');
+    return { token: createToken(user, secret, '10h') };
   }
-
-  const isValid = await user.validatePassword(password);
-
-  if (!isValid) {
-    throw new AuthenticationError('Invalid password.'); //probably want to give a more generic message for security
+  catch (e) {
+    return e;
   }
-  console.log('Returning Token:');
-  return { token: createToken(user, secret, '10h') };
 };
 
 /**
  * Utility Functions
  */
 const createToken = async (user, secret, expiresIn) => {
-  const {id, email} = user;
-  return await jwt.sign({id,email}, secret, {
-    expiresIn,
-  });
+  try {
+    const { id, email } = user;
+    return await jwt.sign({ id, email }, secret, {
+      expiresIn,
+    });
+  }
+  catch (e) {
+    return e;
+  }
 };
