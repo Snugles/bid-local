@@ -18,9 +18,9 @@ const resolvers = {
     get_items: item.get_items, //OK
     //get_category_by_Id: category.get_category_by_Id,  //necessary?
     get_categories: category.get_categories, //OK
-    get_address_by_userId: address.get_address_by_userId, //necessary?
+    get_address: combineResolvers(isAddressOwner,address.get_address), //necessary?
     //get_addresses: address.get_addresses, //to deprecate/block/admin only
-    get_info: image.get_info, //OK
+    get_info: image.get_info, //OK?
   },
 
   User: {
@@ -45,7 +45,7 @@ const resolvers = {
     //create_user: user.create_user, //to deprecate/block/admin only
     update_user: combineResolvers(isAuthenticated,user.update_user), //OK
     //delete_user: user.delete_user, //to deprecate/block/admin only
-    sign_up: user.sign_up,
+    sign_up: user.sign_up, //OK
     sign_in: user.sign_in, //OK
     create_item: combineResolvers(isAuthenticated,item.create_item), //OK
     delete_item_by_id: combineResolvers(isItemOwner,item.delete_item_by_id),

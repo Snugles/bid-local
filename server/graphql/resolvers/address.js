@@ -1,5 +1,5 @@
-exports.get_address_by_userId = async (_, { userId }, { models }) => {
-  const address = await models.addresses.findOne({ where: { userId: userId } });
+exports.get_address = async (_, __, { models, me }) => {
+  const address = await models.addresses.findOne({ where: { userId: me.id } });
   return address;
 };
 
@@ -27,7 +27,7 @@ exports.create_address = async (_, { address }, { models, me }) => {
         city,
         postcode,
         country,
-        userId: userId, //make dynamic
+        userId: userId,
       };
       const createdAddress = await models.addresses.create(newAddress);
 
@@ -41,8 +41,12 @@ exports.create_address = async (_, { address }, { models, me }) => {
 };
 
 exports.update_address = async (_, { addressId, address }, { models }) => {
-  let addressDB = await models.addresses.findOne({ where: { id: addressId } });
-  addressDB = Object.assign(addressDB, address);
-  await addressDB.save();
-  return addressDB;
+  try {
+    let addressDB = await models.addresses.findOne({ where: { id: addressId } });
+    addressDB = Object.assign(addressDB, address);
+    await addressDB.save();
+    return addressDB;
+  } catch (e) {
+    return e;
+  }
 };

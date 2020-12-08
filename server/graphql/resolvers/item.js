@@ -61,14 +61,19 @@ exports.delete_item_by_id = async (_, { itemId }, { models }) => {
     return true;
   } catch (error) {
     console.error('Error', error);
+    return error;
   }
 };
 
 exports.update_item = async (_, { itemId, item }, { models }) => {
-  let itemDB = await models.items.findOne({ where: { id: itemId } });
-  itemDB = Object.assign(itemDB, item);
-  await itemDB.save();
-  return itemDB;
+  try {
+    let itemDB = await models.items.findOne({ where: { id: itemId } });
+    itemDB = Object.assign(itemDB, item);
+    await itemDB.save();
+    return itemDB;
+  } catch (e) {
+    return e;
+  }
 };
 
 exports.place_a_bid = async (_, { itemId, userId }, {models}) => {
