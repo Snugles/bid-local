@@ -4,8 +4,10 @@
  * which makes all the async await irrelevant in some cases
  * but to be explicit it can remain.
  */
-const jwt = require('jsonwebtoken');
 
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const saltRounds = 10;
 
 exports.get_user_by_email = async (_, { email }, { models }) => {
   try {
@@ -82,6 +84,8 @@ exports.update_user = async (_, { user }, { models, me }) => {
     if (userFound) {
       userFound = Object.assign(userFound, user);
       console.log('USER FOUND:', userFound);
+      userFound.password = await bcrypt.hash(userFound.password,saltRounds );
+      console.log('USER UPDATED:', userFound);
       await userFound.save();
       return userFound;
     }

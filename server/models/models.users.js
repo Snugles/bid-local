@@ -23,7 +23,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: true,
-        len: [1, 42],
       }
     },
     firstName: {
