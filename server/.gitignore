@@ -3,3 +3,4 @@
 /config/*
 /migrations/*
 /models/_current.json
+*/.env

@@ -1,20 +1,16 @@
-<<<<<<< HEAD
 import {
   ApolloClient,
   ApolloProvider,
   HttpLink,
   InMemoryCache,
+  split,
 } from '@apollo/client';
-import { APOLLO_SERVER_URI } from '@env';
-=======
-import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache, split } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { APOLLO_SERVER_URI, APOLLO_WEB_SERVER_URI } from '@env';
 import { WebSocketLink } from 'apollo-link-ws';
->>>>>>> 6a7d96ba7f21d56e04003c24c0848238ca296f65
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import Navigator from './routes/HomeStack';
 
@@ -36,13 +32,13 @@ export default function App() {
   const wsLink = new WebSocketLink({
     uri: APOLLO_WEB_SERVER_URI,
     options: {
-      reconnect: true
-    }
+      reconnect: true,
+    },
   });
-  
+
   const uri = APOLLO_SERVER_URI;
   const link = new HttpLink({ uri: uri });
-  
+
   const splitLink = split(
     ({ query }) => {
       const definition = getMainDefinition(query);
@@ -63,7 +59,7 @@ export default function App() {
   return (
     <ApolloProvider client={client}>
       {fontsLoaded ? (
-        <Navigator email={email} id={id}/>
+        <Navigator email={email} id={id} />
       ) : (
         <AppLoading
           startAsync={getFonts}

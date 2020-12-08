@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,7 +8,7 @@ import {
   Dimensions,
   Image,
   SafeAreaView,
-  Button
+  RefreshControl,
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -26,8 +26,17 @@ export default function Home({ navigation, route }) {
     fetchPolicy: 'cache-and-network',
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [refresh, setRefresh] = useState(false);
 
   const { email } = route.params;
+  const onRefresh = useCallback(() => {
+    setRefresh(true);
+
+    setTimeout(() => {
+      getItems();
+      setRefresh(false);
+    }, 2000);
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {
@@ -45,33 +54,47 @@ export default function Home({ navigation, route }) {
     console.log(currentCategory);
   }, [currentCategory]);
 
-  if (categories.loading) return <Text>Loading...</Text>;
+  if (categories.loading)
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.loading}>Loading...</Text>
+        <Image source={require('../assets/ecommerce.gif')} />
+      </SafeAreaView>
+    );
   if (categories.error) {
     return <Text>Error: </Text>;
   }
-  function categoryTest (){
+
+  function categoryTest() {
     const output = [];
-    for (const component of items.data.get_items){
-      if (currentCategory==='ALL'||(component.category&&component.category.name===currentCategory)) {
-        output.push(<TouchableWithoutFeedback
+    for (const component of items.data.get_items) {
+      if (
+        currentCategory === 'ALL' ||
+        (component.category && component.category.name === currentCategory)
+      ) {
+        output.push(
+          <TouchableWithoutFeedback
             key={component.id}
             onPress={() => {
               navigation.navigate('Item', { id: component.id });
-          }}>
+            }}
+          >
             <View style={styles.itemView}>
               <ImageBackground
                 style={styles.itemImage}
                 resizeMode="cover"
-                source={{ uri:component.picUrl1 }}>
+                source={{ uri: component.picUrl1 }}
+              >
                 <Timer
                   style={styles.itemTime}
-                  deadline={new Date('December 25, 2020 12:00:00')}/>
+                  deadline={new Date('December 25, 2020 12:00:00')}
+                />
               </ImageBackground>
-            <Text style={styles.itemTitle}>{component.name}</Text>
-            <Text style={styles.itemPrice}>{component.minPrice}€</Text>
-          </View>
-        </TouchableWithoutFeedback>
-        )
+              <Text style={styles.itemTitle}>{component.name}</Text>
+              <Text style={styles.itemPrice}>{component.minPrice}€</Text>
+            </View>
+          </TouchableWithoutFeedback>,
+        );
       }
     }
     if (!output.length) {
@@ -91,12 +114,19 @@ export default function Home({ navigation, route }) {
     return (
       <>
         <Navbar navigation={navigation} canGoBack={false} />
-        <ScrollView style={styles.container}>
-        <Button title="Refresh"
-        onPress={() => {
-          getItems();
-        }}
-        color="#0C637F88"/>
+        <ScrollView
+          style={styles.container}
+          refreshControl={
+            <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+          }
+        >
+          {/* <Button
+            title="Refresh"
+            onPress={() => {
+              getItems();
+            }}
+            color="#0C637F88"
+          /> */}
           <View style={styles.homeContent}>
             <Text style={styles.categoryTitle}>Category:</Text>
             <DropDownPicker
@@ -135,8 +165,7 @@ export default function Home({ navigation, route }) {
               onChangeItem={(cat) => setCurrentCategory(cat.value)}
             />
             <View style={styles.homeItems}>
-              {items.data
-                ? categoryTest() : null}
+              {items.data ? categoryTest() : null}
             </View>
           </View>
         </ScrollView>
@@ -207,11 +236,11 @@ const styles = StyleSheet.create({
     marginBottom: '-40%',
     zIndex: 1,
   },
-  error:{
+  error: {
     fontFamily: 'Roboto_medium',
     fontSize: 25,
     color: '#67A036',
     textAlign: 'center',
-    marginBottom:1000
-  }
+    marginBottom: 1000,
+  },
 });

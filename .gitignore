@@ -2,3 +2,4 @@
 .env
 /config/*
 /models/_current.json
+*/.env
