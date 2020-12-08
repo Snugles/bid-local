@@ -4,6 +4,7 @@ const item = require('./item');
 const category = require('./category');
 const address = require('./address');
 const image = require('./image');
+const pubsub = require('../utils/pubsub');
 
 const resolvers = {
   Query: {
@@ -51,7 +52,13 @@ const resolvers = {
     update_category: category.update_category,
     create_address: address.create_address,
     update_address: address.update_address,
+    place_a_bid: item.place_a_bid,
     image_uploader: image.image_uploader
+  },
+  Subscription: {
+    bidPlaced: {
+      subscribe: () => pubsub.asyncIterator(['bidPlaced'])
+    }
   }
 };
 
