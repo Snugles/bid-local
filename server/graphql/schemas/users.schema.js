@@ -38,7 +38,7 @@ extend type Mutation {
   create_user(user: UserUpdate!): User
   update_user(user:UserUpdate!): User!
   delete_user(userId:ID!): Boolean!
-  sign_up(email: String!,password: String!): Token!
+  sign_up(user: UserUpdate!): Token!
   sign_in(email: String!,password: String!): Token!
 }
 `;
