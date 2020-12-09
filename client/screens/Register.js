@@ -83,7 +83,7 @@ export default function Register({ navigation }) {
         </View>
         <View style={styles.container}>
           <Item floatingLabel style={styles.labelContainer}>
-            <Label style={styles.label}>Email</Label>
+            <Label style={styles.label}>{'   '}Email</Label>
             <Input
               onChangeText={(text) => setRegisterEmail(text)}
               value={registerEmail}
