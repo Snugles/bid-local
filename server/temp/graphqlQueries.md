@@ -5,7 +5,7 @@
 ----------------**TOKEN**---------------------
 HTTP HEADERS (copy in here the token string you get from sign in to run queries that require it)
 {
-  "x-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg2MDllZjM4LTQyZTUtNDliYS1iMzcxLTliMmIyMGE4YTc1MCIsImVtYWlsIjoidXNlckB1c2VyLmNvbSIsImlhdCI6MTYwNzUwODYzOCwiZXhwIjoxNjA3NTQ0NjM4fQ.DpZklwGzO6mDX8JSefI-GXgVZBC_s7F_GEqo00qU124"
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzYTNlN2IxLTQ2OGYtNDU4Ny05ZTFiLTM3MjkyMzRkNTQ5MSIsImVtYWlsIjoidXNlckB1c2VyLmNvbSIsImlhdCI6MTYwNzUxMTUxMywiZXhwIjoxNjA3NTQ3NTEzfQ.kvQopXOLdo9Nu1a1VwLlTysvW2U7pPkjSppY-EX6Igg"
 }
 
 -----------------**USERS**---------------------

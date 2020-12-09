@@ -34,7 +34,7 @@ extend type Mutation {
   create_item(item: ItemUpdate!): Item!
   delete_item_by_id(itemId: ID!): Boolean!
   update_item(itemId:ID!,item:ItemUpdate!): Item!
-  place_a_bid(itemId:ID!, userId: ID!, biddingPrice: Int): Item!
+  place_a_bid(itemId:ID!, userId: ID!, biddingPrice: Int): Item
 }
 extend type Subscription {
     bidPlaced: Item

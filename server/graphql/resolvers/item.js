@@ -79,10 +79,11 @@ exports.update_item = async (_, { itemId, item }, { models }) => {
 
 exports.place_a_bid = async (_, { itemId, userId, biddingPrice }, { models }) => {
   let itemDB = await models.items.findOne({ where: { id: itemId } });
+  // console.log(itemDB);
   try {
     console.log('checking date');
     if (Date.parse(itemDB.auctionEnd) > Date.now()) {
-      return { message: 'Bidding time over' };
+      throw new Error('Bidding time is over!');
     }
     console.log('checking Bidding');
     if (biddingPrice) {
