@@ -1,34 +1,59 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  Dimensions, Image, ImageBackground, RefreshControl, SafeAreaView, ScrollView, StyleSheet,
-  Text, TextInput, TouchableHighlight, View
+  Dimensions, Image,
+
+
+
+
+  ImageBackground,
+
+
+
+  RefreshControl, SafeAreaView,
+
+
+
+
+  ScrollView, StyleSheet,
+  Text,
+
+
+
+
+  TextInput,
+  TouchableHighlight, View
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import Navbar from '../components/Navbar';
 import Timer from '../components/Timer';
 import { GET_ITEM_BY_ID, PLACE_A_BID } from '../queries/item';
 import bidSubscription from '../queries/subscription';
+
 export default function Item({ navigation, route }) {
   bidSubscription();
   const windowWidth = Dimensions.get('window').width;
   const [offerBid, setOfferBid] = useState('');
   const [images, setImages] = useState([]);
   const [typeError, setTypeError] =useState('');
+
   const [changeItem, changedItem] = useMutation(PLACE_A_BID);
   const { loading, error, data } = useQuery(GET_ITEM_BY_ID, {
     variables: {
       id: route.params.id,
     },
   });
+
   const { email } = route.params;
   const [refresh, setRefresh] = useState(false);
   const onRefresh = useCallback(() => {
     setRefresh(true);
+
     setTimeout(() => {
       setRefresh(false);
     }, 2000);
   }, []);
+
   useEffect(() => {
     if (data) {
       if (data.get_item_by_Id.picUrl3 !== '')
@@ -43,6 +68,7 @@ export default function Item({ navigation, route }) {
       else setImages([{uri:data.get_item_by_Id.picUrl1}]);
     }
   }, [data]);
+
   const imageList = ({ item, index }) => {
     return (
       <ImageBackground
@@ -53,14 +79,16 @@ export default function Item({ navigation, route }) {
       />
     );
   };
-  function LatestBid () {
+
+  function LatestBid() {
     const mutationVariables = {
       itemId: route.params.id,
-      biddingPrice: parseInt(offerBid),
+      biddingPrice: offerBid,
     };
     console.log(mutationVariables)
     changeItem({variables:mutationVariables});
   }
+
   function handleCurrency(input) {
     setTypeError('');
     if (input) {
@@ -82,6 +110,7 @@ export default function Item({ navigation, route }) {
       setOfferBid(input);
     }
   }
+
   if (loading)
     return (
       <SafeAreaView style={styles.loadingContainer}>
@@ -90,6 +119,7 @@ export default function Item({ navigation, route }) {
       </SafeAreaView>
     );
   if (error) return <Text>Error: {error}</Text>;
+
   return (
     <>
       <Navbar navigation={navigation} canGoBack={true} />
@@ -139,6 +169,7 @@ export default function Item({ navigation, route }) {
           {typeError ? (
             <Text style={{ color: 'red', fontSize: 25 }}>{typeError}</Text>
           ) : null}
+
           <Text style={{ fontWeight: '700', fontSize: 18 }}>
             Item Description:
           </Text>
@@ -166,6 +197,7 @@ export default function Item({ navigation, route }) {
     </>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
