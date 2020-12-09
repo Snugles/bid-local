@@ -74,6 +74,7 @@ exports.update_item = async (_, { itemId, item }, { models }) => {
 };
 
 exports.place_a_bid = async (_, { itemId, biddingPrice }, { models, me }) => {
+  console.log(biddingPrice);
   let itemDB = await models.items.findOne({ where: { id: itemId } });
   try {
     // Checking date
