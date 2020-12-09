@@ -75,6 +75,7 @@ export default function Login({ navigation, route }) {
           <Item floatingLabel style={styles.labelContainer}>
             <Label style={styles.label}>Password</Label>
             <Input
+              secureTextEntry={true}
               autoCapitalize='none'
               onChangeText={(text) => setPassword(text)}
               value ={password}
