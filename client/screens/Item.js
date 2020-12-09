@@ -12,8 +12,6 @@ import {
   TextInput,
   TouchableHighlight,
   RefreshControl,
-  SafeAreaView,
-  Image,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import Navbar from '../components/Navbar';
