@@ -3,11 +3,9 @@ import { gql } from '@apollo/client';
 export const PLACE_A_BID = gql`
 mutation place_a_bid (
   $itemId: ID!,
-  $userId: ID!,
-  $biddingPrice:Int!,
+  $biddingPrice: Int
 ) {
   place_a_bid (
-    userId: $userId
     itemId: $itemId
     biddingPrice: $biddingPrice
   ) {
@@ -27,6 +25,7 @@ query  get_item_by_Id ( $id: ID! ){
     picUrl1
     picUrl2
     picUrl3
+    bidder
     user {
       firstName
       lastName
@@ -35,4 +34,12 @@ query  get_item_by_Id ( $id: ID! ){
     }
   }
 }
+`;
+
+export const GET_USER_INFO = gql`
+  query get_user_info {
+    get_user_info {
+      id
+    }
+  }
 `;

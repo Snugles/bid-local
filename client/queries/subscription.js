@@ -7,6 +7,7 @@ export default () => useSubscription(gql`
       name
       minimumBid
       id
+      bidder
     }
   }
 `);

@@ -31,25 +31,30 @@ export default function UserInfo({ navigation, route }) {
   useEffect(() => {
     if (user.data) {
       setEmail(user.data.get_user_info.email);
-      setPhoneNumber(user.data.get_user_info.phoneNumber ? user.data.get_user_info.phoneNumber : '');
+      setPhoneNumber(
+        user.data.get_user_info.phoneNumber
+          ? user.data.get_user_info.phoneNumber
+          : '',
+      );
       setID(user.data.get_user_info.id);
-      setAddress(user.data.get_user_info.address
-        ?
-        {
-          firstLineAddress: user.data.get_user_info.address.firstLineAddress,
-          secondLinAddress: user.data.get_user_info.address.secondLineAddress,
-          city: user.data.get_user_info.address.city,
-          postcode: user.data.get_user_info.address.postcode,
-          country: user.data.get_user_info.address.country,
-        }
-        :
-        {
-          firstLineAddress: '',
-          secondLinAddress: '',
-          city: '',
-          postcode: '',
-          country: '',
-        }
+      setAddress(
+        user.data.get_user_info.address
+          ? {
+              firstLineAddress:
+                user.data.get_user_info.address.firstLineAddress,
+              secondLinAddress:
+                user.data.get_user_info.address.secondLineAddress,
+              city: user.data.get_user_info.address.city,
+              postcode: user.data.get_user_info.address.postcode,
+              country: user.data.get_user_info.address.country,
+            }
+          : {
+              firstLineAddress: '',
+              secondLinAddress: '',
+              city: '',
+              postcode: '',
+              country: '',
+            },
       );
       return;
     }

@@ -7,6 +7,7 @@ import AddItem from '../screens/AddItem';
 import UsersItems from '../screens/UsersListedItems';
 import Login from '../screens/Login';
 import UserInfo from '../screens/UserInfo';
+import Register from '../screens/Register';
 
 const Stack = createStackNavigator();
 
@@ -14,31 +15,21 @@ const HomeStack = ({ token, initial }) => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initial} headerMode={null}>
-        <Stack.Screen
-          name="Home"
-          component={Home}
-        />
-        <Stack.Screen
-          name="Item"
-          component={Item}
-        />
-        <Stack.Screen
-          name="AddItem"
-          component={AddItem}
-        />
-        <Stack.Screen
-          name="UsersItems"
-          component={UsersItems}
-        />
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Item" component={Item} />
+        <Stack.Screen name="AddItem" component={AddItem} />
+        <Stack.Screen name="UsersItems" component={UsersItems} />
         <Stack.Screen
           name="Login"
           component={Login}
           initialParams={{ token: token }}
         />
         <Stack.Screen
-          name="UserInfo"
-          component={UserInfo}
+          name="Register"
+          component={Register}
+          initialParams={{ token: token }}
         />
+        <Stack.Screen name="UserInfo" component={UserInfo} />
       </Stack.Navigator>
     </NavigationContainer>
   );
