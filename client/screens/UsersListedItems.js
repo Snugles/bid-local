@@ -13,7 +13,6 @@ import {
   TextInput,
   Button,
   RefreshControl,
-  Image,
 } from 'react-native';
 import { Icon } from 'native-base';
 import Navbar from '../components/Navbar';

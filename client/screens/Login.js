@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, ImageBackground } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ImageBackground,
+  TouchableOpacity,
+} from 'react-native';
 import { Item, Input, Label, Button } from 'native-base';
 import { SIGN_IN } from '../queries/login';
 import { useMutation } from '@apollo/client';
@@ -27,6 +34,10 @@ export default function Login({ navigation, route }) {
     signIn({ variables: { email: initialEmail, password: 'user' } });
   }
 
+  function register() {
+    navigation.navigate('Register');
+  }
+
   if (isLoading) {
     return (
       <ImageBackground
@@ -51,7 +62,7 @@ export default function Login({ navigation, route }) {
         </View>
         <View style={styles.container}>
           <Item floatingLabel style={styles.labelContainer}>
-            <Label style={styles.label}>Email</Label>
+            <Label style={styles.label}> Email</Label>
             <Input
               onChangeText={(text) => setInitialEmail(text)}
               value={initialEmail}
@@ -75,6 +86,9 @@ export default function Login({ navigation, route }) {
               </Text>
             </Button>
           </View>
+          <TouchableOpacity style={styles.register} onPress={register}>
+            <Text style={styles.register}>Not signed up? Register here</Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     );
@@ -136,5 +150,12 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: 'white',
     marginBottom: '5%',
+  },
+  register: {
+    marginTop: '5%',
+    alignItems: 'center',
+    color: 'white',
+    fontFamily: 'Roboto_medium',
+    fontFamily: 'Roboto_medium',
   },
 });

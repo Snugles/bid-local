@@ -24,7 +24,11 @@ const HomeStack = ({ token, initial }) => {
           component={Login}
           initialParams={{ token: token }}
         />
-        <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen
+          name="Register"
+          component={Register}
+          initialParams={{ token: token }}
+        />
         <Stack.Screen name="UserInfo" component={UserInfo} />
       </Stack.Navigator>
     </NavigationContainer>

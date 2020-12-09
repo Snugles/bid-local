@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, ImageBackground } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ImageBackground,
+  TouchableOpacity,
+} from 'react-native';
 import { Item, Input, Label, Button } from 'native-base';
 import { SIGN_UP } from '../queries/register';
 import { useMutation } from '@apollo/client';
@@ -31,6 +38,9 @@ export default function Register({ navigation }) {
   useEffect(() => {
     setIsLoading(false);
   }, []);
+  function backToLogin() {
+    navigation.navigate('Login');
+  }
 
   function register() {
     signUp({
@@ -97,6 +107,9 @@ export default function Register({ navigation }) {
               </Text>
             </Button>
           </View>
+          <TouchableOpacity style={styles.register} onPress={backToLogin}>
+            <Text style={styles.register}>Back to login</Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     );
@@ -158,5 +171,12 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: 'white',
     marginBottom: '5%',
+  },
+  register: {
+    marginTop: '5%',
+    alignItems: 'center',
+    color: 'white',
+    fontFamily: 'Roboto_medium',
+    fontFamily: 'Roboto_medium',
   },
 });
