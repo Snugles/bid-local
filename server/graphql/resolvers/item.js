@@ -105,12 +105,14 @@ exports.place_a_bid = async (_, { itemId, biddingPrice }, { models, me }) => {
     return e;
   }
 };
-
+const { Op } = require('sequelize');
 exports.won_item_list = async (_, __, { models, me }) => {
   const wonItem = await models.items.findAll(
     { where: { 
       bidder: me.id,
-      auctionTime: Date.parse(itemDB.auctionEnd) < Date.now()
+      auctionEnd: {
+        [Op.lt]:  Date.now()
+      }
     } 
     });
   return wonItem;
