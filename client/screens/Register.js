@@ -45,10 +45,13 @@ export default function Register({ navigation }) {
   function register() {
     signUp({
       variables: {
+        user: {
+          email: registerEmail,
+          password: 'pass',
+        },
         // firstName: firstName,
         // lastName: lastName,
-        password: 'pass',
-        email: registerEmail,
+
         // phoneNumber: phoneNumber,
         // firstLineAddress: firstLineAddress,
         // secondLineAddress: secondLineAddress,
