@@ -41,6 +41,10 @@ export default function SideBar({ navigation, hideSide, setHideSide }) {
             <Icon type="MaterialCommunityIcons" name="account" style={styles.sidebarIcon}/>
             <Text style={styles.sidebarText}>Profile</Text>
           </ListItem>
+          <ListItem onPress={()=>{navigation.navigate('UserWonItems'); setHideSide(true)}}>
+            <Icon type="MaterialCommunityIcons" name="crown" style={styles.sidebarIcon}/>
+            <Text style={styles.sidebarText}>Won Items</Text>
+          </ListItem>
           <ListItem onPress={()=>{navigation.navigate('UsersItems'); setHideSide(true)}}>
             <Icon type="MaterialCommunityIcons" name="format-list-bulleted-square" style={styles.sidebarIcon}/>
             <Text style={styles.sidebarText}>User Items</Text>
