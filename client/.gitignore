@@ -11,7 +11,7 @@ web-build/
 .env
 
 /node_modules
-.env
+*.env
 /config/config.js
 
 # macOS

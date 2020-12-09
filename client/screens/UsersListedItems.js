@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   SafeAreaView,
   LayoutAnimation,
@@ -12,6 +12,7 @@ import {
   TextInput,
   Button,
   RefreshControl,
+  Image,
 } from 'react-native';
 import { Icon } from 'native-base';
 import Navbar from '../components/Navbar';

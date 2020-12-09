@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  SafeAreaView,
 } from 'react-native';
 import Navbar from '../components/Navbar';
 import { CREATE_ITEM, GET_CATEGORIES } from '../queries/addItem';

@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,6 +10,8 @@ import {
   TextInput,
   TouchableHighlight,
   RefreshControl,
+  SafeAreaView,
+  Image,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import Navbar from '../components/Navbar';

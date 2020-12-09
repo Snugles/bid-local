@@ -6,6 +6,7 @@ import {
   Button,
   TextInput,
   SafeAreaView,
+  Image,
 } from 'react-native';
 import Navbar from '../components/Navbar';
 import { GET_EMAIL, UPDATE_USER } from '../queries/userInfo';
