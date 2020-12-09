@@ -56,6 +56,7 @@ const resolvers = {
     update_category: category.update_category, //to deprecate/block/admin only
     create_address: combineResolvers(isAuthenticated, address.create_address),
     update_address: combineResolvers(isAddressOwner, address.update_address),
+    place_a_bid: item.place_a_bid,
     //image_uploader: image.image_uploader //to protect
   },
   Subscription: {

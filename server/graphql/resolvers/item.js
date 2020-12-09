@@ -1,9 +1,9 @@
 const pubsub = require('../utils/PubSub');
 
 exports.get_item_by_Id = async (_, { id }, { models }) => {
-  console.log('Getting ITEM:',id);
+  console.log('Getting ITEM:', id);
   const item = await models.items.findByPk(id);
-  console.log('Returning:',item);
+  console.log('Returning:', item);
   return item;
 };
 
@@ -23,8 +23,8 @@ exports.get_category_by_Item = async (item, _, { models }) => {
 };
 
 exports.create_item = async (_, { item }, { models, me }) => {
-  console.log('CREATING ITEM:',me);
-  console.log('User Creating Item:',me);
+  console.log('CREATING ITEM:', me);
+  console.log('User Creating Item:', me);
   const { name, minPrice, description, picUrl1, picUrl2, picUrl3, auctionEnd, categoryId } = item;
   try {
     const item = {
@@ -77,30 +77,35 @@ exports.update_item = async (_, { itemId, item }, { models }) => {
   }
 };
 
-exports.place_a_bid = async (_, { itemId, userId, biddingPrice }, {models}) => {
-  let itemDB = await models.items.findOne({ where: { id: itemId}});
-
-  if (Date.parse(itemDB.auctionEnd) > Date.now()) {
-    return { message: 'Bidding time over'};
-  }
-
-  if (biddingPrice) {
-    itemDB.minimumBid = itemDB.minimumBid + biddingPrice;
-  }
-  else {
+exports.place_a_bid = async (_, { itemId, userId, biddingPrice }, { models }) => {
+  let itemDB = await models.items.findOne({ where: { id: itemId } });
+  try {
+    console.log('checking date');
+    if (Date.parse(itemDB.auctionEnd) > Date.now()) {
+      return { message: 'Bidding time over' };
+    }
+    console.log('checking Bidding');
+    if (biddingPrice) {
+      itemDB.minimumBid = itemDB.minimumBid + biddingPrice;
+    }
+    else {
+      itemDB.minimumBid++;
+    }
+    console.log('Changing Values');
     itemDB.minimumBid++;
+    itemDB.bidder = userId;
+
+    console.log('Saving Values');
+    await itemDB.save();
+
+    console.log('Publishing');
+    pubsub.publish('bidPlaced', {
+      bidPlaced: itemDB
+    });
+    return itemDB;
+  } catch (e) {
+    return e;
   }
-
-  itemDB.minimumBid++;
-  itemDB.bidder = userId;
-
-  await itemDB.save();
-
-  pubsub.publish('bidPlaced', {
-    bidPlaced: itemDB
-  });
-
-  return itemDB;
 };
 
 

@@ -1,6 +1,13 @@
 // For queries that require Ids please insert ones given by database.
 // Here is some sample queries
 
+
+----------------**TOKEN**---------------------
+HTTP HEADERS (copy in here the token string you get from sign in to run queries that require it)
+{
+  "x-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg2MDllZjM4LTQyZTUtNDliYS1iMzcxLTliMmIyMGE4YTc1MCIsImVtYWlsIjoidXNlckB1c2VyLmNvbSIsImlhdCI6MTYwNzUwODYzOCwiZXhwIjoxNjA3NTQ0NjM4fQ.DpZklwGzO6mDX8JSefI-GXgVZBC_s7F_GEqo00qU124"
+}
+
 -----------------**USERS**---------------------
 //Create User
 
@@ -11,7 +18,7 @@ mutation {
 }
 
 mutation {
-  sign_in(email: "mooming6@gmail.com", password: "pass") {
+  sign_in(email: "user@user.com", password: "pass") {
     token
   }
 }
@@ -59,10 +66,7 @@ mutation {
   }
 }
 
-HTTP HEADERS
-{
-  "x-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA4Y2NjNGM4LTU3NTUtNGE3ZS04MzY3LTJiNzkyYmFkYjA5MiIsImVtYWlsIjoibW9vbWluZzZAZ21haWwuY29tIiwiaWF0IjoxNjA3NDIxNTc2LCJleHAiOjE2MDc0NTc1NzZ9.V_TGleKT3IMozmiinXte5HrqMuwus_ILQU_uDS_sB5A"
-}
+
 
 
 
