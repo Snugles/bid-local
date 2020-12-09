@@ -70,13 +70,13 @@ export default function Item({ navigation, route }) {
   };
 
   function LatestBid() {
-    const mutationVariables = {
+    const queryVariables = {
+      userId: "694b46f7-d39e-482d-9154-6980fc6f06b4",
       itemId: route.params.id,
-      userId: "04489e5a-ebfb-4fa3-9b86-436ba519d8bd",
       biddingPrice: parseInt(offerBid),
     };
-    console.log(mutationVariables)
-    changeItem({variables:mutationVariables});
+    console.log(queryVariables)
+    changeItem({ variables: queryVariables });
   }
 
   function handleCurrency(input) {
