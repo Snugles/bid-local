@@ -126,6 +126,7 @@
                     "seqType": "Sequelize.INTEGER"
                 },
                 "bidder": {
+                    "allowNull": true,
                     "field": "bidder",
                     "seqType": "Sequelize.UUID"
                 },
