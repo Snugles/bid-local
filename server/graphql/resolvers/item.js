@@ -73,29 +73,29 @@ exports.update_item = async (_, { itemId, item }, { models }) => {
   }
 };
 
-exports.place_a_bid = async (_, { itemId, userId, biddingPrice }, { models }) => {
+exports.place_a_bid = async (_, { itemId, biddingPrice }, { models, me }) => {
   let itemDB = await models.items.findOne({ where: { id: itemId } });
-  // console.log(itemDB);
   try {
-    console.log('checking date');
+    // Checking date
     if (Date.parse(itemDB.auctionEnd) < Date.now()) {
       throw new Error('Bidding time is over!');
     }
-    console.log('checking Bidding');
+
+    // Checking Bidding
     if (biddingPrice) {
       itemDB.minimumBid = itemDB.minimumBid + biddingPrice;
     }
     else {
       itemDB.minimumBid++;
     }
-    console.log('Changing Values');
-    itemDB.minimumBid++;
-    itemDB.bidder = userId;
 
-    console.log('Saving Values');
+    // Changing Bidder
+    itemDB.bidder = me.id;
+
+    // Saving Values
     await itemDB.save();
 
-    console.log('Publishing');
+    // Publishing
     pubsub.publish('bidPlaced', {
       bidPlaced: itemDB
     });

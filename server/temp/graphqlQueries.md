@@ -5,7 +5,7 @@
 ----------------**TOKEN**---------------------
 HTTP HEADERS (copy in here the token string you get from sign in to run queries that require it)
 {
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzYTNlN2IxLTQ2OGYtNDU4Ny05ZTFiLTM3MjkyMzRkNTQ5MSIsImVtYWlsIjoidXNlckB1c2VyLmNvbSIsImlhdCI6MTYwNzUxMTUxMywiZXhwIjoxNjA3NTQ3NTEzfQ.kvQopXOLdo9Nu1a1VwLlTysvW2U7pPkjSppY-EX6Igg"
+  "x-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzYTNlN2IxLTQ2OGYtNDU4Ny05ZTFiLTM3MjkyMzRkNTQ5MSIsImVtYWlsIjoidXNlckB1c2VyLmNvbSIsImlhdCI6MTYwNzUyMjg1MSwiZXhwIjoxNjA3NTU4ODUxfQ.Bz86pOirDilGVxgE9EqIxyOtC6L-bQK7cdfD4bxuAeE"
 }
 
 -----------------**USERS**---------------------
@@ -149,29 +149,6 @@ mutation {
 //Delete an item TOKEN NEEDED (ALSO HAS TO BE OWNER OF ITEM)
 mutation {
   delete_item_by_id(itemId:"503455e5-0008-49ae-b6ed-00c8a7ade28b")
-}
-------------------------**BIDDING**---------------------------------
-//Start Listening First
-subscription {
-  bidPlaced{
-    id
-    name
-    user{
-      email
-    }
-  }
-}
-//Place a bid
-mutation{
-  place_a_bid(
-    itemId:"13b2886a-c514-45fb-a251-f7e21973f699",
-    userId:"8609ef38-42e5-49ba-b371-9b2b20a8a750"
-  )
-  {
-    name
-    minPrice
-    description
-  }
 }
 
 -------------------------**CATEGORIES**------------------------------
