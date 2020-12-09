@@ -65,6 +65,8 @@ export default function Login({ navigation, route }) {
           <Item floatingLabel style={styles.labelContainer}>
             <Label style={styles.label}>{'   '}Email</Label>
             <Input
+              keyboardType='email-address'
+              autoCapitalize='none'
               onChangeText={(text) => setInitialEmail(text)}
               value={initialEmail}
               style={{ color: 'white', fontFamily: 'Roboto_medium' }}
@@ -72,10 +74,11 @@ export default function Login({ navigation, route }) {
           </Item>
           <Item floatingLabel style={styles.labelContainer}>
             <Label style={styles.label}>Password</Label>
-            <Input 
-            onChangeText={(text) => setPassword(text)}
-            value ={password}
-            style={{ color: 'white', fontFamily: 'Roboto_medium' }}/>
+            <Input
+              autoCapitalize='none'
+              onChangeText={(text) => setPassword(text)}
+              value ={password}
+              style={{ color: 'white', fontFamily: 'Roboto_medium' }}/>
           </Item>
           <View>
             <Button rounded onPress={login} style={styles.button}>
