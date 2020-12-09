@@ -28,3 +28,13 @@ mutation update_item (
   }
 }
 `;
+
+export const DELETE_ITEM = gql`
+mutation delete_item_by_id (
+  $itemId: ID!
+) {
+  delete_item_by_id (
+    itemId: $itemId
+  )
+}
+`;
