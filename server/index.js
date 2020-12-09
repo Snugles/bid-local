@@ -12,7 +12,7 @@ const app = express();
 app.use(cors());
 app.use(express.static(join(__dirname, './uploads'))); //IS THIS STILL NECESSARY?
 
-const PORT = process.env.PORT || 8000;
+const port = process.env.PORT || 8000;
 
 server.applyMiddleware({ app, path: '/graphql' });
 
@@ -21,8 +21,8 @@ server.installSubscriptionHandlers(httpServer);
 
 try {
   db.sequelize.sync().then(async () => {
-    httpServer.listen({ PORT }, () => {
-      console.log(`Apollo Server on http://localhost:${PORT}/graphql`);
+    httpServer.listen({ port }, () => {
+      console.log(`Apollo Server on http://localhost:${port}/graphql`);
     });
   });
 } catch (error) {
