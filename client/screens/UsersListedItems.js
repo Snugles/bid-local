@@ -82,13 +82,13 @@ export default function UsersItems({ navigation, route }) {
     return (
       <SafeAreaView style={{flex: 1}}>
         <Navbar navigation={navigation} canGoBack={true} />
-        <Button
+        {/* <Button
           title="Refresh"
           onPress={() => {
             getItems();
           }}
           color="#0C637F88"
-        />
+        /> */}
         <ScrollView
           style={styles.container}
           refreshControl={

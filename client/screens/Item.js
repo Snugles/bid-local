@@ -1,27 +1,40 @@
 import { useMutation, useQuery } from '@apollo/client';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
-  Dimensions, Image, ImageBackground, RefreshControl, SafeAreaView, ScrollView, StyleSheet,
-  Text, TextInput, TouchableHighlight, View
+  SafeAreaView,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  ImageBackground,
+  Dimensions,
+  TextInput,
+  TouchableHighlight,
+  RefreshControl,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import Navbar from '../components/Navbar';
 import Timer from '../components/Timer';
-import { GET_ITEM_BY_ID, PLACE_A_BID } from '../queries/item';
+import { GET_ITEM_BY_ID, PLACE_A_BID, GET_USER_INFO } from '../queries/item';
 import bidSubscription from '../queries/subscription';
+
 export default function Item({ navigation, route }) {
   bidSubscription();
   const windowWidth = Dimensions.get('window').width;
   const [offerBid, setOfferBid] = useState('');
   const [images, setImages] = useState([]);
   const [typeError, setTypeError] =useState('');
+  const [highestBidder, setHighestBidder] = useState(false);
+
+  const user = useQuery(GET_USER_INFO);
   const [changeItem, changedItem] = useMutation(PLACE_A_BID);
   const { loading, error, data } = useQuery(GET_ITEM_BY_ID, {
     variables: {
       id: route.params.id,
     },
   });
-  const { email } = route.params;
+
   const [refresh, setRefresh] = useState(false);
   const onRefresh = useCallback(() => {
     setRefresh(true);
@@ -29,6 +42,7 @@ export default function Item({ navigation, route }) {
       setRefresh(false);
     }, 2000);
   }, []);
+
   useEffect(() => {
     if (data) {
       if (data.get_item_by_Id.picUrl3 !== '')
@@ -41,8 +55,14 @@ export default function Item({ navigation, route }) {
           {uri:data.get_item_by_Id.picUrl1},
           {uri:data.get_item_by_Id.picUrl2}]);
       else setImages([{uri:data.get_item_by_Id.picUrl1}]);
+      if (user) {
+        if (user.data.get_user_info.id===data.get_item_by_Id.bidder) {
+          setHighestBidder(true);
+        }
+      }
     }
   }, [data]);
+
   const imageList = ({ item, index }) => {
     return (
       <ImageBackground
@@ -53,14 +73,20 @@ export default function Item({ navigation, route }) {
       />
     );
   };
-  function LatestBid () {
-    const mutationVariables = {
-      itemId: route.params.id,
-      biddingPrice: parseInt(offerBid),
-    };
-    console.log(mutationVariables)
-    changeItem({variables:mutationVariables});
+
+  function LatestBid() {
+    if (offerBid<data.get_item_by_Id.minimumBid) {
+      setTypeError('Bid is lower than current highest bid.')
+    }
+      const mutationVariables = {
+        userId: "694b46f7-d39e-482d-9154-6980fc6f06b4",
+        itemId: route.params.id,
+        biddingPrice: parseInt(offerBid)-data.get_item_by_Id.minimumBid,
+      };
+      console.log(mutationVariables)
+    changeItem({ variables: mutationVariables });
   }
+
   function handleCurrency(input) {
     setTypeError('');
     if (input) {
@@ -82,6 +108,7 @@ export default function Item({ navigation, route }) {
       setOfferBid(input);
     }
   }
+
   if (loading)
     return (
       <SafeAreaView style={styles.loadingContainer}>
@@ -90,6 +117,7 @@ export default function Item({ navigation, route }) {
       </SafeAreaView>
     );
   if (error) return <Text>Error: {error}</Text>;
+
   return (
     <>
       <Navbar navigation={navigation} canGoBack={true} />
@@ -113,6 +141,9 @@ export default function Item({ navigation, route }) {
         <View style={styles.itemInfo}>
           <Text style={styles.itemTitle}>{data.get_item_by_Id.name}</Text>
           <Text style={styles.itemPrice}>{data.get_item_by_Id.minimumBid}€</Text>
+          {user&&highestBidder?
+            <Text>You are the current highest bidder.</Text>:
+            <Text>Another user is the current highest bidder.</Text>}
           <View style={styles.time}>
             <Text style={{ color: 'white', fontSize: 16 }}>Time Left:</Text>
             <Timer style={{ color: 'white', fontSize: 25 }} deadline={data.get_item_by_Id.auctionEnd}/>
@@ -124,6 +155,7 @@ export default function Item({ navigation, route }) {
                 value={offerBid}
                 onChangeText={(text) => handleCurrency(text)}
                 keyboardType="numeric"
+                placeholder={(data.get_item_by_Id.minimumBid+1).toString()}
               />
               <Text style={styles.bidCurrency}>€</Text>
             </View>
@@ -139,6 +171,7 @@ export default function Item({ navigation, route }) {
           {typeError ? (
             <Text style={{ color: 'red', fontSize: 25 }}>{typeError}</Text>
           ) : null}
+
           <Text style={{ fontWeight: '700', fontSize: 18 }}>
             Item Description:
           </Text>
@@ -166,6 +199,7 @@ export default function Item({ navigation, route }) {
     </>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
