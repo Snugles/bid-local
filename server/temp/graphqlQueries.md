@@ -1,6 +1,13 @@
 // For queries that require Ids please insert ones given by database.
 // Here is some sample queries
 
+
+----------------**TOKEN**---------------------
+HTTP HEADERS (copy in here the token string you get from sign in to run queries that require it)
+{
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzYTNlN2IxLTQ2OGYtNDU4Ny05ZTFiLTM3MjkyMzRkNTQ5MSIsImVtYWlsIjoidXNlckB1c2VyLmNvbSIsImlhdCI6MTYwNzUxMTUxMywiZXhwIjoxNjA3NTQ3NTEzfQ.kvQopXOLdo9Nu1a1VwLlTysvW2U7pPkjSppY-EX6Igg"
+}
+
 -----------------**USERS**---------------------
 //Create User
 
@@ -11,7 +18,7 @@ mutation {
 }
 
 mutation {
-  sign_in(email: "mooming6@gmail.com", password: "pass") {
+  sign_in(email: "user@user.com", password: "pass") {
     token
   }
 }
@@ -59,10 +66,7 @@ mutation {
   }
 }
 
-HTTP HEADERS
-{
-  "x-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA4Y2NjNGM4LTU3NTUtNGE3ZS04MzY3LTJiNzkyYmFkYjA5MiIsImVtYWlsIjoibW9vbWluZzZAZ21haWwuY29tIiwiaWF0IjoxNjA3NDIxNTc2LCJleHAiOjE2MDc0NTc1NzZ9.V_TGleKT3IMozmiinXte5HrqMuwus_ILQU_uDS_sB5A"
-}
+
 
 
 
@@ -145,6 +149,29 @@ mutation {
 //Delete an item TOKEN NEEDED (ALSO HAS TO BE OWNER OF ITEM)
 mutation {
   delete_item_by_id(itemId:"503455e5-0008-49ae-b6ed-00c8a7ade28b")
+}
+------------------------**BIDDING**---------------------------------
+//Start Listening First
+subscription {
+  bidPlaced{
+    id
+    name
+    user{
+      email
+    }
+  }
+}
+//Place a bid
+mutation{
+  place_a_bid(
+    itemId:"13b2886a-c514-45fb-a251-f7e21973f699",
+    userId:"8609ef38-42e5-49ba-b371-9b2b20a8a750"
+  )
+  {
+    name
+    minPrice
+    description
+  }
 }
 
 -------------------------**CATEGORIES**------------------------------

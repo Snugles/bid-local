@@ -59,7 +59,7 @@ const items = [...Array(numItems + 1)].map((item, index) => (
   {
     id: faker.random.uuid(),
     name: faker.commerce.productName(),
-    minPrice: parseInt(faker.commerce.price(), 10),
+    minPrice:parseInt(faker.commerce.price(), 10),
     description: faker.commerce.productDescription(),
     picUrl1: faker.image.image(),
     picUrl2: faker.image.image(),

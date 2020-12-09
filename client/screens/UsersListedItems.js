@@ -19,8 +19,10 @@ import Navbar from '../components/Navbar';
 import Timer from '../components/Timer';
 import { GET_USER_ITEMS, UPDATE_ITEM, DELETE_ITEM } from '../queries/usersListedItems';
 import { useLazyQuery, useMutation } from '@apollo/client';
+import bidSubscription from '../queries/subscription';
 
 export default function UsersItems({ navigation, route }) {
+  bidSubscription();
   const [isLoading, setIsLoading] = useState(true);
   const [getItems, { loading, error, data }] = useLazyQuery(GET_USER_ITEMS, {
     fetchPolicy: 'cache-and-network',
@@ -114,8 +116,8 @@ export default function UsersItems({ navigation, route }) {
                   id={item.id}
                   name={item.name}
                   description={item.description}
-                  deadline={new Date('December 5, 2020 12:00:00')}
-                  price={item.minPrice}
+                  deadline={item.auctionEnd}
+                  price={item.minimumBid}
                 />
               ))
             : null}

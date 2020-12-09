@@ -1,5 +1,5 @@
-import { useQuery } from '@apollo/client';
-import React, { useEffect, useCallback, useState } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   SafeAreaView,
   Image,
@@ -16,22 +16,24 @@ import {
 import Carousel from 'react-native-snap-carousel';
 import Navbar from '../components/Navbar';
 import Timer from '../components/Timer';
-import useBidPlaced from '../components/useBidPlaced';
-import { GET_ITEM_BY_ID } from '../queries/item';
+import { GET_ITEM_BY_ID, PLACE_A_BID } from '../queries/item';
+import bidSubscription from '../queries/subscription';
 
 export default function Item({ navigation, route }) {
-  useBidPlaced();
+  bidSubscription();
   const windowWidth = Dimensions.get('window').width;
   const [offerBid, setOfferBid] = useState('');
   const [images, setImages] = useState([]);
-  const [typeError, setTypeError] = useState('');
+  const [typeError, setTypeError] =useState('');
 
+  const [changeItem, changedItem] = useMutation(PLACE_A_BID);
   const { loading, error, data } = useQuery(GET_ITEM_BY_ID, {
     variables: {
       id: route.params.id,
     },
   });
 
+  const { email } = route.params;
   const [refresh, setRefresh] = useState(false);
   const onRefresh = useCallback(() => {
     setRefresh(true);
@@ -43,19 +45,16 @@ export default function Item({ navigation, route }) {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       if (data.get_item_by_Id.picUrl3 !== '')
         setImages([
-          { uri: data.get_item_by_Id.picUrl1 },
-          { uri: data.get_item_by_Id.picUrl2 },
-          { uri: data.get_item_by_Id.picUrl3 },
-        ]);
+          {uri:data.get_item_by_Id.picUrl1},
+          {uri:data.get_item_by_Id.picUrl2},
+          {uri:data.get_item_by_Id.picUrl3}]);
       else if (data.get_item_by_Id.picUrl2 !== '')
         setImages([
-          { uri: data.get_item_by_Id.picUrl1 },
-          { uri: data.get_item_by_Id.picUrl2 },
-        ]);
-      else setImages([{ uri: data.get_item_by_Id.picUrl1 }]);
+          {uri:data.get_item_by_Id.picUrl1},
+          {uri:data.get_item_by_Id.picUrl2}]);
+      else setImages([{uri:data.get_item_by_Id.picUrl1}]);
     }
   }, [data]);
 
@@ -69,6 +68,16 @@ export default function Item({ navigation, route }) {
       />
     );
   };
+
+  function LatestBid() {
+    const mutationVariables = {
+      itemId: route.params.id,
+      userId: "04489e5a-ebfb-4fa3-9b86-436ba519d8bd",
+      biddingPrice: parseInt(offerBid),
+    };
+    console.log(mutationVariables)
+    changeItem({variables:mutationVariables});
+  }
 
   function handleCurrency(input) {
     setTypeError('');
@@ -123,13 +132,10 @@ export default function Item({ navigation, route }) {
         />
         <View style={styles.itemInfo}>
           <Text style={styles.itemTitle}>{data.get_item_by_Id.name}</Text>
-          <Text style={styles.itemPrice}>{data.get_item_by_Id.minPrice}€</Text>
+          <Text style={styles.itemPrice}>{data.get_item_by_Id.minimumBid}€</Text>
           <View style={styles.time}>
             <Text style={{ color: 'white', fontSize: 16 }}>Time Left:</Text>
-            <Timer
-              style={{ color: 'white', fontSize: 25 }}
-              deadline={new Date('December 25, 2020 12:00:00')}
-            />
+            <Timer style={{ color: 'white', fontSize: 25 }} deadline={data.get_item_by_Id.auctionEnd}/>
           </View>
           <View style={styles.bidView}>
             <View style={styles.bidBorder}>
@@ -138,14 +144,14 @@ export default function Item({ navigation, route }) {
                 value={offerBid}
                 onChangeText={(text) => handleCurrency(text)}
                 keyboardType="numeric"
-                placeholder="0,00"
+                placeholder={(data.get_item_by_Id.minimumBid+1).toString()}
               />
               <Text style={styles.bidCurrency}>€</Text>
             </View>
             <TouchableHighlight
               style={styles.bidButton}
               onPress={() => {
-                navigation.goBack();
+                LatestBid();
               }}
             >
               <Text style={{ fontSize: 16, color: 'white' }}>MAKE OFFER</Text>
