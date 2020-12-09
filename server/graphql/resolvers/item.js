@@ -84,11 +84,12 @@ exports.place_a_bid = async (_, { itemId, userId, biddingPrice }, {models}) => {
   itemDB.minimumBid++;
   itemDB.bidder = userId;
 
+  await itemDB.save();
+
   pubsub.publish('bidPlaced', {
     bidPlaced: itemDB
   });
 
-  await itemDB.save();
   return itemDB;
 };
 
