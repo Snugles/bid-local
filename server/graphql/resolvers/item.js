@@ -105,4 +105,14 @@ exports.place_a_bid = async (_, { itemId, biddingPrice }, { models, me }) => {
   }
 };
 
+exports.won_item_list = async (_, __, { models, me }) => {
+  const wonItem = await models.items.findAll(
+    { where: { 
+      bidder: me.id,
+      auctionTime: Date.parse(itemDB.auctionEnd) < Date.now()
+    } 
+    });
+  return wonItem;
+};
+
 

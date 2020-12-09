@@ -3,7 +3,6 @@ const user = require('./user');
 const item = require('./item');
 const category = require('./category');
 const address = require('./address');
-const image = require('./image');
 const { combineResolvers } = require('graphql-resolvers');
 const { isAuthenticated, isItemOwner, isAddressOwner } = require('./authorization');
 const pubsub = require('../utils/PubSub');
@@ -21,7 +20,7 @@ const resolvers = {
     get_categories: category.get_categories, //OK
     get_address: combineResolvers(isAddressOwner, address.get_address), //necessary?
     //get_addresses: address.get_addresses, //to deprecate/block/admin only
-    get_info: image.get_info, //OK?
+    won_item_list: combineResolvers(isAuthenticated, item.won_item_list),
   },
 
   User: {
@@ -56,7 +55,7 @@ const resolvers = {
     update_category: category.update_category, //to deprecate/block/admin only
     create_address: combineResolvers(isAuthenticated, address.create_address),
     update_address: combineResolvers(isAddressOwner, address.update_address),
-    place_a_bid: combineResolvers(isAuthenticated, item.place_a_bid)
+    place_a_bid: combineResolvers(isAuthenticated, item.place_a_bid),
   },
   Subscription: {
     bidPlaced: {

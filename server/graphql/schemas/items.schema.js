@@ -28,6 +28,7 @@ input ItemUpdate {
 extend type Query {
   get_item_by_Id(id: ID!): Item
   get_items: [Item]
+  won_item_list: [Item]
 }
 
 extend type Mutation {
