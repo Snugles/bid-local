@@ -21,8 +21,8 @@ server.installSubscriptionHandlers(httpServer);
 
 try {
   db.sequelize.sync().then(async () => {
-    httpServer.listen({ port: 8000 }, () => {
-      console.log(`Server is running at ${PORT}`);
+    httpServer.listen({ PORT }, () => {
+      console.log(`Apollo Server on http://localhost:${PORT}/graphql`);
     });
   });
 } catch (error) {
