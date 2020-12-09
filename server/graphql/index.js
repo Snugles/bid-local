@@ -25,7 +25,11 @@ const loggerPlugin = {
 
 const getMe = async req => {
   //console.log('Received Headers',req.headers);
-  const token = req.headers['x-token'];
+  let token = '';
+  if (req) {
+    token = req.headers['x-token'];
+  }
+  //const token = req.headers['x-token'];
   //console.log('Received Token:',token);
   //console.log('STARTING AUTH PROCESS:');
   if (token) {

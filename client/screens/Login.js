@@ -9,6 +9,7 @@ export default function Login({ navigation, route }) {
   const { token } = route.params;
   const [signIn, { data, error }] = useMutation(SIGN_IN);
   const [isLoading, setIsLoading] = useState(true);
+  const [password, setPassword] =useState('');
 
   useEffect(() => {
     console.log('error: ', error);
@@ -24,7 +25,7 @@ export default function Login({ navigation, route }) {
   }, []);
 
   function login() {
-    signIn({ variables: { email: initialEmail, password: 'user' } });
+    signIn({ variables: { email: initialEmail, password: password } });
   }
 
   if (isLoading) {
@@ -58,9 +59,12 @@ export default function Login({ navigation, route }) {
               style={{ color: 'white', fontFamily: 'Roboto_medium' }}
             />
           </Item>
-          <Item floatingLabel last style={styles.labelContainer}>
+          <Item floatingLabel style={styles.labelContainer}>
             <Label style={styles.label}>Password</Label>
-            <Input style={{ color: 'white', fontFamily: 'Roboto_medium' }} />
+            <Input 
+            onChangeText={(text) => setPassword(text)}
+            value ={password}
+            style={{ color: 'white', fontFamily: 'Roboto_medium' }}/>
           </Item>
           <View>
             <Button rounded onPress={login} style={styles.button}>

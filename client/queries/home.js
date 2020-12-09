@@ -14,8 +14,9 @@ query get_items {
   get_items {
     id
     name
-    minPrice
+    minimumBid
     picUrl1
+    auctionEnd
     category {
       name
     }

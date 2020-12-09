@@ -10,7 +10,7 @@ import { APOLLO_SERVER_URI, APOLLO_WEB_SERVER_URI } from '@env';
 import { WebSocketLink } from 'apollo-link-ws';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Navigator from './routes/HomeStack';
 import { setContext } from '@apollo/client/link/context';
@@ -84,7 +84,7 @@ export default function App() {
       reconnect: true,
     },
   });
-  
+
   const link = new HttpLink({ uri: uri });
 
   const splitLink = split(
