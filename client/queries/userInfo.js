@@ -36,7 +36,7 @@ export const GET_USER_INFO = gql`
 
 export const UPDATE_USER = gql`
 mutation update_user (
-  $userId: String!
+  $userId: ID!
   $user: UserUpdate!
 ) {
   update_user (

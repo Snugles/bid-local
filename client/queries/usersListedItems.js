@@ -6,8 +6,9 @@ query get_user_info {
     item {
       id
       name
-      minPrice
+      minimumBid
       description
+      auctionEnd
     }
   }
 }
@@ -24,8 +25,6 @@ mutation update_item (
   ) {
     id
     name
-    minPrice
-    description
   }
 }
 `;

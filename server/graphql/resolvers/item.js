@@ -1,10 +1,7 @@
-const pubsub = require('../utils/PubSub');
+const pubsub = require('../utils/PubSub.js');
 
-console.log('PUBSUB output ', pubsub.publish);
 exports.get_item_by_Id = async (_, { id }, { models }) => {
-  console.log('Getting ITEM:',id);
   const item = await models.items.findByPk(id);
-  console.log('Returning:',item);
   return item;
 };
 
@@ -24,8 +21,6 @@ exports.get_category_by_Item = async (item, _, { models }) => {
 };
 
 exports.create_item = async (_, { item }, { models, me }) => {
-  console.log('CREATING ITEM:',me);
-  console.log('User Creating Item:',me);
   const { name, minPrice, description, picUrl1, picUrl2, picUrl3, auctionEnd, categoryId } = item;
   try {
     const item = {
@@ -49,7 +44,7 @@ exports.create_item = async (_, { item }, { models, me }) => {
   }
 
 };
-exports.delete_item_by_id = async (_, { itemId }, { models }) => {
+exports.delete_item_by_id = async (_, { itemId }, { models }) => {  
   try {
     const destroyed = await models.items.destroy({
       where: {
@@ -78,23 +73,36 @@ exports.update_item = async (_, { itemId, item }, { models }) => {
   }
 };
 
-exports.place_a_bid = async (_, { itemId, userId }, {models}) => {
-  let itemDB = await models.items.findOne({ where: { id: itemId}});
-  // console.log('test');
-  // if (biddingPrice > itemDB.minimumBid) {
-  //   itemDB.minimumBid++;
-  //   itemDB.bidder = userId;
-  // }
+exports.place_a_bid = async (_, { itemId, userId, biddingPrice }, { models }) => {
+  let itemDB = await models.items.findOne({ where: { id: itemId } });
+  // console.log(itemDB);
+  try {
+    console.log('checking date');
+    if (Date.parse(itemDB.auctionEnd) < Date.now()) {
+      throw new Error('Bidding time is over!');
+    }
+    console.log('checking Bidding');
+    if (biddingPrice) {
+      itemDB.minimumBid = itemDB.minimumBid + biddingPrice;
+    }
+    else {
+      itemDB.minimumBid++;
+    }
+    console.log('Changing Values');
+    itemDB.minimumBid++;
+    itemDB.bidder = userId;
 
-  itemDB.minimumBid++;
-  itemDB.bidder = userId;
+    console.log('Saving Values');
+    await itemDB.save();
 
-  pubsub.publish('bidPlaced', {
-    bidPlaced: itemDB
-  });
-
-  await itemDB.save();
-  return itemDB;
+    console.log('Publishing');
+    pubsub.publish('bidPlaced', {
+      bidPlaced: itemDB
+    });
+    return itemDB;
+  } catch (e) {
+    return e;
+  }
 };
 
 
