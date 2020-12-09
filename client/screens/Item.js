@@ -45,7 +45,6 @@ export default function Item({ navigation, route }) {
 
   useEffect(() => {
     if (data) {
-      setPrice(data.get_item_by_Id.minimumBid);
       if (data.get_item_by_Id.picUrl3 !== '')
         setImages([
           {uri:data.get_item_by_Id.picUrl1},
@@ -58,28 +57,6 @@ export default function Item({ navigation, route }) {
       else setImages([{uri:data.get_item_by_Id.picUrl1}]);
     }
   }, [data]);
-
-  // useEffect(() => {
-  //   console.log('bid.data');
-  //   console.log(bid.data);
-  //   console.log('bid.loading');
-  //   console.log(bid.loading);
-  //   console.log('bid.error');
-  //   console.log(bid.error);
-  //   if (bid.data) {
-  //     setPrice(bid.data.bidPlaced.minimumBid);
-  //   }
-  // }, [bid]);
-
-  // useEffect(() => {
-  //   console.log('changedItem.data');
-  //   console.log(changedItem.data);
-  //   console.log('changedItem.loading');
-  //   console.log(changedItem.loading);
-  //   console.log('bchangedItemd.error');
-  //   console.log(changedItem.error);
-  // }, [changedItem]);
-
 
   const imageList = ({ item, index }) => {
     return (
@@ -96,6 +73,7 @@ export default function Item({ navigation, route }) {
     const mutationVariables = {
       itemId: route.params.id,
       userId: "04489e5a-ebfb-4fa3-9b86-436ba519d8bd",
+      biddingPrice: parseInt(offerBid),
     };
     console.log(mutationVariables)
     changeItem({variables:mutationVariables});

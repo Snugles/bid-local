@@ -78,7 +78,7 @@ exports.place_a_bid = async (_, { itemId, userId, biddingPrice }, { models }) =>
   // console.log(itemDB);
   try {
     console.log('checking date');
-    if (Date.parse(itemDB.auctionEnd) > Date.now()) {
+    if (Date.parse(itemDB.auctionEnd) < Date.now()) {
       throw new Error('Bidding time is over!');
     }
     console.log('checking Bidding');

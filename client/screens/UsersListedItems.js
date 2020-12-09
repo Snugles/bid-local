@@ -23,7 +23,6 @@ import bidSubscription from '../queries/subscription';
 
 export default function UsersItems({ navigation, route }) {
   bidSubscription();
-  const email = route.params.email.current;
   const [isLoading, setIsLoading] = useState(true);
   const [getItems, { loading, error, data }] = useLazyQuery(GET_USER_ITEMS, {
     fetchPolicy: 'cache-and-network',
