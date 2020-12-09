@@ -1,6 +1,5 @@
 const pubsub = require('../utils/PubSub');
 
-console.log('PUBSUB output ', pubsub.publish);
 exports.get_item_by_Id = async (_, { id }, { models }) => {
   console.log('Getting ITEM:',id);
   const item = await models.items.findByPk(id);
@@ -78,22 +77,29 @@ exports.update_item = async (_, { itemId, item }, { models }) => {
   }
 };
 
-exports.place_a_bid = async (_, { itemId, userId }, {models}) => {
+exports.place_a_bid = async (_, { itemId, userId, biddingPrice }, {models}) => {
   let itemDB = await models.items.findOne({ where: { id: itemId}});
-  // console.log('test');
-  // if (biddingPrice > itemDB.minimumBid) {
-  //   itemDB.minimumBid++;
-  //   itemDB.bidder = userId;
-  // }
+
+  if (Date.parse(itemDB.auctionEnd) > Date.now()) {
+    return { message: 'Bidding time over'};
+  }
+
+  if (biddingPrice) {
+    itemDB.minimumBid = itemDB.minimumBid + biddingPrice;
+  }
+  else {
+    itemDB.minimumBid++;
+  }
 
   itemDB.minimumBid++;
   itemDB.bidder = userId;
+
+  await itemDB.save();
 
   pubsub.publish('bidPlaced', {
     bidPlaced: itemDB
   });
 
-  await itemDB.save();
   return itemDB;
 };
 
