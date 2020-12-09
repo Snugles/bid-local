@@ -2,11 +2,9 @@ import { gql } from '@apollo/client';
 
 export const CREATE_ITEM = gql`
 mutation create_item(
-  $userId: ID!,
   $item: ItemUpdate!
   ) {
   create_item(
-    userId: $userId,
     item: $item
   ) {
     id,

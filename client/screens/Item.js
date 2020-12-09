@@ -1,8 +1,17 @@
-import { useQuery, useMutation } from '@apollo/client';
-import React, { useEffect, useState } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
-  Dimensions, ImageBackground, ScrollView, StyleSheet,
-  Text, TextInput, TouchableHighlight, View
+  SafeAreaView,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  ImageBackground,
+  Dimensions,
+  TextInput,
+  TouchableHighlight,
+  RefreshControl,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import Navbar from '../components/Navbar';
@@ -25,23 +34,51 @@ export default function Item({ navigation, route }) {
   });
 
   const { email } = route.params;
-  console.log('mounted')
+  const [refresh, setRefresh] = useState(false);
+  const onRefresh = useCallback(() => {
+    setRefresh(true);
+
+    setTimeout(() => {
+      setRefresh(false);
+    }, 2000);
+  }, []);
+
   useEffect(() => {
     if (data) {
-      if (data.get_item_by_Id.picUrl3 !== '') setImages([{uri:data.get_item_by_Id.picUrl1}, {uri:data.get_item_by_Id.picUrl2}, {uri:data.get_item_by_Id.picUrl3}]);
-      else if (data.get_item_by_Id.picUrl2 !== '') setImages([{uri:data.get_item_by_Id.picUrl1}, {uri:data.get_item_by_Id.picUrl2}]);
+      setPrice(data.get_item_by_Id.minimumBid);
+      if (data.get_item_by_Id.picUrl3 !== '')
+        setImages([
+          {uri:data.get_item_by_Id.picUrl1},
+          {uri:data.get_item_by_Id.picUrl2},
+          {uri:data.get_item_by_Id.picUrl3}]);
+      else if (data.get_item_by_Id.picUrl2 !== '')
+        setImages([
+          {uri:data.get_item_by_Id.picUrl1},
+          {uri:data.get_item_by_Id.picUrl2}]);
       else setImages([{uri:data.get_item_by_Id.picUrl1}]);
     }
   }, [data]);
 
-  useEffect(() => {
-    console.log('changedItem.data');
-    console.log(changedItem.data);
-    console.log('changedItem.loading');
-    console.log(changedItem.loading);
-    console.log('changedItem.error:');
-    console.log(changedItem.error);
-  }, [changedItem]);
+  // useEffect(() => {
+  //   console.log('bid.data');
+  //   console.log(bid.data);
+  //   console.log('bid.loading');
+  //   console.log(bid.loading);
+  //   console.log('bid.error');
+  //   console.log(bid.error);
+  //   if (bid.data) {
+  //     setPrice(bid.data.bidPlaced.minimumBid);
+  //   }
+  // }, [bid]);
+
+  // useEffect(() => {
+  //   console.log('changedItem.data');
+  //   console.log(changedItem.data);
+  //   console.log('changedItem.loading');
+  //   console.log(changedItem.loading);
+  //   console.log('bchangedItemd.error');
+  //   console.log(changedItem.error);
+  // }, [changedItem]);
 
 
   const imageList = ({ item, index }) => {
@@ -86,13 +123,24 @@ export default function Item({ navigation, route }) {
     }
   }
 
-  if (loading) return <Text>Loading...</Text>;
+  if (loading)
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <Text style={styles.loading}>Loading...</Text>
+        <Image source={require('../assets/ecommerce.gif')} />
+      </SafeAreaView>
+    );
   if (error) return <Text>Error: {error}</Text>;
 
   return (
     <>
       <Navbar navigation={navigation} canGoBack={true} />
-      <ScrollView style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+        }
+      >
         <Carousel
           containerCustomStyle={{
             backgroundColor: '#06D6A0',
@@ -131,7 +179,9 @@ export default function Item({ navigation, route }) {
               <Text style={{ fontSize: 16, color: 'white' }}>MAKE OFFER</Text>
             </TouchableHighlight>
           </View>
-            {typeError?<Text style={{ color: 'red', fontSize: 25 }}>{typeError}</Text>:null}
+          {typeError ? (
+            <Text style={{ color: 'red', fontSize: 25 }}>{typeError}</Text>
+          ) : null}
 
           <Text style={{ fontWeight: '700', fontSize: 18 }}>
             Item Description:
@@ -222,5 +272,20 @@ const styles = StyleSheet.create({
   },
   userInfo: {
     marginTop: 20,
+  },
+  loadingContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: '#fff',
+    fontFamily: 'Roboto_medium',
+  },
+  loading: {
+    fontFamily: 'Roboto_medium',
+    fontSize: 50,
+    color: '#67A036',
+    marginTop: '60%',
+    textAlign: 'center',
+    marginBottom: '-40%',
+    zIndex: 1,
   },
 });
