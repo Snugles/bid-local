@@ -1,21 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, ImageBackground } from 'react-native';
 import { Item, Input, Label, Button } from 'native-base';
-// import { SIGN_IN } from '../queries/login';
+import { SIGN_UP } from '../queries/register';
 import { useMutation } from '@apollo/client';
 
-export default function Register({ navigation, route }) {
-  const [initialEmail, setInitialEmail] = useState('');
-  const { token } = route.params;
-  const [signIn, { data, error }] = useMutation(SIGN_IN);
+export default function Register({ navigation }) {
+  const [registerEmail, setRegisterEmail] = useState('');
+  // const [registerFirstName, setRegisterFirstName] = useState('');
+  // const [registerLastName, setRegisterLastName] = useState('');
+  // const [registerPhoneNumber, setRegisterPhoneNumber] = useState('');
+  // const [registerFirstLineAddress, setRegisterFirstLineAddress] = useState('');
+  // const [registersecondLineAddress, setRegisterSecondLineAddress] = useState(
+  //   '',
+  // );
+  // const [registerCity, setRegisterCity] = useState('');
+  // const [registerPostcode, setRegisterPostcode] = useState('');
+  // const [registerCountry, setRegisterCountry] = useState('');
+
+  // const { token } = route.params;
+  const [signUp, { data, error }] = useMutation(SIGN_UP);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     console.log('error: ', error);
-    if (data && data.sign_in) {
-      console.log(data);
-      token.current = data.sign_in.token;
-      navigation.navigate('Home');
+    if (data && data.sign_up) {
+      navigation.navigate('Login');
     }
   }, [data, error]);
 
@@ -23,19 +32,19 @@ export default function Register({ navigation, route }) {
     setIsLoading(false);
   }, []);
 
-  function sendDetails() {
-    register({
+  function register() {
+    signUp({
       variables: {
-        firstName: firstName,
-        lastName: lastName,
-        password: 'user',
-        email: email,
-        phoneNumber: phoneNumber,
-        firstLineAddress: firstLineAddress,
-        secondLineAddress: secondLineAddress,
-        city: city,
-        postcode: postcode,
-        country: country,
+        // firstName: firstName,
+        // lastName: lastName,
+        password: 'pass',
+        email: registerEmail,
+        // phoneNumber: phoneNumber,
+        // firstLineAddress: firstLineAddress,
+        // secondLineAddress: secondLineAddress,
+        // city: city,
+        // postcode: postcode,
+        // country: country,
       },
     });
   }
@@ -66,8 +75,8 @@ export default function Register({ navigation, route }) {
           <Item floatingLabel style={styles.labelContainer}>
             <Label style={styles.label}>Email</Label>
             <Input
-              onChangeText={(text) => setInitialEmail(text)}
-              value={initialEmail}
+              onChangeText={(text) => setRegisterEmail(text)}
+              value={registerEmail}
               style={{ color: 'white', fontFamily: 'Roboto_medium' }}
             />
           </Item>
@@ -76,7 +85,7 @@ export default function Register({ navigation, route }) {
             <Input style={{ color: 'white', fontFamily: 'Roboto_medium' }} />
           </Item>
           <View>
-            <Button rounded onPress={sendDetails} style={styles.button}>
+            <Button rounded onPress={register} style={styles.button}>
               <Text
                 style={{
                   fontFamily: 'Roboto_medium',
