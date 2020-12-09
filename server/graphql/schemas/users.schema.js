@@ -32,12 +32,13 @@ extend type Query {
   me: User
   get_user_by_email(email: String!): User
   get_users: [User!]
-  get_user_by_Id(id: ID!): User
+  get_user_info: User
 }
 extend type Mutation {
   create_user(user: UserUpdate!): User
-  update_user(userId:ID!,user:UserUpdate!): User!
+  update_user(user:UserUpdate!): User!
   delete_user(userId:ID!): Boolean!
-  sign_up(email: String!,password: String!): Token!
+  sign_up(user: UserUpdate!): Token!
+  sign_in(email: String!,password: String!): Token!
 }
 `;

@@ -1,12 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_USER_ITEMS = gql`
-query get_user_by_email (
-  $email: String!
-) {
-  get_user_by_email (
-    email: $email
-  ) {
+query get_user_info {
+    get_user_info {
     item {
       id
       name
@@ -19,7 +15,7 @@ query get_user_by_email (
 
 export const UPDATE_ITEM = gql`
 mutation update_item (
-  $itemId: String!
+  $itemId: ID!
   $item: ItemUpdate!
 ) {
   update_item (

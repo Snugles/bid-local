@@ -4,21 +4,30 @@
  * which makes all the async await irrelevant in some cases
  * but to be explicit it can remain.
  */
+
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const saltRounds = 10;
+const { AuthenticationError,ValidationError } = require('apollo-server');
+
+
 exports.get_user_by_email = async (_, { email }, { models }) => {
   try {
     const user = await models.users.findOne({ where: { email: email } });
-    return user;
+    if (user) return user;
+    else throw new Error('No user found with that email.');
   } catch (error) {
     console.error('Error', error);
   }
 };
 
-exports.get_user_by_Id = async (_, { id }, { models }) => {
+exports.get_user_info = async (_, __, { models, me }) => {
   try {
-    const user = await models.users.findByPk(id);
-    return user;
+    const user = await models.users.findByPk(me.id);
+    if (user) return user;
+    else throw new Error('No user found. If this is unexpected, try to log out and log in again.');
   } catch (error) {
-    console.error('Error', error);
+    return error;
   }
 };
 
@@ -58,6 +67,48 @@ exports.get_address = async (user, _, { models }) => {
   }
   catch (error) {
     console.error('Error', error);
+    return error;
+  }
+};
+
+exports.delete_user = async (_, { userId }, { models }) => {
+  const destroyed = await models.users.destroy({
+    where: {
+      id: userId
+    }
+  });
+  if (!destroyed) {
+    return false;
+  }
+  return true;
+};
+
+exports.update_user = async (_, { user }, { models, me }) => {
+  try {
+    let userFound = await models.users.findOne({ where: { id: me.id } });
+    if (userFound) {
+      userFound = Object.assign(userFound, user);
+      console.log('USER FOUND:', userFound);
+      userFound.password = await bcrypt.hash(userFound.password, saltRounds);
+      console.log('USER UPDATED:', userFound);
+      await userFound.save();
+      return userFound;
+    }
+    else {
+      return new Error('No user found. If this is unexpected, try to log out and log in again.');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    return error;
+  }
+};
+
+exports.me = async (_, __, { models, me }) => { //placeholder for login
+  if (!me) return null;
+  try {
+    return await models.users.findByPk(me.id);
+  } catch (error) {
+    console.error('Error', error);
   }
 };
 
@@ -74,56 +125,58 @@ exports.create_user = async (_, { user }, { models }) => {
     }
   } catch (error) {
     console.error('Error', error);
+    return error;
   }
 };
 
-const createToken = async (user) => {
-  return user.email;
-};
 
-exports.sign_up = async (_, { email, password }, { models }) => {
 
-  const user = await models.users.create({
-    email: email,
-    password: password,
-  });
-
-  return { token: createToken(user) };
-};
-
-exports.delete_user = async (_, { userId }, { models }) => {
-  const destroyed = await models.users.destroy({
-    where: {
-      id: userId
-    }
-  });
-  if (!destroyed) {
-    return false;
-  }
-  return true;
-};
-
-exports.update_user = async (_, { userId, user }, { models }) => {
+exports.sign_up = async (_, { user }, { models, secret }) => {
   try {
-    let userFound = await models.users.findOne({ where: { id: userId } });
-    if (userFound) {
-      userFound = Object.assign(userFound, user);
-      await userFound.save();
-      return userFound;
-    }
-    else {
-      return new Error('User doesn\'t exist');
-    }
-  } catch (error) {
-    console.error('Error', error);
+    const userFound = await models.users.findOne({ where: { email: user.email } });
+    if (userFound) throw new Error('Please choose another email, this one is already taken.');
+    console.log('User Signing Up User...');
+    const { email, password, firstName, lastName, phoneNumber } = user;
+    const createdUser = await models.users.create({ email: email, password: password, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber });
+    console.log('Creating Token...');
+    return { token: createToken(createdUser, secret, '10h') };
+  } catch (e) {
+    return new ValidationError(e);
   }
 };
 
-exports.me = async (_, __, { models, me }) => { //placeholder for login
-  if (!me) return null;
+exports.sign_in = async (_, { email, password }, { models, secret }) => {
   try {
-    return await models.users.findByPk(me.id);
-  } catch (error) {
-    console.error('Error', error);
+    console.log('User Signing in...');
+    const user = await models.users.findByLogin(email);
+    if (!user) {
+      throw new Error(
+        'No user found with this email credentials.',
+      );
+    }
+
+    const isValid = await user.validatePassword(password);
+    if (!isValid) throw new Error('invalid password'); //probably want to give a more generic message for security
+
+    console.log('Returning Token:');
+    return { token: createToken(user, secret, '10h') };
+  }
+  catch (e) {
+    return new AuthenticationError(`Invalid Authentication, check email/password: ${e}`);
+  }
+};
+
+/**
+ * Utility Functions
+ */
+const createToken = async (user, secret, expiresIn) => {
+  try {
+    const { id, email } = user;
+    return await jwt.sign({ id, email }, secret, {
+      expiresIn,
+    });
+  }
+  catch (e) {
+    return e;
   }
 };

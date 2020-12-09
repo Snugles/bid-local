@@ -28,7 +28,6 @@ export default function Home({ navigation, route }) {
   const [isLoading, setIsLoading] = useState(true);
   const [refresh, setRefresh] = useState(false);
 
-  const { email } = route.params;
   const onRefresh = useCallback(() => {
     setRefresh(true);
 
@@ -83,7 +82,7 @@ export default function Home({ navigation, route }) {
               <ImageBackground
                 style={styles.itemImage}
                 resizeMode="cover"
-                source={{ uri: component.picUrl1 }}
+                source={component.picUrl1 ? { uri: component.picUrl1 } : require('../assets/splash.png')}
               >
                 <Timer
                   style={styles.itemTime}

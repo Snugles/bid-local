@@ -1,29 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, ImageBackground } from 'react-native';
 import { Item, Input, Label, Button } from 'native-base';
-import { GET_USER_BY_EMAIL } from '../queries/login';
-import { useLazyQuery } from '@apollo/client';
+import { SIGN_IN } from '../queries/login';
+import { useMutation } from '@apollo/client';
 
 export default function Login({ navigation, route }) {
   const [initialEmail, setInitialEmail] = useState('');
-  const { email, id } = route.params;
-  const [getID, { data }] = useLazyQuery(GET_USER_BY_EMAIL);
+  const { token } = route.params;
+  const [signIn, { data, error }] = useMutation(SIGN_IN);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (data && data.get_user_by_email) {
-      id.current = data.get_user_by_email.id;
-      email.current = data.get_user_by_email.email;
+    console.log('error: ', error);
+    if (data && data.sign_in) {
+      console.log(data);
+      token.current = data.sign_in.token;
       navigation.navigate('Home');
     }
-  }, [data]);
+  }, [data, error]);
 
   useEffect(() => {
     setIsLoading(false);
   }, []);
 
   function login() {
-    getID({ variables: { email: initialEmail } });
+    signIn({ variables: { email: initialEmail, password: 'user' } });
   }
 
   if (isLoading) {

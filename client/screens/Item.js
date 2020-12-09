@@ -1,6 +1,8 @@
 import { useQuery } from '@apollo/client';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import {
+  SafeAreaView,
+  Image,
   StyleSheet,
   Text,
   View,
@@ -41,10 +43,9 @@ export default function Item({ navigation, route }) {
     }, 2000);
   }, []);
 
-  const { email } = route.params;
-
   useEffect(() => {
     if (data) {
+      console.log(data);
       if (data.get_item_by_Id.picUrl3 !== '')
         setImages([
           { uri: data.get_item_by_Id.picUrl1 },

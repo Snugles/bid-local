@@ -1,5 +1,5 @@
-exports.get_address_by_userId = async (_, { userId }, { models }) => {
-  const address = await models.addresses.findOne({ where: { userId: userId } });
+exports.get_address = async (_, __, { models, me }) => {
+  const address = await models.addresses.findOne({ where: { userId: me.id } });
   return address;
 };
 
@@ -13,8 +13,9 @@ exports.get_addresses = async (_, __, { models }) => {
   return addresses;
 };
 
-exports.create_address = async (_, { userId, address }, { models }) => {
+exports.create_address = async (_, { address }, { models, me }) => {
   try {
+    const userId = me.id;
     console.log('Checking if user has an address:', address);
     const DBaddress = await this.get_address_by_userId(_, { userId }, { models });
 
@@ -26,7 +27,7 @@ exports.create_address = async (_, { userId, address }, { models }) => {
         city,
         postcode,
         country,
-        userId, //make dynamic
+        userId: userId,
       };
       const createdAddress = await models.addresses.create(newAddress);
 
@@ -40,8 +41,12 @@ exports.create_address = async (_, { userId, address }, { models }) => {
 };
 
 exports.update_address = async (_, { addressId, address }, { models }) => {
-  let addressDB = await models.addresses.findOne({ where: { id: addressId } });
-  addressDB = Object.assign(addressDB, address);
-  await addressDB.save();
-  return addressDB;
+  try {
+    let addressDB = await models.addresses.findOne({ where: { id: addressId } });
+    addressDB = Object.assign(addressDB, address);
+    await addressDB.save();
+    return addressDB;
+  } catch (e) {
+    return e;
+  }
 };
