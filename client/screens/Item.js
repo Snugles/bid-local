@@ -1,4 +1,4 @@
-import { useQuery, useSubscription, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import {
   Dimensions, ImageBackground, ScrollView, StyleSheet,
@@ -7,10 +7,10 @@ import {
 import Carousel from 'react-native-snap-carousel';
 import Navbar from '../components/Navbar';
 import Timer from '../components/Timer';
-import { GET_ITEM_BY_ID, BID_SUBSCRIPTION, PLACE_A_BID } from '../queries/item';
+import { GET_ITEM_BY_ID, PLACE_A_BID } from '../queries/item';
 
 export default function Item({ navigation, route }) {
-  const bid = useSubscription(BID_SUBSCRIPTION);
+  // const bid = useSubscription(BID_SUBSCRIPTION);
   const windowWidth = Dimensions.get('window').width;
   const [offerBid, setOfferBid] = useState('');
   const [images, setImages] = useState([]);
@@ -35,17 +35,17 @@ export default function Item({ navigation, route }) {
     }
   }, [data]);
 
-  useEffect(() => {
-    console.log('bid.data');
-    console.log(bid.data);
-    console.log('bid.loading');
-    console.log(bid.loading);
-    console.log('bid.error');
-    console.log(bid.error);
-    if (bid.data) {
-      setPrice(bid.data.bidPlaced.minimumBid);
-    }
-  }, [bid]);
+  // useEffect(() => {
+  //   console.log('bid.data');
+  //   console.log(bid.data);
+  //   console.log('bid.loading');
+  //   console.log(bid.loading);
+  //   console.log('bid.error');
+  //   console.log(bid.error);
+  //   if (bid.data) {
+  //     setPrice(bid.data.bidPlaced.minimumBid);
+  //   }
+  // }, [bid]);
 
   // useEffect(() => {
   //   console.log('changedItem.data');
