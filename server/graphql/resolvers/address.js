@@ -16,7 +16,6 @@ exports.get_addresses = async (_, __, { models }) => {
 exports.create_address = async (_, { address }, { models, me }) => {
   try {
     const userId = me.id;
-    console.log('Checking if user has an address:', address);
     const DBaddress = await this.get_address_by_userId(_, { userId }, { models });
 
     if (!DBaddress) {

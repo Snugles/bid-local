@@ -8,18 +8,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const saltRounds = 10;
-const { AuthenticationError,ValidationError } = require('apollo-server');
+const { AuthenticationError, ValidationError } = require('apollo-server');
 
-
-exports.get_user_by_email = async (_, { email }, { models }) => {
-  try {
-    const user = await models.users.findOne({ where: { email: email } });
-    if (user) return user;
-    else throw new Error('No user found with that email.');
-  } catch (error) {
-    console.error('Error', error);
-  }
-};
 
 exports.get_user_info = async (_, __, { models, me }) => {
   try {
@@ -38,7 +28,6 @@ exports.get_users = async (_, __, { models }) => {
   } catch (error) {
     console.error('Error', error);
   }
-
 };
 
 exports.get_items = async (user, _, { models }) => {
@@ -88,9 +77,7 @@ exports.update_user = async (_, { user }, { models, me }) => {
     let userFound = await models.users.findOne({ where: { id: me.id } });
     if (userFound) {
       userFound = Object.assign(userFound, user);
-      console.log('USER FOUND:', userFound);
       userFound.password = await bcrypt.hash(userFound.password, saltRounds);
-      console.log('USER UPDATED:', userFound);
       await userFound.save();
       return userFound;
     }
@@ -100,15 +87,6 @@ exports.update_user = async (_, { user }, { models, me }) => {
   } catch (error) {
     console.error('Error:', error);
     return error;
-  }
-};
-
-exports.me = async (_, __, { models, me }) => { //placeholder for login
-  if (!me) return null;
-  try {
-    return await models.users.findByPk(me.id);
-  } catch (error) {
-    console.error('Error', error);
   }
 };
 
@@ -129,16 +107,12 @@ exports.create_user = async (_, { user }, { models }) => {
   }
 };
 
-
-
 exports.sign_up = async (_, { user }, { models, secret }) => {
   try {
     const userFound = await models.users.findOne({ where: { email: user.email } });
     if (userFound) throw new Error('Please choose another email, this one is already taken.');
-    console.log('User Signing Up User...');
     const { email, password, firstName, lastName, phoneNumber } = user;
     const createdUser = await models.users.create({ email: email, password: password, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber });
-    console.log('Creating Token...');
     return { token: createToken(createdUser, secret, '10h') };
   } catch (e) {
     return new ValidationError(e);
@@ -147,7 +121,6 @@ exports.sign_up = async (_, { user }, { models, secret }) => {
 
 exports.sign_in = async (_, { email, password }, { models, secret }) => {
   try {
-    console.log('User Signing in...');
     const user = await models.users.findByLogin(email);
     if (!user) {
       throw new Error(
@@ -158,7 +131,6 @@ exports.sign_in = async (_, { email, password }, { models, secret }) => {
     const isValid = await user.validatePassword(password);
     if (!isValid) throw new Error('invalid password'); //probably want to give a more generic message for security
 
-    console.log('Returning Token:');
     return { token: createToken(user, secret, '10h') };
   }
   catch (e) {
