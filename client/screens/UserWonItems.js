@@ -1,15 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  Image,
   SafeAreaView,
-  LayoutAnimation,
   StyleSheet,
   View,
   Text,
   ScrollView,
-  UIManager,
   TouchableOpacity,
-  Platform,
   RefreshControl,
 } from 'react-native';
 import Navbar from '../components/Navbar';
@@ -146,28 +142,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#fff',
     padding: 15,
-  },
-  box: {
-    paddingLeft: 15,
-    height: 100,
-    width: '100%',
-    flexShrink: 0,
-    backgroundColor: '#0C637F',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  text: {
-    color: '#fff',
-    fontSize: 22,
-    textAlign: 'center',
-  },
-  itemImage: {
-    width: 50,
-    height: 50,
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
-  },
+  }
 });
 
 const styles2 = StyleSheet.create({
@@ -179,39 +154,9 @@ const styles2 = StyleSheet.create({
   titleText: {
     flexShrink: 0,
     width: '95%',
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: 'bold',
     width: '100%',
-  },
-  header: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#00C793',
-    marginTop: 10,
-  },
-  headerText: {
-    fontWeight: '500',
-    padding: 10,
-    color: 'white',
-    fontSize: 18,
-  },
-  textBoxes: {
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#EF476F',
-    padding: 10,
-    marginBottom: 5,
-  },
-  text: {
-    width: '95%',
-    fontSize: 16,
-  },
-  content: {
-    width: '95%',
-    backgroundColor: '#fff',
-  },
-  timer: {
-    borderLeftWidth: 1,
-    padding: 3,
   },
   delete: {
     flexDirection: 'row',
@@ -220,20 +165,5 @@ const styles2 = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
-  },
-  loadingContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#fff',
-    fontFamily: 'Roboto_medium',
-  },
-  loading: {
-    fontFamily: 'Roboto_medium',
-    fontSize: 50,
-    color: '#67A036',
-    marginTop: '60%',
-    textAlign: 'center',
-    marginBottom: '-40%',
-    zIndex: 1,
   },
 });
