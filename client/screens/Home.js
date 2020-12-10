@@ -67,11 +67,14 @@ export default function Home({ navigation, route }) {
   }
 
   function categoryTest() {
+    const temp = items.data.get_items.slice();
+    temp.sort((a, b) => a.auctionEnd - b.auctionEnd);
     const output = [];
-    for (const component of items.data.get_items) {
+    for (const component of temp) {
       if (
-        currentCategory === 'ALL' ||
-        (component.category && component.category.name === currentCategory)
+        (currentCategory === 'ALL' ||
+        (component.category && component.category.name === currentCategory))
+        &&component.auctionEnd>(Date.now())
       ) {
         output.push(
           <TouchableWithoutFeedback
@@ -120,13 +123,6 @@ export default function Home({ navigation, route }) {
             <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
           }
         >
-          {/* <Button
-            title="Refresh"
-            onPress={() => {
-              getItems();
-            }}
-            color="#0C637F88"
-          /> */}
           <View style={styles.homeContent}>
             <Text style={styles.categoryTitle}>Category:</Text>
             <DropDownPicker

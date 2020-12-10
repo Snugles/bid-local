@@ -55,7 +55,7 @@ export default function Item({ navigation, route }) {
           {uri:data.get_item_by_Id.picUrl1},
           {uri:data.get_item_by_Id.picUrl2}]);
       else setImages([{uri:data.get_item_by_Id.picUrl1}]);
-      if (user) {
+      if (user.data) {
         if (user.data.get_user_info.id===data.get_item_by_Id.bidder) {
           setHighestBidder(true);
         }
@@ -75,8 +75,9 @@ export default function Item({ navigation, route }) {
   };
 
   function LatestBid() {
-    if (offerBid<data.get_item_by_Id.minimumBid) {
-      setTypeError('Bid is lower than current highest bid.')
+    if (offerBid<=data.get_item_by_Id.minimumBid) {
+      setTypeError('Bid is lower than current highest bid.');
+      return;
     }
       const mutationVariables = {
         userId: "694b46f7-d39e-482d-9154-6980fc6f06b4",
