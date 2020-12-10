@@ -1,4 +1,5 @@
 const pubsub = require('../utils/PubSub.js');
+const { Op } = require('sequelize');
 
 exports.get_item_by_Id = async (_, { id }, { models }) => {
   const item = await models.items.findByPk(id);
@@ -78,6 +79,10 @@ exports.place_a_bid = async (_, { itemId, biddingPrice }, { models, me }) => {
       throw new Error('Bidding time is over!');
     }
 
+    if (biddingPrice <= itemDB.minimumBid) {
+      throw new Error('Bidding amount is less than minimum bid');
+    }
+
     if (biddingPrice) {
       itemDB.minimumBid = itemDB.minimumBid + biddingPrice;
     }
@@ -96,7 +101,7 @@ exports.place_a_bid = async (_, { itemId, biddingPrice }, { models, me }) => {
     return e;
   }
 };
-const { Op } = require('sequelize');
+
 exports.won_item_list = async (_, __, { models, me }) => {
   const wonItem = await models.items.findAll(
     { where: {
