@@ -76,7 +76,8 @@ export default function Item({ navigation, route }) {
 
   function LatestBid() {
     if (offerBid<data.get_item_by_Id.minimumBid) {
-      setTypeError('Bid is lower than current highest bid.')
+      setTypeError('Bid is lower than current highest bid.');
+      return;
     }
       const mutationVariables = {
         userId: "694b46f7-d39e-482d-9154-6980fc6f06b4",
