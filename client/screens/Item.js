@@ -55,7 +55,7 @@ export default function Item({ navigation, route }) {
           {uri:data.get_item_by_Id.picUrl1},
           {uri:data.get_item_by_Id.picUrl2}]);
       else setImages([{uri:data.get_item_by_Id.picUrl1}]);
-      if (user) {
+      if (user.data) {
         if (user.data.get_user_info.id===data.get_item_by_Id.bidder) {
           setHighestBidder(true);
         }
