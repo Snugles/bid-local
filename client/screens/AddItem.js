@@ -72,7 +72,7 @@ export default function AddItem({ navigation, route }) {
         picUrl1: imageUrls[0] ? imageUrls[0] : '',
         picUrl2: imageUrls[1] ? imageUrls[1] : '',
         picUrl3: imageUrls[2] ? imageUrls[2] : '',
-        auctionEnd: '04 Dec 2020 00:12:00 GMT',
+        auctionEnd: new Date(Date.now()+60000),
         categoryId: selectedCategories[0].id,
       },
     };
