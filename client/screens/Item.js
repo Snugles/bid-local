@@ -75,7 +75,7 @@ export default function Item({ navigation, route }) {
   };
 
   function LatestBid() {
-    if (offerBid<data.get_item_by_Id.minimumBid) {
+    if (offerBid<=data.get_item_by_Id.minimumBid) {
       setTypeError('Bid is lower than current highest bid.');
       return;
     }
