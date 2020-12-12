@@ -1,7 +1,11 @@
 # Bid Local
 
+## What is it
+
+Time to declutter the house? Want to find a bargain which you can pick up locally? Register with Bid local, an app that allows you to put your second-hand items on auction, and find second hand at bargain prices. Old-style live auctions and the highest bidder will pay you and pick the items up from your house!
 
 ## Tech Stack
+
 ```
 ♦ React Native
 ♦ Express
