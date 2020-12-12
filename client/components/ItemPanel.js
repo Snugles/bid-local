@@ -105,57 +105,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     width: '100%',
   },
-  header: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#00C793',
-    marginTop: 10,
-  },
-  headerText: {
-    fontWeight: '500',
-    padding: 10,
-    color: 'white',
-    fontSize: 18,
-  },
-  textBoxes: {
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#EF476F',
-    padding: 10,
-    marginBottom: 5,
-  },
-  text: {
-    width: '95%',
-    fontSize: 16,
-  },
-  content: {
-    width: '95%',
-    backgroundColor: '#fff',
-  },
   timer: {
     borderLeftWidth: 1,
     padding: 3,
-  },
-  delete: {
-    flexDirection: 'row',
-    padding: 5,
-    backgroundColor: '#EF476F',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  loadingContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#fff',
-    fontFamily: 'Roboto_medium',
-  },
-  loading: {
-    fontFamily: 'Roboto_medium',
-    fontSize: 50,
-    color: '#67A036',
-    marginTop: '60%',
-    textAlign: 'center',
-    marginBottom: '-40%',
-    zIndex: 1,
   },
 });
