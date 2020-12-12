@@ -76,8 +76,5 @@ module.exports = (sequelize, DataTypes) => {
     });
     Items.belongsTo(models.categories);
   };
-
-  console.log(uuidv4());
   return Items;
-
 };

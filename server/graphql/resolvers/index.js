@@ -12,7 +12,6 @@ const resolvers = {
     get_user_info: combineResolvers(isAuthenticated, user.get_user_info),
     get_item_by_Id: item.get_item_by_Id, //OK
     get_items: item.get_items, //OK - needs protecting
-    //get_category_by_Id: category.get_category_by_Id,  //necessary?
     get_categories: category.get_categories, //OK
     get_address: combineResolvers(isAddressOwner, address.get_address), //necessary?
     //get_addresses: address.get_addresses, //to deprecate/block/admin only
