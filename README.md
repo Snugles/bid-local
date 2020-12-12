@@ -24,6 +24,8 @@ Time to declutter the house? Want to find a bargain which you can pick up locall
 ♦ Sequelize
 ♦ Docker
 ```
+## Room for Improvement and Future development
+- Checkout issue [#125](https://github.com/Snugles/bid-local/issues/125) in github issues
 
 ## Contributors
 - [Peter Ackroyd](https://github.com/Snugles)  ||  [LinkedIn](https://www.linkedin.com/in/peter-ackroyd/)
