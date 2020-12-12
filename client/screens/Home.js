@@ -20,29 +20,19 @@ import bidSubscription from '../queries/subscription';
 
 const windowWidth = Dimensions.get('window').width;
 
-export default function Home({ navigation, route }) {
+export default function Home({ navigation }) {
   bidSubscription();
   const [currentCategory, setCurrentCategory] = useState('ALL');
+  const [refresh, setRefresh] = useState(false);
   const categories = useQuery(GET_CATEGORIES);
   const [getItems, items] = useLazyQuery(GET_ITEMS, {
     fetchPolicy: 'cache-and-network',
   });
-  const [isLoading, setIsLoading] = useState(true);
-  const [refresh, setRefresh] = useState(false);
 
   const onRefresh = useCallback(() => {
     setRefresh(true);
-
-    setTimeout(() => {
-      getItems();
-      setRefresh(false);
-    }, 2000);
-  }, []);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+    getItems();
+    setRefresh(false);
   }, []);
 
   useEffect(() => {
@@ -50,10 +40,6 @@ export default function Home({ navigation, route }) {
       getItems();
     }
   }, [categories]);
-
-  useEffect(() => {
-    console.log(currentCategory);
-  }, [currentCategory]);
 
   if (categories.loading)
     return (
@@ -103,75 +89,59 @@ export default function Home({ navigation, route }) {
     return output;
   }
 
-  if (isLoading) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.loading}>Loading...</Text>
-        <Image source={require('../assets/ecommerce.gif')} />
-      </SafeAreaView>
-    );
-  } else {
-    return (
-      <>
-        <Navbar navigation={navigation} canGoBack={false} />
-        <ScrollView
-          style={styles.container}
-          refreshControl={
-            <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
-          }
-        >
-          {/* <Button
-            title="Refresh"
-            onPress={() => {
-              getItems();
+  return (
+    <>
+      <Navbar navigation={navigation} canGoBack={false} />
+      <ScrollView
+        style={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+        }
+      >
+        <View style={styles.homeContent}>
+          <Text style={styles.categoryTitle}>Category:</Text>
+          <DropDownPicker
+            items={[{ name: 'ALL' }, ...categories.data.get_categories].map(
+              (cat) => ({
+                label: cat.name.charAt(0) + cat.name.slice(1).toLowerCase(),
+                value: cat.name,
+              }),
+            )}
+            defaultValue={'ALL'}
+            containerStyle={{
+              height: 40,
+              marginBottom: 20,
             }}
-            color="#0C637F88"
-          /> */}
-          <View style={styles.homeContent}>
-            <Text style={styles.categoryTitle}>Category:</Text>
-            <DropDownPicker
-              items={[{ name: 'ALL' }, ...categories.data.get_categories].map(
-                (cat) => ({
-                  label: cat.name.charAt(0) + cat.name.slice(1).toLowerCase(),
-                  value: cat.name,
-                }),
-              )}
-              defaultValue={'ALL'}
-              containerStyle={{
-                height: 40,
-                marginBottom: 20,
-              }}
-              style={{
-                backgroundColor: '#06D6A0',
-                borderWidth: 0,
-                fontFamily: 'Roboto_medium',
-              }}
-              itemStyle={{
-                justifyContent: 'flex-start',
-              }}
-              arrowColor="white"
-              arrowSize={20}
-              labelStyle={{
-                fontSize: 22,
-                color: 'white',
-                fontFamily: 'Roboto_medium',
-              }}
-              dropDownStyle={{
-                backgroundColor: '#06D6A0',
-                borderWidth: 0,
-                borderTopWidth: 1,
-                borderColor: 'white',
-              }}
-              onChangeItem={(cat) => setCurrentCategory(cat.value)}
-            />
-            <View style={styles.homeItems}>
-              {items.data ? categoryTest() : null}
-            </View>
+            style={{
+              backgroundColor: '#06D6A0',
+              borderWidth: 0,
+              fontFamily: 'Roboto_medium',
+            }}
+            itemStyle={{
+              justifyContent: 'flex-start',
+            }}
+            arrowColor="white"
+            arrowSize={20}
+            labelStyle={{
+              fontSize: 22,
+              color: 'white',
+              fontFamily: 'Roboto_medium',
+            }}
+            dropDownStyle={{
+              backgroundColor: '#06D6A0',
+              borderWidth: 0,
+              borderTopWidth: 1,
+              borderColor: 'white',
+            }}
+            onChangeItem={(cat) => setCurrentCategory(cat.value)}
+          />
+          <View style={styles.homeItems}>
+            {items.data ? categoryTest() : null}
           </View>
-        </ScrollView>
-      </>
-    );
-  }
+        </View>
+      </ScrollView>
+    </>
+  );
 }
 
 const styles = StyleSheet.create({

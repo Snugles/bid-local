@@ -1,22 +1,5 @@
 import { gql } from '@apollo/client';
 
-// export const GET_EMAIL = gql`
-//   query get_user_by_email ($email: String!) {
-//     get_user_by_email(email: $email) {
-//       id
-//       email
-//       phoneNumber
-//       address {
-//         firstLineAddress
-//         secondLineAddress
-//         city
-//         postcode
-//         country
-//       }
-//     }
-//   }
-// `;
-
 export const GET_USER_INFO = gql`
   query get_user_info {
     get_user_info {
