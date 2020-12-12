@@ -25,6 +25,7 @@ mutation update_item (
   ) {
     id
     name
+    description
   }
 }
 `;
