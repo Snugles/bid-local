@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -72,17 +72,12 @@ export default function ExpandableComponent (props) {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    flexShrink: 0,
+  textBoxes: {
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: '#EF476F',
     padding: 10,
-  },
-  titleText: {
-    flexShrink: 0,
-    width: '95%',
-    fontSize: 22,
-    fontWeight: 'bold',
-    width: '100%',
+    marginBottom: 5,
   },
   header: {
     alignSelf: 'flex-start',
@@ -95,21 +90,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
   },
-  textBoxes: {
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#EF476F',
-    padding: 10,
-    marginBottom: 5,
-  },
-  text: {
-    width: '95%',
-    fontSize: 16,
-  },
-  content: {
-    width: '95%',
-    backgroundColor: '#fff',
-  },
   timer: {
     borderLeftWidth: 1,
     padding: 3,
@@ -121,20 +101,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
-  },
-  loadingContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#fff',
-    fontFamily: 'Roboto_medium',
-  },
-  loading: {
-    fontFamily: 'Roboto_medium',
-    fontSize: 50,
-    color: '#67A036',
-    marginTop: '60%',
-    textAlign: 'center',
-    marginBottom: '-40%',
-    zIndex: 1,
   },
 });
