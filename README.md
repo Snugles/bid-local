@@ -39,7 +39,7 @@ Backend deployed on Heroku
 
 - Code Editor 
 
-- Expo Client installed on your phone (download from Google PLay or App Store)
+- Expo Client installed on your phone (download from Google Play or App Store)
 
 ### Instructions
 
