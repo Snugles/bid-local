@@ -11,8 +11,6 @@ function randNumb (max) {
 const numItems = 15;
 
 let pass = bcrypt.hashSync('pass', saltRounds);
-console.log('PASSWORD GENERATED:',pass);
-
 
 const users = [...Array(numItems)].map((user) => (
   {

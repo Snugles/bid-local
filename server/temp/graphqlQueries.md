@@ -1,6 +1,4 @@
-// For queries that require Ids please insert ones given by database.
-// Here is some sample queries
-
+// Example queries: Make sure to use correct numbers given by your database.
 
 ----------------**TOKEN**---------------------
 HTTP HEADERS (copy in here the token string you get from sign in to run queries that require it)
@@ -65,10 +63,6 @@ mutation {
     }
   }
 }
-
-
-
-
 
 --------------------------**ITEMS**-----------------------------------
 //Create an item (INCLUDE TOKEN)
@@ -166,9 +160,6 @@ query {
   }
 }
 
-
-
-
 -----------------------**ADDRESSES**--------------------------
 
 //Create Address TOKEN NEEDED (ALSO HAS TO BE OWNER OF ADDRESS)
@@ -240,30 +231,6 @@ mutation {
     }
   }
 }
-
-**{
-  get_user_by_Id(id:"019b2553-cea3-4380-ba84-c4a163d6c1e6") {
-    id
-    firstName
-    lastName
-    password
-    email
-    phoneNumber
-    item {
-      id
-      name
-    }
-    address {
-      id
-      firstLineAddress
-      secondLineAddress
-      city
-      postcode
-      country
-    }
-  }
-}
-
 
 //Delete user -> Doesn't work at the moment, need to resolve a relationship issue
 

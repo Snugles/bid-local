@@ -5,7 +5,6 @@ exports.get_category_by_Id = async (_, { id }, { models }) => {
 
 exports.get_categories = async (_, __, { models }) => {
   const categories = await models.categories.findAll();
-  console.log('returning all categories:', categories);
   return categories;
 };
 
