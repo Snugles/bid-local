@@ -10,11 +10,17 @@ Time to declutter the house? Want to find a bargain which you can pick up locall
 
 <img src="https://github.com/Snugles/bid-local/blob/development/readme%20assets/screen6.jpg"></img>
 
+## TLDR
+
+[Check out our video presentation of the application](https://youtu.be/LzgYNAu8jeA)
 
 ## Tech Stack
 
 ```
 ♦ React Native
+♦ Expo
+♦ Native Base
+♦ Lottie UI
 ♦ Express
 ♦ GraphQL
 ♦ Apollo
@@ -23,7 +29,42 @@ Time to declutter the house? Want to find a bargain which you can pick up locall
 ♦ MySQL / PostgreSQL
 ♦ Sequelize
 ♦ Docker
+
+Backend deployed on Heroku
 ```
+
+## Running DreamHome
+
+### What you'll need:
+
+- Code Editor 
+
+- Expo Client installed on your phone (download from Google PLay or App Store)
+
+### Instructions
+
+1. Fork & clone this repo 🍴
+
+2. cd DreamHome and run npm i
+
+3. 🚀 Run expo start
+
+Android simulator: 💻
+
+1. Download [Android Studio](https://developer.android.com/studio)
+
+2. Select 'run on Android simulator' in the web browser that pops up
+
+On your Android device: 📱
+
+1. Download 'Expo Client' from the App Store
+
+2. Open the camera on your phone & point at the QR code in the brower or CLI
+
+3. Select open in expo
+
+### Get bidding!
+
 ## Room for Improvement and Future development
 - Checkout issue [#125](https://github.com/Snugles/bid-local/issues/125) in github issues
 
