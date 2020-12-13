@@ -17,20 +17,19 @@ Time to declutter the house? Want to find a bargain which you can pick up locall
 ## Tech Stack
 
 ```
-♦ React Native
-♦ Expo
-♦ Native Base
-♦ Lottie UI
-♦ Express
-♦ GraphQL
-♦ Apollo
-♦ JWT
-♦ Cloudinary API
-♦ MySQL / PostgreSQL
-♦ Sequelize
-♦ Docker
+♦ [React Native](https://reactnative.dev/)
+♦ [Expo](https://expo.io/)
+♦ [Native Base](https://nativebase.io/)
+♦ [Express](https://expressjs.com/)
+♦ [GraphQL](https://graphql.org/)
+♦ [Apollo](https://www.apollographql.com/)
+♦ [JWT](https://jwt.io/)
+♦ [Cloudinary API](https://cloudinary.com/)
+♦ [MySQL](https://www.mysql.com/) / [PostgreSQL](https://www.postgresql.org/)
+♦ [Sequelize](https://sequelize.org/master/manual/getting-started.html)
+♦ [Docker](https://www.docker.com/)
 
-Backend deployed on Heroku
+Backend deployed on [Heroku](https://www.heroku.com/)
 ```
 
 ## Running Bid Local
