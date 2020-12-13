@@ -1,4 +1,5 @@
 const pubsub = require('../utils/PubSub.js');
+const { Op } = require('sequelize');
 
 exports.get_item_by_Id = async (_, { id }, { models }) => {
   const item = await models.items.findByPk(id);
@@ -39,12 +40,11 @@ exports.create_item = async (_, { item }, { models, me }) => {
 
     return createdItem;
   } catch (error) {
-    console.error('Error', error);
     return error;
   }
 
 };
-exports.delete_item_by_id = async (_, { itemId }, { models }) => {  
+exports.delete_item_by_id = async (_, { itemId }, { models }) => {
   try {
     const destroyed = await models.items.destroy({
       where: {
@@ -56,7 +56,6 @@ exports.delete_item_by_id = async (_, { itemId }, { models }) => {
     }
     return true;
   } catch (error) {
-    console.error('Error', error);
     return error;
   }
 };
@@ -74,15 +73,16 @@ exports.update_item = async (_, { itemId, item }, { models }) => {
 };
 
 exports.place_a_bid = async (_, { itemId, biddingPrice }, { models, me }) => {
-  console.log(biddingPrice);
   let itemDB = await models.items.findOne({ where: { id: itemId } });
   try {
-    // Checking date
     if (Date.parse(itemDB.auctionEnd) < Date.now()) {
       throw new Error('Bidding time is over!');
     }
 
-    // Checking Bidding
+    if (biddingPrice <= itemDB.minimumBid) {
+      throw new Error('Bidding amount is less than minimum bid');
+    }
+
     if (biddingPrice) {
       itemDB.minimumBid = itemDB.minimumBid + biddingPrice;
     }
@@ -90,13 +90,9 @@ exports.place_a_bid = async (_, { itemId, biddingPrice }, { models, me }) => {
       itemDB.minimumBid++;
     }
 
-    // Changing Bidder
     itemDB.bidder = me.id;
-
-    // Saving Values
     await itemDB.save();
 
-    // Publishing
     pubsub.publish('bidPlaced', {
       bidPlaced: itemDB
     });
@@ -105,15 +101,15 @@ exports.place_a_bid = async (_, { itemId, biddingPrice }, { models, me }) => {
     return e;
   }
 };
-const { Op } = require('sequelize');
+
 exports.won_item_list = async (_, __, { models, me }) => {
   const wonItem = await models.items.findAll(
-    { where: { 
+    { where: {
       bidder: me.id,
       auctionEnd: {
         [Op.lt]:  Date.now()
       }
-    } 
+    }
     });
   return wonItem;
 };

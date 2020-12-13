@@ -1,4 +1,3 @@
-const { v4: uuidv4 } = require('uuid');
 const user = require('./user');
 const item = require('./item');
 const category = require('./category');
@@ -6,16 +5,13 @@ const address = require('./address');
 const { combineResolvers } = require('graphql-resolvers');
 const { isAuthenticated, isItemOwner, isAddressOwner } = require('./authorization');
 const pubsub = require('../utils/PubSub');
-const { AuthenticationError } = require('apollo-server');
 
 const resolvers = {
   Query: {
-    //me: user.me, //necessary?
-    //get_user_by_email: user.get_user_by_email, //to deprecate for sign in
     get_users: user.get_users, //to deprecate/block/admin only
     get_user_info: combineResolvers(isAuthenticated, user.get_user_info),
     get_item_by_Id: item.get_item_by_Id, //OK
-    get_items: item.get_items, //OK
+    get_items: item.get_items, //OK - needs protecting
     //get_category_by_Id: category.get_category_by_Id,  //necessary?
     get_categories: category.get_categories, //OK
     get_address: combineResolvers(isAddressOwner, address.get_address), //necessary?
