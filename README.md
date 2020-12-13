@@ -10,7 +10,7 @@ Time to declutter the house? Want to find a bargain which you can pick up locall
 
 <img src="https://github.com/Snugles/bid-local/blob/development/readme%20assets/screen6.jpg"></img>
 
-## TLDR
+## Video Presentation
 
 [Check out our video presentation of the application](https://youtu.be/LzgYNAu8jeA)
 
