@@ -33,7 +33,7 @@ Time to declutter the house? Want to find a bargain which you can pick up locall
 Backend deployed on Heroku
 ```
 
-## Running DreamHome
+## Running Bid Local
 
 ### What you'll need:
 
@@ -45,7 +45,7 @@ Backend deployed on Heroku
 
 1. Fork & clone this repo 🍴
 
-2. cd DreamHome and run npm i
+2. cd client and run npm i
 
 3. 🚀 Run expo start
 
@@ -59,7 +59,7 @@ On your Android device: 📱
 
 1. Download 'Expo Client' from the App Store
 
-2. Open the camera on your phone & point at the QR code in the brower or CLI
+2. Open the camera on your phone & point at the QR code in the browser or CLI
 
 3. Select open in expo
 
