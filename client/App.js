@@ -3,18 +3,18 @@ import {
   ApolloProvider,
   HttpLink,
   InMemoryCache,
-  split,
+  split
 } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { APOLLO_SERVER_URI, APOLLO_WEB_SERVER_URI } from '@env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { WebSocketLink } from 'apollo-link-ws';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Navigator from './routes/HomeStack';
-import { setContext } from '@apollo/client/link/context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const getFonts = () => {
   return Font.loadAsync({

@@ -35,7 +35,6 @@ extend type Query {
   get_user_info: User
 }
 extend type Mutation {
-  create_user(user: UserUpdate!): User
   update_user(user:UserUpdate!): User!
   delete_user(userId:ID!): Boolean!
   sign_up(user: UserUpdate!): Token!

@@ -1,7 +1,7 @@
-0. Make sure mysql service is NOT running
-1. Replace your config file with one in the docker folder
+0. Make sure your mysql service is NOT running
+1. ./config place your config.js as in the template
 2. run docker compose up to start the database service
-3. run npm start in seperate terminal
+3. run npm start in seperate terminal to install dependencies
 
 Instructions from the web
 

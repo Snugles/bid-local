@@ -1,9 +1,10 @@
 import { useMutation, useQuery } from '@apollo/client';
+import { CLOUDINARY_KEY, CLOUDINARY_URL } from '@env';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useEffect, useState } from 'react';
 import {
-  SafeAreaView,
-  Image,
+  Image, SafeAreaView,
+
   ScrollView,
   StyleSheet,
   Text,
@@ -11,11 +12,10 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View,
+  View
 } from 'react-native';
 import Navbar from '../components/Navbar';
 import { CREATE_ITEM, GET_CATEGORIES } from '../queries/addItem';
-import { CLOUDINARY_URL, CLOUDINARY_KEY } from '@env';
 
 export default function AddItem({ navigation, route }) {
   const [title, setTitle] = React.useState('');
@@ -72,7 +72,7 @@ export default function AddItem({ navigation, route }) {
         picUrl1: imageUrls[0] ? imageUrls[0] : '',
         picUrl2: imageUrls[1] ? imageUrls[1] : '',
         picUrl3: imageUrls[2] ? imageUrls[2] : '',
-        auctionEnd: '04 Dec 2020 00:12:00 GMT',
+        auctionEnd: new Date(Date.now()+3600000*Math.random()),
         categoryId: selectedCategories[0].id,
       },
     };
@@ -94,9 +94,9 @@ export default function AddItem({ navigation, route }) {
 
   async function pickImage() {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      quality: 0,
+      quality: 1,
       base64: true,
     });
 
