@@ -1,0 +1,12 @@
+//you can change this to anything or generate a strong one from https://www.grc.com/passwords.htm
+SECRET=shhhSecret
+
+//DEVELOPMENT
+DATABASE=db_bid_local
+DATABASE_USER=user
+DATABASE_PASSWORD=mysqlpass
+DIALECT=mysql
+
+//SEQUELIZE-CLI
+USERNAME=user
+HOST=127.0.0.1

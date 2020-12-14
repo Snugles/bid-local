@@ -1,0 +1,6 @@
+//Add your computers private network ip address to the uris and optinally add a cloudinary accounts info if you want image support
+
+APOLLO_SERVER_URI = http://your computers private network ip address:8000/graphql
+APOLLO_WEB_SERVER_URI = ws://your computers private network ip address:8000/graphql
+CLOUDINARY_URL=your cloudinary URL
+CLOUDINARY_KEY=your cloudinary key
