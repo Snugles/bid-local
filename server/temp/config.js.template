@@ -1,3 +1,8 @@
+/*
+To run locally, fill in this file with your database details,
+and place it in the config folder in the server root
+*/
+
 module.exports =  {
   database: '', //'db_bid_local'
   username: '', //'postgres'

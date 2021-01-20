@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery, useLazyQuery } from '@apollo/client';
 import React, { useEffect, useState, useCallback } from 'react';
 import {
   SafeAreaView,
@@ -26,21 +26,24 @@ export default function Item({ navigation, route }) {
   const [images, setImages] = useState([]);
   const [typeError, setTypeError] =useState('');
   const [highestBidder, setHighestBidder] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   const user = useQuery(GET_USER_INFO);
   const [changeItem, changedItem] = useMutation(PLACE_A_BID);
-  const { loading, error, data } = useQuery(GET_ITEM_BY_ID, {
+  const [getItem, { loading, error, data }] = useLazyQuery(GET_ITEM_BY_ID, {
     variables: {
       id: route.params.id,
     },
   });
 
-  const [refresh, setRefresh] = useState(false);
   const onRefresh = useCallback(() => {
     setRefresh(true);
-    setTimeout(() => {
-      setRefresh(false);
-    }, 2000);
+    getItem();
+    setRefresh(false);
+  }, []);
+
+  useEffect(()=>{
+    getItem();
   }, []);
 
   useEffect(() => {
@@ -80,11 +83,9 @@ export default function Item({ navigation, route }) {
       return;
     }
       const mutationVariables = {
-        userId: "694b46f7-d39e-482d-9154-6980fc6f06b4",
         itemId: route.params.id,
         biddingPrice: parseInt(offerBid)-data.get_item_by_Id.minimumBid,
       };
-      console.log(mutationVariables)
     changeItem({ variables: mutationVariables });
   }
 
@@ -118,87 +119,90 @@ export default function Item({ navigation, route }) {
       </SafeAreaView>
     );
   if (error) return <Text>Error: {error}</Text>;
-
-  return (
-    <>
-      <Navbar navigation={navigation} canGoBack={true} />
-      <ScrollView
-        style={styles.container}
-        refreshControl={
-          <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
-        }
-      >
-        <Carousel
-          containerCustomStyle={{
-            backgroundColor: '#06D6A0',
-            paddingVertical: 10,
-          }}
-          layout={'default'}
-          data={images}
-          sliderWidth={windowWidth}
-          itemWidth={windowWidth - windowWidth / 6}
-          renderItem={imageList}
-        />
-        <View style={styles.itemInfo}>
-          <Text style={styles.itemTitle}>{data.get_item_by_Id.name}</Text>
-          <Text style={styles.itemPrice}>{data.get_item_by_Id.minimumBid}€</Text>
-          {user&&highestBidder?
-            <Text>You are the current highest bidder.</Text>:
-            <Text>Another user is the current highest bidder.</Text>}
-          <View style={styles.time}>
-            <Text style={{ color: 'white', fontSize: 16 }}>Time Left:</Text>
-            <Timer style={{ color: 'white', fontSize: 25 }} deadline={data.get_item_by_Id.auctionEnd}/>
-          </View>
-          <View style={styles.bidView}>
-            <View style={styles.bidBorder}>
-              <TextInput
-                style={styles.bidInput}
-                value={offerBid}
-                onChangeText={(text) => handleCurrency(text)}
-                keyboardType="numeric"
-                placeholder={(data.get_item_by_Id.minimumBid+1).toString()}
-              />
-              <Text style={styles.bidCurrency}>€</Text>
+  if (data) {
+    return (
+      <>
+        <Navbar navigation={navigation} canGoBack={true} />
+        <ScrollView
+          style={styles.container}
+          refreshControl={
+            <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+          }
+        >
+          <Carousel
+            containerCustomStyle={{
+              backgroundColor: '#06D6A0',
+              paddingVertical: 10,
+            }}
+            layout={'default'}
+            data={images}
+            sliderWidth={windowWidth}
+            itemWidth={windowWidth - windowWidth / 6}
+            renderItem={imageList}
+          />
+          <View style={styles.itemInfo}>
+            <Text style={styles.itemTitle}>{data.get_item_by_Id.name}</Text>
+            <Text style={styles.itemPrice}>{data.get_item_by_Id.minimumBid}€</Text>
+            {user&&highestBidder?
+              <Text>You are the current highest bidder.</Text>:
+              <Text>Another user is the current highest bidder.</Text>}
+            <View style={styles.time}>
+              <Text style={{ color: 'white', fontSize: 16 }}>Time Left:</Text>
+              <Timer style={{ color: 'white', fontSize: 25 }} deadline={data.get_item_by_Id.auctionEnd}/>
             </View>
-            <TouchableHighlight
-              style={styles.bidButton}
-              onPress={() => {
-                LatestBid();
-              }}
-            >
-              <Text style={{ fontSize: 16, color: 'white' }}>MAKE OFFER</Text>
-            </TouchableHighlight>
+            <View style={styles.bidView}>
+              <View style={styles.bidBorder}>
+                <TextInput
+                  style={styles.bidInput}
+                  value={offerBid}
+                  onChangeText={(text) => handleCurrency(text)}
+                  keyboardType="numeric"
+                  placeholder={(data.get_item_by_Id.minimumBid+1).toString()}
+                />
+                <Text style={styles.bidCurrency}>€</Text>
+              </View>
+              <TouchableHighlight
+                style={styles.bidButton}
+                onPress={() => {
+                  LatestBid();
+                }}
+              >
+                <Text style={{ fontSize: 16, color: 'white' }}>MAKE OFFER</Text>
+              </TouchableHighlight>
+            </View>
+            {typeError ? (
+              <Text style={{ color: 'red', fontSize: 25 }}>{typeError}</Text>
+            ) : null}
+  
+            <Text style={{ fontWeight: '700', fontSize: 18 }}>
+              Item Description:
+            </Text>
+            <Text style={{ fontSize: 16 }}>
+              {data.get_item_by_Id.description}
+            </Text>
+            <View style={styles.userInfo}>
+              <Text style={{ fontWeight: '700', fontSize: 18 }}>Seller Info</Text>
+              <Text style={{ fontSize: 16 }}>
+                <Text style={{ fontWeight: '700' }}>Name: </Text>
+                {data.get_item_by_Id.user.firstName}{' '}
+                {data.get_item_by_Id.user.lastName}
+              </Text>
+              <Text style={{ fontSize: 16 }}>
+                <Text style={{ fontWeight: '700' }}>Email: </Text>
+                {data.get_item_by_Id.user.email}
+              </Text>
+              <Text style={{ fontSize: 16 }}>
+                <Text style={{ fontWeight: '700' }}>Tel: </Text>
+                {data.get_item_by_Id.user.phoneNumber}
+              </Text>
+            </View>
           </View>
-          {typeError ? (
-            <Text style={{ color: 'red', fontSize: 25 }}>{typeError}</Text>
-          ) : null}
+        </ScrollView>
+      </>
+    );
+  }
 
-          <Text style={{ fontWeight: '700', fontSize: 18 }}>
-            Item Description:
-          </Text>
-          <Text style={{ fontSize: 16 }}>
-            {data.get_item_by_Id.description}
-          </Text>
-          <View style={styles.userInfo}>
-            <Text style={{ fontWeight: '700', fontSize: 18 }}>Seller Info</Text>
-            <Text style={{ fontSize: 16 }}>
-              <Text style={{ fontWeight: '700' }}>Name: </Text>
-              {data.get_item_by_Id.user.firstName}{' '}
-              {data.get_item_by_Id.user.lastName}
-            </Text>
-            <Text style={{ fontSize: 16 }}>
-              <Text style={{ fontWeight: '700' }}>Email: </Text>
-              {data.get_item_by_Id.user.email}
-            </Text>
-            <Text style={{ fontSize: 16 }}>
-              <Text style={{ fontWeight: '700' }}>Tel: </Text>
-              {data.get_item_by_Id.user.phoneNumber}
-            </Text>
-          </View>
-        </View>
-      </ScrollView>
-    </>
-  );
+  
 }
 
 const styles = StyleSheet.create({
